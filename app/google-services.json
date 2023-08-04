@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "814204183462",
+    "project_id": "yofu-d003c",
+    "storage_bucket": "yofu-d003c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814204183462:android:7585b2e49024eab447a567",
+        "android_client_info": {
+          "package_name": "com.example.yofu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814204183462-rj0hrqrd0avlh26setkbq074alkvckkm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgwHTN1buWO-AL5vmkyUsh-4M-9T8toT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814204183462-rj0hrqrd0avlh26setkbq074alkvckkm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
