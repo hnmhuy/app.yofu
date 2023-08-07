@@ -1,58 +1,68 @@
 package com.example.yofu
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
+
+@SuppressLint("StaticFieldLeak")
+val db = Firebase.firestore
+
+val emptyCompanyRef = db.collection("company").document("CID")
+val emptyUser = db.collection("user").document("UID")
+val emptyVacancy = db.collection("vacancy").document("VID")
 
 data class Vacancy(
-    val vid: String, //Vacancy Id
-    val manager: DocumentReference,
-    val title: String,
-    val minSalary: Double,
-    val maxSalary: Double,
-    val location: String,
-    val position: String,
-    val jobType: String,
-    val updatedDate: Timestamp,
-    val expiredDate: Timestamp,
-    val isActive: Boolean,
+    var vid: String = "", //Vacancy Id
+    var manager: DocumentReference = emptyCompanyRef,
+    var title: String = "",
+    var minSalary: Double = 0.0,
+    var maxSalary: Double = 0.0,
+    var location: String = "",
+    var position: String = "",
+    var jobType: String = "",
+    var updatedDate: Timestamp = Timestamp(0,0),
+    var expiredDate: Timestamp = Timestamp(0,0),
+    var isActive: Boolean = false,
 )
 
 data class JobApplication(
-    val aid: String,
-    val vid: DocumentReference,
-    val uid: DocumentReference,
-    val cvRef: DocumentReference,
-    val status: String
+    var aid: String = "",
+    var vid: DocumentReference = emptyVacancy,
+    var uid: DocumentReference = emptyUser,
+    var cvRef: DocumentReference = emptyUser,
+    var status: String = ""
 )
 
 data class  User(
-    val uid: String,
-    val cid: DocumentReference,
-    val fullName: String,
-    val birthDate: Timestamp,
-    val userType: String,
-    val avt: Bitmap,
-    val avtRef: DocumentReference,
-    val gender: String,
-    val phone: String
+    var uid: String = "",
+    var cid: DocumentReference = emptyCompanyRef,
+    var fullName: String = "",
+    var birthDate: Timestamp = Timestamp(0,0),
+    var userType: String = "",
+    var avt: Bitmap? = null,
+    var avtRef: DocumentReference = emptyUser,
+    var gender: String = "",
+    var phone: String = ""
 )
 
 data class Company(
-    val cid: String,
-    val name: String,
-    val manager: DocumentReference,
-    val description: String,
-    val location: String,
-    val website: String,
-    val phone: String,
-    val email: String
+    var cid: String = "",
+    var name: String = "",
+    var manager: DocumentReference = emptyUser,
+    var description: String = "",
+    var location: String = "",
+    var website: String = "",
+    var phone: String = "",
+    var email: String = ""
 )
 
 data class UserLogin(
-    val email: String,
-    val password: String
+    var email: String = "",
+    var password: String = ""
 )
 
 fun map(data: Vacancy): HashMap<String, Any> {
