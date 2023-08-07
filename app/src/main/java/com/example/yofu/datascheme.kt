@@ -65,53 +65,53 @@ data class UserLogin(
     var password: String = ""
 )
 
-fun map(data: Vacancy): HashMap<String, Any> {
-    return hashMapOf(
-        "manager" to data.manager,
-        "title" to data.title,
-        "minSalary" to data.minSalary,
-        "maxSalary" to data.maxSalary,
-        "location" to data.location,
-        "position" to data.position,
-        "jopType" to data.jobType,
-        "updatedDate" to data.updatedDate,
-        "expiredDate" to data.expiredDate,
-        "isActive" to data.isActive
-    )
-}
-
-fun map(data: JobApplication): HashMap<String, Any>
-{
-    return hashMapOf(
-        "vid" to data.vid,
-        "uid" to data.vid,
-        "cvRef" to data.cvRef,
-        "status" to data.status
-    )
-}
-
-fun map(data: User): HashMap<String, Any>
-{
-    return hashMapOf(
-        "cid" to data.cid,
-        "fullName" to data.fullName,
-        "birthDate" to data.birthDate,
-        "userType" to data.userType,
-        "avtRef" to data.avtRef,
-        "gender" to data.gender,
-        "phone" to data.phone
-    )
-}
-
-fun map(data: Company): HashMap<String, Any>
-{
-    return hashMapOf(
-        "name" to data.name,
-        "manager" to data.manager,
-        "description" to data.description,
-        "location" to data.location,
-        "website" to data.website,
-        "phone" to data.phone,
-        "email" to data.email
-    )
-}
+//fun map(data: Vacancy): HashMap<String, Any> {
+//    return hashMapOf(
+//        "manager" to data.manager,
+//        "title" to data.title,
+//        "minSalary" to data.minSalary,
+//        "maxSalary" to data.maxSalary,
+//        "location" to data.location,
+//        "position" to data.position,
+//        "jopType" to data.jobType,
+//        "updatedDate" to data.updatedDate,
+//        "expiredDate" to data.expiredDate,
+//        "isActive" to data.isActive
+//    )
+//}
+//
+//fun map(data: JobApplication): HashMap<String, Any>
+//{
+//    return hashMapOf(
+//        "vid" to data.vid,
+//        "uid" to data.vid,
+//        "cvRef" to data.cvRef,
+//        "status" to data.status
+//    )
+//}
+//
+//fun map(data: User): HashMap<String, Any>
+//{
+//    return hashMapOf(
+//        "cid" to data.cid,
+//        "fullName" to data.fullName,
+//        "birthDate" to data.birthDate,
+//        "userType" to data.userType,
+//        "avtRef" to data.avtRef,
+//        "gender" to data.gender,
+//        "phone" to data.phone
+//    )
+//}
+//
+//fun map(data: Company): HashMap<String, Any>
+//{
+//    return hashMapOf(
+//        "name" to data.name,
+//        "manager" to data.manager,
+//        "description" to data.description,
+//        "location" to data.location,
+//        "website" to data.website,
+//        "phone" to data.phone,
+//        "email" to data.email
+//    )
+//}
