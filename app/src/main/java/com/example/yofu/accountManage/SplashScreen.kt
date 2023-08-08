@@ -1,4 +1,4 @@
-package com.example.yofu.screens
+package com.example.yofu.accountManage
 
 
 import androidx.compose.foundation.Image
