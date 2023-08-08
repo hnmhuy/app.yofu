@@ -118,6 +118,25 @@ fun BoldTextComponent(value: String)
 }
 
 @Composable
+fun LessBoldTextComponent(value: String)
+{   val extraBoldFont = FontFamily(
+    Font(R.font.raleway_bold, FontWeight.Bold),
+)
+    Text(
+        text = value,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 20.dp),
+        fontFamily = extraBoldFont,
+        textAlign = TextAlign.Center,
+        style = TextStyle(
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal,
+        ),
+    )
+}
+@Composable
 fun TextFieldComponent(labelValue: String)
 {
     val textValue = remember {
