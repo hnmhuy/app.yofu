@@ -35,6 +35,6 @@ class MainActivity : AppCompatActivity() {
 //                Log.d("NOTIFICATION", e.toString())
 //            }
 //        }
-            setContent { ChooseRoleScreen() }
+            setContent { CreateAccountScreen() }
     }
 }

@@ -1,7 +1,9 @@
 package com.example.yofu.accountUI
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -150,14 +152,18 @@ fun TextFieldComponent(labelValue: String)
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
             focusedLabelColor = Color.Black,
-            cursorColor = Color.Black
+            cursorColor = Color.Black,
+            disabledTextColor = Color.Transparent,
+            unfocusedBorderColor = Color.LightGray
         ),
         keyboardOptions = KeyboardOptions.Default,
         shape = RoundedCornerShape(50.dp),
         value = textValue.value,
+
         onValueChange = {
             textValue.value = it
         },
+
     )
 }
 @Composable
@@ -177,7 +183,10 @@ fun PasswordTextFieldComponent(labelValue: String)
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
             focusedLabelColor = Color.Black,
-            cursorColor = Color.Black
+            cursorColor = Color.Black,
+            disabledTextColor = Color.Transparent,
+            unfocusedBorderColor = Color.LightGray,
+            trailingIconColor = Color.LightGray
         ),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         value = password.value,

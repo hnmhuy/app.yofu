@@ -43,8 +43,9 @@ fun ChooseRoleScreen()
     Surface (
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(18.dp),
+            .background(Color.White),
+        elevation = 50.dp,
+        shape = RoundedCornerShape(20.dp)
     )
     {
         Box {

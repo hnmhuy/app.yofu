@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -23,9 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.example.yofu.R
 
+@Preview
 @Composable
 fun CreateAccountScreen()
 {
@@ -33,7 +37,9 @@ fun CreateAccountScreen()
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(18.dp),
+            .padding(10.dp),
+        elevation = 50.dp,
+        shape = RoundedCornerShape(20.dp)
     )
     {
         Box {
@@ -42,15 +48,17 @@ fun CreateAccountScreen()
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
                     tint = Color.Blue,
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(60.dp).padding(10.dp)
                 )
             }
         }
         Column(modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()))
+            .verticalScroll(rememberScrollState())
+            .padding(10.dp)
+        )
         {
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(30.dp).padding(20.dp))
             Image(painter = painterResource(id = R.drawable.logo),
                 contentDescription = "logo",
                 contentScale = ContentScale.Fit,
@@ -62,13 +70,13 @@ fun CreateAccountScreen()
             BoldTextComponent(value = "Create New Account")
             Spacer(modifier = Modifier.height(20.dp))
             TextFieldComponent(labelValue = "Full name")
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Email")
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Gender")
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             PasswordTextFieldComponent(labelValue = "Password")
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             PasswordTextFieldComponent(labelValue = "Confirm Password")
             Spacer(modifier = Modifier.height(20.dp))
             ButtonComponent(value = "Sign up")

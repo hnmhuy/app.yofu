@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,10 +29,12 @@ fun LoginScreen()
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(28.dp),
+            .padding(10.dp),
+        elevation = 50.dp,
+        shape = RoundedCornerShape(20.dp)
     )
     {
-        Column(modifier = Modifier.fillMaxSize())
+        Column(modifier = Modifier.fillMaxSize().padding(20.dp))
         {
             Spacer(modifier = Modifier.height(30.dp))
             Image(painter = painterResource(id = R.drawable.logo),
