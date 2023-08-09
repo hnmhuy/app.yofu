@@ -1,4 +1,4 @@
-package com.example.yofu.accountManage
+package com.example.yofu.accountUI
 
 import android.util.Log
 import androidx.compose.foundation.background
