@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import com.example.yofu.accountManage.AuthenticationProcess
+import com.example.yofu.accountUI.ChooseRoleScreen
+import com.example.yofu.accountUI.CreateAccountScreen
 import com.example.yofu.accountUI.LoginScreen
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +35,6 @@ class MainActivity : AppCompatActivity() {
 //                Log.d("NOTIFICATION", e.toString())
 //            }
 //        }
-            setContent { LoginScreen() }
+            setContent { ChooseRoleScreen() }
     }
 }

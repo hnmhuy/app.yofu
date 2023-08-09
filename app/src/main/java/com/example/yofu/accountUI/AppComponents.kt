@@ -145,8 +145,7 @@ fun TextFieldComponent(labelValue: String)
 
     OutlinedTextField(
         modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(4.dp)),
+            .fillMaxWidth(),
         label = {Text(text = labelValue)},
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
@@ -154,6 +153,7 @@ fun TextFieldComponent(labelValue: String)
             cursorColor = Color.Black
         ),
         keyboardOptions = KeyboardOptions.Default,
+        shape = RoundedCornerShape(50.dp),
         value = textValue.value,
         onValueChange = {
             textValue.value = it
@@ -171,8 +171,8 @@ fun PasswordTextFieldComponent(labelValue: String)
     }
     OutlinedTextField(
         modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(4.dp)),
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(50.dp),
         label = {Text(text = labelValue)},
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
@@ -214,16 +214,17 @@ fun ButtonComponent(value: String)
         onClick = { /*TODO*/ },
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(42.dp),
+            .heightIn(50.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        shape = RoundedCornerShape(50.dp)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(42.dp)
                 .background(
-                    Brush.horizontalGradient(listOf(Color.Blue, Color.Black)),
+                    color = Color.Blue,
                     shape = RoundedCornerShape(50.dp)
                 ),
             contentAlignment = Alignment.Center
