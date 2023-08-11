@@ -28,9 +28,10 @@ class AuthenticationProcess {
                     onComplete(null, Exception("This account hasn't verified the email"))
                 }
             }
+            .addOnFailureListener { e -> onComplete(null, e)}
     }
 
-    fun sigup(newAccount: UserLogin, userData: User, onComplete: (User?, Exception?) -> Unit) {
+    fun signup(newAccount: UserLogin, userData: User, onComplete: (User?, Exception?) -> Unit) {
         val auth = Firebase.auth
         auth.createUserWithEmailAndPassword(newAccount.email, newAccount.password)
             .addOnSuccessListener {
@@ -48,7 +49,7 @@ class AuthenticationProcess {
                     onComplete(userData, exception)
                 }
             }
-            .addOnFailureListener() { e ->
+            .addOnFailureListener { e ->
                 Log.d(SIGNUP, e.toString())
                 onComplete(null, e)
             }
@@ -56,28 +57,28 @@ class AuthenticationProcess {
 
     fun companySignup(newAccout: UserLogin, userInfo: User, newCompany: Company,
                       onComplete: (Exception?) -> Unit) {
-        this.sigup(newAccout, userInfo) { user, e ->
+        this.signup(newAccout, userInfo) { user, e ->
             if(e==null) {
                 val db = Firebase.firestore
                 newCompany.manager = db.collection("user").document(user?.uid.toString())
                 val companyProcess = CompanyRepository()
-                companyProcess.create(newCompany) { dataCompany, e ->
-                    if (e == null) {
+                companyProcess.create(newCompany) { dataCompany, exception ->
+                    if (exception == null) {
                         Log.d(SIGNUP, "Company signup successful")
                         // Update user data
                         user?.cid = db.collection("company").document(dataCompany.cid)
                         val userProcess = UserRepository()
-                        userProcess.update(user!!) { exception ->
-                            onComplete(exception)
+                        userProcess.update(user!!) {
+                            onComplete(it)
                         }
                     } else {
-                        Log.d(SIGNUP, e.toString())
+                        Log.d(SIGNUP, exception.toString())
                         // Delete the user account
                         val auth = Firebase.auth
                         auth.currentUser?.delete()
                             ?.addOnSuccessListener { Log.d(SIGNUP, "Delete the user account") }
                             ?.addOnFailureListener { e -> Log.d(SIGNUP, e.toString())}
-                        onComplete(e)
+                        onComplete(exception)
                     }
                 }
             }
