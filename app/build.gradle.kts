@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.yofu"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.yofu"
@@ -80,4 +80,11 @@ dependencies {
 
     //Compose Constraintlayout
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.0")
+
+    // viewModel
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 }

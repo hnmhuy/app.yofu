@@ -18,11 +18,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.yofu.R
 
-@Preview
 @Composable
-fun LoginScreen()
+fun LoginScreen(
+    navController: NavController,
+    loginViewModel: LoginScreenViewModel = viewModel<LoginScreenViewModel>()
+)
 {
 
     Surface (
@@ -34,7 +38,9 @@ fun LoginScreen()
         shape = RoundedCornerShape(20.dp)
     )
     {
-        Column(modifier = Modifier.fillMaxSize().padding(20.dp))
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp))
         {
             Spacer(modifier = Modifier.height(30.dp))
             Image(painter = painterResource(id = R.drawable.logo),
@@ -47,11 +53,28 @@ fun LoginScreen()
             )
             BoldTextComponent(value = "Login to Your Account")
             Spacer(modifier = Modifier.height(20.dp))
-            TextFieldComponent(labelValue = "Email address")
+            TextFieldComponent(labelValue = "Email address",
+                setValue =  { newEmail ->
+                    loginViewModel.setEmail(newEmail)
+                }
+                )
             Spacer(modifier = Modifier.height(15.dp))
-            PasswordTextFieldComponent(labelValue = "Password")
+            PasswordTextFieldComponent(labelValue = "Password",
+                    setValue = {
+                        loginViewModel.setPassword(it)
+                    }
+                )
             Spacer(modifier = Modifier.height(15.dp))
-            ButtonComponent(value = "Sign in")
+            ButtonComponent(
+                value = "Sign in",
+                callback = {
+                    loginViewModel.login(
+                        navigateToHomepage = {
+                            navController.navigate("homepageScreen")
+                        }
+                    )
+                }
+                )
             Spacer(modifier = Modifier.height(40.dp))
             DividerTextComponent()
             Spacer(modifier = Modifier.height(40.dp))

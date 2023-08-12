@@ -27,6 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -44,11 +45,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yofu.R
 
 
@@ -139,7 +142,10 @@ fun LessBoldTextComponent(value: String)
     )
 }
 @Composable
-fun TextFieldComponent(labelValue: String)
+fun TextFieldComponent(
+    labelValue: String,
+    setValue: (String) -> Unit = {}
+)
 {
     val textValue = remember {
         mutableStateOf("")
@@ -149,6 +155,7 @@ fun TextFieldComponent(labelValue: String)
         modifier = Modifier
             .fillMaxWidth(),
         label = {Text(text = labelValue)},
+
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
             focusedLabelColor = Color.Black,
@@ -159,15 +166,19 @@ fun TextFieldComponent(labelValue: String)
         keyboardOptions = KeyboardOptions.Default,
         shape = RoundedCornerShape(50.dp),
         value = textValue.value,
-
-        onValueChange = {
-            textValue.value = it
+        onValueChange = { newEmail: String ->
+            textValue.value = newEmail
+            setValue(newEmail)
         },
-
     )
+
+
 }
 @Composable
-fun PasswordTextFieldComponent(labelValue: String)
+fun PasswordTextFieldComponent(
+    labelValue: String,
+    setValue: (String) -> Unit = {}
+)
 {
     val password = remember {
         mutableStateOf("")
@@ -192,6 +203,7 @@ fun PasswordTextFieldComponent(labelValue: String)
         value = password.value,
         onValueChange = {
             password.value = it
+            setValue(it)
         },
         trailingIcon = {
             val iconImage = if(passwordVisible.value) {
@@ -217,10 +229,15 @@ fun PasswordTextFieldComponent(labelValue: String)
 }
 
 @Composable
-fun ButtonComponent(value: String)
+fun ButtonComponent(
+    value: String,
+    callback: () -> Unit = {}
+)
 {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = {
+                  callback()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(50.dp),
