@@ -140,7 +140,10 @@ fun LessBoldTextComponent(value: String)
     )
 }
 @Composable
-fun TextFieldComponent(labelValue: String)
+fun TextFieldComponent(
+    labelValue: String,
+    setValue: (String) -> Unit = {}
+)
 {
     val textValue = remember {
         mutableStateOf("")
@@ -168,7 +171,10 @@ fun TextFieldComponent(labelValue: String)
     )
 }
 @Composable
-fun PasswordTextFieldComponent(labelValue: String)
+fun PasswordTextFieldComponent(
+    labelValue: String,
+    setValue: (String) -> Unit = {}
+    )
 {
     val password = remember {
         mutableStateOf("")
@@ -218,10 +224,13 @@ fun PasswordTextFieldComponent(labelValue: String)
 }
 
 @Composable
-fun ButtonComponent(value: String)
+fun ButtonComponent(
+    value: String,
+    callback: () -> Unit = {}
+    )
 {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = { callback() },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(50.dp),

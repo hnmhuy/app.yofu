@@ -51,8 +51,7 @@ import androidx.compose.material.Card
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 
-
-
+@Preview
 @Composable
 fun Homepage() = Surface (
     modifier = Modifier
