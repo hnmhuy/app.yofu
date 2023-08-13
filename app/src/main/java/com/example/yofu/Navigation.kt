@@ -6,6 +6,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.yofu.accountUI.ChooseRoleScreen
+import com.example.yofu.accountUI.CreateAccountScreen
 import com.example.yofu.accountUI.LoginScreen
 
 @Composable
@@ -18,6 +20,8 @@ fun Navigation() {
     ) {
         addLoginScreen(navController)
         addHomepageScreen(navController)
+        addChooseRoleScreen(navController)
+        addCreateAccountScreen(navController)
     }
 }
 
@@ -30,5 +34,17 @@ private fun NavGraphBuilder.addLoginScreen(navController: NavController) {
 private fun NavGraphBuilder.addHomepageScreen(navController: NavController) {
     composable("homepageScreen") {
         HomepageScreen(navController)
+    }
+}
+
+private fun NavGraphBuilder.addChooseRoleScreen(navController: NavController) {
+    composable("chooseRoleScreen") {
+        ChooseRoleScreen(navController)
+    }
+}
+
+private  fun NavGraphBuilder.addCreateAccountScreen(navController: NavController) {
+    composable("createAccountScreen") {
+        CreateAccountScreen(navController)
     }
 }

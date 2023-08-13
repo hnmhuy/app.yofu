@@ -1,5 +1,7 @@
 package com.example.yofu.accountUI
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -27,11 +29,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.yofu.R
 
-@Preview
 @Composable
-fun CreateAccountScreen()
+fun CreateAccountScreen(
+    navController: NavController,
+    createAccountViewModel: CreateAccountViewModel = CreateAccountViewModel("JobFinder")
+)
 {
     Surface (
         modifier = Modifier
@@ -69,17 +75,51 @@ fun CreateAccountScreen()
             )
             BoldTextComponent(value = "Create New Account")
             Spacer(modifier = Modifier.height(20.dp))
-            TextFieldComponent(labelValue = "Full name")
+            TextFieldComponent(labelValue = "Full name",
+                setValue = {
+                    createAccountViewModel.setFullName(it)
+                }
+            )
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Email")
+            TextFieldComponent(labelValue = "Email",
+                setValue = {
+                    createAccountViewModel.setEmail(it)
+                }
+            )
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Gender")
+            TextFieldComponent(labelValue = "Gender",
+                setValue = {
+                    createAccountViewModel.setGender(it)
+                }
+            )
             Spacer(modifier = Modifier.height(15.dp))
-            PasswordTextFieldComponent(labelValue = "Password")
+            PasswordTextFieldComponent(labelValue = "Password",
+                setValue = {
+                    createAccountViewModel.setPassword(it)
+                }
+            )
             Spacer(modifier = Modifier.height(15.dp))
-            PasswordTextFieldComponent(labelValue = "Confirm Password")
+            PasswordTextFieldComponent(labelValue = "Confirm Password",
+                setValue = {
+                    createAccountViewModel.setConfirmPassword(it)
+                }
+            )
             Spacer(modifier = Modifier.height(20.dp))
-            ButtonComponent(value = "Sign up")
+            ButtonComponent(value = "Sign up",
+                callback = {
+                    // Precondition checking
+                    if (createAccountViewModel.checkPassword())
+                    {
+                        createAccountViewModel.signup(
+                            navigateToHomepage = {
+                                navController.navigate("homepageScreen")
+                            }
+                        )
+                    }
+                    else {
+                        Log.d("signup", "Password not match")
+                    }
+                })
         }
     }
 }

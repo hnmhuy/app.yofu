@@ -1,11 +1,10 @@
 package com.example.yofu.accountUI
 
-import android.accounts.Account
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.example.yofu.UserLogin
 import com.example.yofu.accountManage.AuthenticationProcess
-import com.google.api.Authentication
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -40,13 +39,16 @@ class LoginScreenViewModel : ViewModel() {
     ) {
         process.login(
             UserLogin(
-                email = state.value.email,
-                password = state.value.password
+                email = _state.value.email,
+                password = _state.value.password
             ),
             onComplete = { user, exception ->
                 if (exception == null) {
                     Log.d("login", "Successfully")
                     navigateToHomepage()
+                }
+                else {
+                    Log.d("login", exception.toString())
                 }
             }
         )

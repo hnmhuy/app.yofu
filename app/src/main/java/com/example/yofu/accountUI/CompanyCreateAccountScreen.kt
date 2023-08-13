@@ -68,11 +68,14 @@ fun CompanyCreateAccountScreen()
             )
             BoldTextComponent(value = "Create New Account")
             Spacer(modifier = Modifier.height(20.dp))
-            TextFieldComponent(labelValue = "Manager's Full Name")
+            TextFieldComponent(labelValue = "Manager's Full Name",
+                setValue = {})
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Email")
+            TextFieldComponent(labelValue = "Email",
+                setValue = {})
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Manager's Gender")
+            TextFieldComponent(labelValue = "Manager's Gender",
+                setValue = {})
             Spacer(modifier = Modifier.height(15.dp))
             PasswordTextFieldComponent(labelValue = "Password")
             Spacer(modifier = Modifier.height(15.dp))

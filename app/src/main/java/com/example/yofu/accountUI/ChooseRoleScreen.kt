@@ -33,12 +33,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.yofu.R
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ChooseRoleScreen()
+fun ChooseRoleScreen(
+    navController: NavController
+)
 {
     Surface (
         modifier = Modifier
@@ -145,11 +148,4 @@ fun ChooseRoleScreen()
             ButtonComponent(value = "Continue")
         }
     }
-}
-
-@Preview
-@Composable
-fun ChooseRoleScreenPreview()
-{
-    ChooseRoleScreen()
 }

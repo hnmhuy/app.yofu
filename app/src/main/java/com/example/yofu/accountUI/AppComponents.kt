@@ -142,7 +142,7 @@ fun LessBoldTextComponent(value: String)
 @Composable
 fun TextFieldComponent(
     labelValue: String,
-    setValue: (String) -> Unit = {}
+    setValue: (String) -> Unit
 )
 {
     val textValue = remember {
@@ -166,6 +166,7 @@ fun TextFieldComponent(
 
         onValueChange = {
             textValue.value = it
+            setValue(it)
         },
 
     )
@@ -199,6 +200,7 @@ fun PasswordTextFieldComponent(
         value = password.value,
         onValueChange = {
             password.value = it
+            setValue(it)
         },
         trailingIcon = {
             val iconImage = if(passwordVisible.value) {

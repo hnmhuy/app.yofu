@@ -1477,7 +1477,8 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Job Title", 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.1.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(5.dp))
-                    TextFieldComponent(labelValue = "Job's Title")
+                    TextFieldComponent(labelValue = "Job's Title",
+                        setValue = {})
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))

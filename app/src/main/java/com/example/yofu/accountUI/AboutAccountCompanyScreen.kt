@@ -68,15 +68,20 @@ fun AboutAccountCompanyScreen()
             )
             BoldTextComponent(value = "About Your Company")
             Spacer(modifier = Modifier.height(20.dp))
-            TextFieldComponent(labelValue = "Company Name")
+            TextFieldComponent(labelValue = "Company Name",
+                setValue = {})
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Company's address")
+            TextFieldComponent(labelValue = "Company's address",
+                setValue = {})
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Email")
+            TextFieldComponent(labelValue = "Email",
+                setValue = {})
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Phone Number")
+            TextFieldComponent(labelValue = "Phone Number",
+                setValue = {})
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Website")
+            TextFieldComponent(labelValue = "Website",
+                setValue = {})
             Spacer(modifier = Modifier.height(20.dp))
             ButtonComponent(value = "Next")
         }
