@@ -46,26 +46,28 @@ fun ChooseRoleScreen(
     Surface (
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .padding(10.dp),
         elevation = 50.dp,
         shape = RoundedCornerShape(20.dp)
     )
     {
-        Box {
+        Box(modifier = Modifier.padding(10.dp)) {
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
                     tint = Color.Blue,
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(60.dp)
                 )
             }
         }
         Column(modifier = Modifier
             .fillMaxSize()
+            .padding(10.dp)
             .verticalScroll(rememberScrollState()))
         {
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             Image(painter = painterResource(id = R.drawable.choose_role),
                 contentDescription = "role",
                 contentScale = ContentScale.Fit,
@@ -80,14 +82,14 @@ fun ChooseRoleScreen(
             NormalTextComponent(value = "Choose whether you ore looking for a job or\n" +
                     "you are an organization/company that needs\n" +
                     "employees")
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             Row(modifier = Modifier
                 .align(Alignment.CenterHorizontally)) {
                 Card(
                     onClick = { /*TODO*/ },
                     modifier = Modifier
-                        .height(200.dp)
+                        .height(250.dp)
                         .width(150.dp)
                         .padding(10.dp),
                     elevation = 4.dp,
@@ -116,8 +118,8 @@ fun ChooseRoleScreen(
                 Card(
                     onClick = { /*TODO*/ },
                     modifier = Modifier
-                        .height(200.dp)
-                        .width(150.dp)
+                        .height(250.dp)
+                        .width(180.dp)
                         .padding(10.dp),
                     elevation = 4.dp,
                     shape = RoundedCornerShape(8.dp),
@@ -144,7 +146,7 @@ fun ChooseRoleScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(50.dp))
             ButtonComponent(value = "Continue")
         }
     }
