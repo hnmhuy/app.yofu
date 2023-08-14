@@ -2,6 +2,7 @@ package com.example.yofu.employer
 
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -66,10 +67,12 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.example.yofu.accountUI.NormalTextComponentWithSize
 import com.example.yofu.accountUI.NotCenterBoldTextComponentWithSize
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
+import com.example.yofu.employerUI.CreateVacancyViewModel
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
@@ -78,7 +81,7 @@ private fun roundToNearestTenth(value: Float): Float {
 }
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun MyUI() {
+private fun MyUI(setSalary: (Float, Float) -> Unit) {
 
     var sliderValues by remember {
         mutableStateOf(0f..20f) // pass the initial values
@@ -103,6 +106,7 @@ private fun MyUI() {
             )
             val roundedStart = ceil(sliderValues.start)
             val roundedEnd = ceil(sliderValues.endInclusive)
+            setSalary(roundedStart, roundedEnd)
         }
     )
 
@@ -115,7 +119,7 @@ private fun MyUI() {
 
 
 @Composable
-fun DropDown(){
+fun DropDown(setValue: (String) -> Unit) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
@@ -200,7 +204,7 @@ fun DropDown(){
         OutlinedTextField(
             enabled = false,
             value = selectedItem,
-            onValueChange = {selectedItem = it},
+            onValueChange = { selectedItem = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { layoutCoordinates ->
@@ -223,9 +227,12 @@ fun DropDown(){
             modifier = Modifier.fillMaxWidth()
         )
         {
-            list.forEach{
-                    label-> DropdownMenuItem(onClick = { selectedItem = label
-                isExpanded = false}) {
+            list.forEach { label-> DropdownMenuItem(
+                onClick = { selectedItem = label
+                        isExpanded = false
+                        setValue(label)}
+            )
+            {
                 Text(text = label)
             }
             }
@@ -235,13 +242,14 @@ fun DropDown(){
 
 
 @Composable
-fun JobTypeCheckbox() {
+fun JobTypeCheckbox(setJobType: (String)-> Unit) {
     val selectedCheckbox = remember { mutableStateOf(1) }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
-    ){
+    )
+    {
         Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
@@ -250,6 +258,8 @@ fun JobTypeCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 1
+                            setJobType("Full Time")
+                            Log.d("JobType", "Full Time")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.White,
@@ -286,6 +296,8 @@ fun JobTypeCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 2
+                            setJobType("Contract")
+                            Log.d("JobType", "Contract")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.White,
@@ -323,6 +335,8 @@ fun JobTypeCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 3
+                            setJobType("Internship")
+                            Log.d("JobType", "Internship")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.White,
@@ -362,6 +376,8 @@ fun JobTypeCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 4
+                            setJobType("Part Time")
+                            Log.d("JobType", "Part Time")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.White,
@@ -399,6 +415,8 @@ fun JobTypeCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 5
+                            setJobType("Temporary")
+                            Log.d("JobType", "Temporary")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.White,
@@ -436,6 +454,8 @@ fun JobTypeCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 6
+                            setJobType("Other")
+                            Log.d("JobType", "Other")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.White,
@@ -471,7 +491,9 @@ fun JobTypeCheckbox() {
 }
 
 @Composable
-fun PositionCheckbox() {
+fun PositionCheckbox(
+    setJobPosition: (String) -> Unit
+) {
     val selectedCheckbox = remember { mutableStateOf(1) }
 
     Row(
@@ -486,6 +508,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 1
+                            setJobPosition("Software Engineer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.White,
@@ -522,6 +545,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 2
+                            setJobPosition("Fullstack Engineer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.White,
@@ -559,6 +583,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 3
+                            setJobPosition("Security Engineer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.White,
@@ -596,6 +621,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 4
+                            setJobPosition("Business Analysist")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.White,
@@ -632,6 +658,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 5
+                            setJobPosition("Web Designer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.White,
@@ -669,6 +696,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 6
+                            setJobPosition("Game Developer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.White,
@@ -708,6 +736,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 7
+                            setJobPosition("Developer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 7) Color(0xFF40A5FE) else Color.White,
@@ -745,6 +774,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 8
+                            setJobPosition("Data Scientist")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 8) Color(0xFF40A5FE) else Color.White,
@@ -782,6 +812,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 9
+                            setJobPosition("Tester")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 9) Color(0xFF40A5FE) else Color.White,
@@ -819,6 +850,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 10
+                            setJobPosition("Front-end")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 10) Color(0xFF40A5FE) else Color.White,
@@ -855,6 +887,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 11
+                            setJobPosition("Back-end")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 11) Color(0xFF40A5FE) else Color.White,
@@ -892,6 +925,7 @@ fun PositionCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox.value = 12
+                            setJobPosition("Other")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 12) Color(0xFF40A5FE) else Color.White,
@@ -926,7 +960,7 @@ fun PositionCheckbox() {
     }
 }
 @Composable
-fun ProgrammingLanguageCheckbox() {
+fun ProgrammingLanguageCheckbox(updateProgammingLanguage: (Int) -> Unit) {
     var selectedCheckbox1 by remember {
         mutableStateOf(false)
     }
@@ -977,6 +1011,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox1 = !selectedCheckbox1
+                            updateProgammingLanguage(0)
                         }
                         .background(
                             color = if (selectedCheckbox1) Color(0xFF40A5FE) else Color.White,
@@ -1013,6 +1048,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox2 = !selectedCheckbox2
+                            updateProgammingLanguage(1)
                         }
                         .background(
                             color = if (selectedCheckbox2) Color(0xFF40A5FE) else Color.White,
@@ -1050,6 +1086,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox3 = !selectedCheckbox3
+                            updateProgammingLanguage(2)
                         }
                         .background(
                             color = if (selectedCheckbox3) Color(0xFF40A5FE) else Color.White,
@@ -1087,6 +1124,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox4 = !selectedCheckbox4
+                            updateProgammingLanguage(3)
                         }
                         .background(
                             color = if (selectedCheckbox4) Color(0xFF40A5FE) else Color.White,
@@ -1123,6 +1161,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox5 = !selectedCheckbox5
+                            updateProgammingLanguage(4)
                         }
                         .background(
                             color = if (selectedCheckbox5) Color(0xFF40A5FE) else Color.White,
@@ -1160,6 +1199,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox6 = !selectedCheckbox6
+                            updateProgammingLanguage(5)
                         }
                         .background(
                             color = if (selectedCheckbox6) Color(0xFF40A5FE) else Color.White,
@@ -1199,6 +1239,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox7 = !selectedCheckbox7
+                            updateProgammingLanguage(6)
                         }
                         .background(
                             color = if (selectedCheckbox7) Color(0xFF40A5FE) else Color.White,
@@ -1236,6 +1277,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox8 = !selectedCheckbox8
+                            updateProgammingLanguage(7)
                         }
                         .background(
                             color = if (selectedCheckbox8) Color(0xFF40A5FE) else Color.White,
@@ -1273,6 +1315,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox9 = !selectedCheckbox9
+                            updateProgammingLanguage(8)
                         }
                         .background(
                             color = if (selectedCheckbox9) Color(0xFF40A5FE) else Color.White,
@@ -1310,6 +1353,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox10 = !selectedCheckbox10
+                            updateProgammingLanguage(9)
                         }
                         .background(
                             color = if (selectedCheckbox10) Color(0xFF40A5FE) else Color.White,
@@ -1346,6 +1390,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox11 = !selectedCheckbox11
+                            updateProgammingLanguage(10)
                         }
                         .background(
                             color = if (selectedCheckbox11) Color(0xFF40A5FE) else Color.White,
@@ -1383,6 +1428,7 @@ fun ProgrammingLanguageCheckbox() {
                         .clip(shape = RoundedCornerShape(size = 6.dp))
                         .clickable {
                             selectedCheckbox12 = !selectedCheckbox12
+                            updateProgammingLanguage(11)
                         }
                         .background(
                             color = if (selectedCheckbox12) Color(0xFF40A5FE) else Color.White,
@@ -1446,14 +1492,17 @@ private fun ListCheckBox() {
 }
 
 
-@Preview
 @Composable
-fun CreateVacancy() = Surface (
+fun CreateVacancy(
+    navController: NavController,
+    viewModel: CreateVacancyViewModel = CreateVacancyViewModel()
+) = Surface (
     modifier = Modifier
         .fillMaxSize()
         .background(Color(0xFFF6F7F9))
 )
 {
+    val toastContex = LocalContext.current.applicationContext
     Column(modifier = Modifier
         .background(Color(0xFFF6F7F9))
         .verticalScroll(rememberScrollState()))
@@ -1478,7 +1527,9 @@ fun CreateVacancy() = Surface (
                     Divider(startIndent = 1.dp, thickness = 0.1.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(5.dp))
                     TextFieldComponent(labelValue = "Job's Title",
-                        setValue = {})
+                        setValue = {
+                            viewModel.setTitle(it)
+                        })
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -1493,7 +1544,11 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Location", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(5.dp))
-                    DropDown()
+                    DropDown(
+                        setValue = {
+                            viewModel.setLocation(it)
+                        }
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -1508,7 +1563,11 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Salary", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(5.dp))
-                    MyUI()
+                    MyUI(
+                        setSalary = {min, max ->
+                            viewModel.setSalary(min, max)
+                        }
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -1523,7 +1582,11 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Job Type", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(10.dp))
-                    JobTypeCheckbox()
+                    JobTypeCheckbox(
+                        setJobType = {
+                            viewModel.setJobType(it)
+                        }
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -1538,7 +1601,11 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Position", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(10.dp))
-                    PositionCheckbox()
+                    PositionCheckbox(
+                        setJobPosition = {
+                            viewModel.setPosition(it)
+                        }
+                    )
                 }
             }
 
@@ -1554,7 +1621,11 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Programming Language", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(10.dp))
-                    ProgrammingLanguageCheckbox()
+                    ProgrammingLanguageCheckbox(
+                        updateProgammingLanguage = {
+                            viewModel.updateProgram(it)
+                        }
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -1588,6 +1659,7 @@ fun CreateVacancy() = Surface (
                         value = textValue.value,
                         onValueChange = {
                             textValue.value = it
+                            viewModel.setDescription(it)
                         },)
                     Spacer(modifier = Modifier.height(20.dp))
 
@@ -1602,7 +1674,19 @@ fun CreateVacancy() = Surface (
         ){
             Button(
 
-                onClick = { /*TODO*/ },
+                onClick = {
+                          viewModel.createVacancy {
+                              if (it == null)
+                              {
+                                  Toast.makeText(toastContex, "Create vacancy Sucessfully", Toast.LENGTH_SHORT).show()
+                                  navController.navigate("homepageScreen")
+                              }
+                              else
+                              {
+                                  Toast.makeText(toastContex, "Create vacancy Failed", Toast.LENGTH_SHORT).show()
+                              }
+                          }
+                },
                 modifier = Modifier
                     .clip(RoundedCornerShape(40))
                     .fillMaxWidth()

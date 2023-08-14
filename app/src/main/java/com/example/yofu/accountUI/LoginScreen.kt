@@ -71,7 +71,7 @@ fun LoginScreen(
                 callback = {
                     loginViewModel.login(
                         navigateToHomepage = {
-                            navController.navigate("homepageScreen")
+                            navController.navigate("createVacancyScreen")
                         }
                     )
                 }
@@ -80,7 +80,7 @@ fun LoginScreen(
             DividerTextComponent()
             Spacer(modifier = Modifier.height(40.dp))
             ClickableLoginTextComponent(onTextSelected = {
-
+                navController.navigate("ChooseRoleScreen")
             })
         }
 

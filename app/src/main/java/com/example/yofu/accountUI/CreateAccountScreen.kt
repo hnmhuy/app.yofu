@@ -36,7 +36,8 @@ import com.example.yofu.R
 @Composable
 fun CreateAccountScreen(
     navController: NavController,
-    createAccountViewModel: CreateAccountViewModel = CreateAccountViewModel("JobFinder")
+    userType: String,
+    createAccountViewModel: CreateAccountViewModel = CreateAccountViewModel(userType)
 )
 {
     Surface (
