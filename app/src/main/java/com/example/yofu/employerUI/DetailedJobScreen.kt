@@ -51,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yofu.R
+import com.example.yofu.accountUI.alert
 
 val BoldFont = FontFamily(
     Font(R.font.raleway_bold, FontWeight.Bold),
@@ -65,6 +66,27 @@ val mediumFont = FontFamily(
 @Composable
 fun DetailedJobScreen()
 {
+    var jobDescriptionContent = "InnovateTech Solutions is seeking " +
+            "a talented and motivated Digital Marketing Specialist to join " +
+            "our dynamic marketing team. As a Digital Marketing Specialist, " +
+            "you will play a pivotal role in developing and implementing " +
+            "digital marketing strategies that drive brand awareness, engagement, " +
+            "and lead generation for our innovative tech solutions. This is an " +
+            "exciting opportunity to contribute to a growing company at the forefront " +
+            "of technological advancements.a growing company at the forefront of technological " +
+            "advancements.a growing company at the forefront of technological advancements.a growing " +
+            "company at the forefront of technological advancements."
+
+    var benefitContent = "Bachelor's degree in Marketing, Business, " +
+            "or a related field. Relevant certifications (e.g., Google Ads, HubSpot, etc.) are a plus.\n" +
+            "Proven experience (2+ years) in digital marketing, including hands-on experience " +
+            "with social media management, email marketing, SEO, and SEM.\n" +
+            "Strong analytical skills with the ability to interpret data, draw conclusions, " +
+            "and make data-driven recommendations."
+    var companyContent = "To apply, please submit your resume, a cover letter outlining your " +
+            "relevant experience, and examples of successful digital marketing campaigns you have managed." +
+            " Please also include your salary expectations and earliest availability. Send your application " +
+            "to careers@innovatetech.com with the subject line: \"Digital Marketing Specialist Application - [Your Name]\"."
 
     Surface(
         modifier = Modifier
@@ -101,60 +123,12 @@ fun DetailedJobScreen()
                         )
                     }
                 }
-                if (isTinted) {
-                    AlertDialog(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(0.3f)
-                            .align(Alignment.CenterVertically)
-                            .padding(20.dp),
-
-                        onDismissRequest = { isTinted = false },
-                        title = {
-                            Text(text = "Oops, Failed!",
-                                fontFamily = BoldFont,
-                                color = Color.Red,
-                                textAlign = TextAlign.Center,
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Normal),
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        },
-                        text = {
-                            Text(text = "Sorry this feature is not supported yet! Please try again later",
-                                fontFamily = NormalFont,
-                                color = Color.Black,
-                                textAlign = TextAlign.Center,
-                                style = TextStyle(
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Normal),
-                            )
-                        },
-                        confirmButton = {
-                            Button(
-                                onClick = { isTinted = false },
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .fillMaxWidth(),
-                                shape = RoundedCornerShape(20.dp),
-                                colors = ButtonDefaults.buttonColors(Color.Blue),
-                            ) {
-                                Text(text = "OK",
-                                    fontFamily = BoldFont,
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center,
-                                    style = TextStyle(
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        fontStyle = FontStyle.Normal),
-                                )
-                            }
-                        },
-                        shape = RoundedCornerShape(30.dp)
-                    )
+                if(isTinted)
+                {
+                    alert(isTinted)
+                    {
+                            updateShowDialog -> isTinted = updateShowDialog
+                    }
                 }
             }
             Surface(
@@ -292,27 +266,7 @@ fun DetailedJobScreen()
                             }
                         }
                     }
-                    var jobDescriptionContent = "InnovateTech Solutions is seeking " +
-                            "a talented and motivated Digital Marketing Specialist to join " +
-                            "our dynamic marketing team. As a Digital Marketing Specialist, " +
-                            "you will play a pivotal role in developing and implementing " +
-                            "digital marketing strategies that drive brand awareness, engagement, " +
-                            "and lead generation for our innovative tech solutions. This is an " +
-                            "exciting opportunity to contribute to a growing company at the forefront " +
-                            "of technological advancements.a growing company at the forefront of technological " +
-                            "advancements.a growing company at the forefront of technological advancements.a growing " +
-                            "company at the forefront of technological advancements."
 
-                    var benefitContent = "Bachelor's degree in Marketing, Business, " +
-                            "or a related field. Relevant certifications (e.g., Google Ads, HubSpot, etc.) are a plus.\n" +
-                            "Proven experience (2+ years) in digital marketing, including hands-on experience " +
-                            "with social media management, email marketing, SEO, and SEM.\n" +
-                            "Strong analytical skills with the ability to interpret data, draw conclusions, " +
-                            "and make data-driven recommendations."
-                    var companyContent = "To apply, please submit your resume, a cover letter outlining your " +
-                            "relevant experience, and examples of successful digital marketing campaigns you have managed." +
-                            " Please also include your salary expectations and earliest availability. Send your application " +
-                            "to careers@innovatetech.com with the subject line: \"Digital Marketing Specialist Application - [Your Name]\"."
                     when (selectedTabIndex) {
                         0 -> TabContent("Jod Description",jobDescriptionContent)
                         1 -> TabContent("Benefits", benefitContent)

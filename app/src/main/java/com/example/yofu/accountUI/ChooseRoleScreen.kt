@@ -119,7 +119,7 @@ fun ChooseRoleScreen(
                     },
                     modifier = Modifier
                         .height(250.dp)
-                        .width(180.dp)
+                        .width(150.dp)
                         .padding(10.dp),
                     elevation = 4.dp,
                     shape = RoundedCornerShape(8.dp),
@@ -156,7 +156,7 @@ fun ChooseRoleScreen(
                     },
                     modifier = Modifier
                         .height(250.dp)
-                        .width(180.dp)
+                        .width(150.dp)
                         .padding(10.dp),
                     elevation = 4.dp,
                     shape = RoundedCornerShape(8.dp),

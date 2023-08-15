@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
@@ -59,6 +61,9 @@ val normalFont = FontFamily(
 )
 val extraBoldFont = FontFamily(
     Font(R.font.raleway_black, FontWeight.Black),
+)
+val BoldFont = FontFamily(
+    Font(R.font.raleway_bold, FontWeight.Bold),
 )
 @Composable
 fun NormalTextComponent(value: String)
@@ -325,6 +330,7 @@ fun ClickableLoginTextComponent(onTextSelected:(String) ->Unit)
         })
 }
 
+
 @Composable
 fun NormalTextComponentWithSize(value: String, size: TextUnit)
 {
@@ -392,5 +398,59 @@ fun NotCenterBoldTextComponent(value: String)
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal,
         ),
+    )
+}
+
+@Composable
+fun alert(showDialog: Boolean, onClose: (Boolean)-> Unit)
+{
+    AlertDialog(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.3f)
+            .padding(20.dp),
+        onDismissRequest = { onClose(!showDialog) },
+        title = {
+            Text(text = "Oops, Failed!",
+                fontFamily = BoldFont,
+                color = Color.Red,
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Normal),
+            )
+        },
+        text = {
+            Text(text = "Sorry this feature is not supported yet! Please try again later",
+                fontFamily = normalFont,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Normal),
+            )
+        },
+        confirmButton = {
+            Button(
+                onClick = { onClose(!showDialog) },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Text(text = "OK",
+                    fontFamily = BoldFont,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Normal),
+                )
+            }
+        },
+        shape = RoundedCornerShape(30.dp)
     )
 }

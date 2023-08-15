@@ -8,18 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.yofu.accountManage.AuthenticationProcess
 import com.example.yofu.accountUI.AboutAccountCompanyScreen
 import com.example.yofu.accountUI.ChooseRoleScreen
 import com.example.yofu.accountUI.CompanyCreateAccountScreen
 import com.example.yofu.accountUI.CreateAccountScreen
 import com.example.yofu.accountUI.LoginScreen
+import com.example.yofu.employerUI.DetailedJobScreen
+import com.example.yofu.employerUI.ProfileScreen
 import com.example.yofu.jobVacancyManage.VacancyRepository
 import com.google.firebase.Timestamp
 
@@ -30,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setContent{
             Navigation()
+            //ProfileScreen()
         }
 //        val account = UserLogin("minhhuu3323@gmail.com", "1234567890")
         //val userInfo = User(fullName = "Huy", birthDate = Timestamp.now(), userType = "JobFinder")
