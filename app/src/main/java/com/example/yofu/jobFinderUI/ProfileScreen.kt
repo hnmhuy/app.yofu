@@ -106,7 +106,7 @@ fun ProfileScreen()
                             Icon(
                                 imageVector = Icons.Filled.Edit,
                                 contentDescription = "",
-                                tint = Color.Blue,
+                                tint = Color(0xFF2F4AE3),
                                 modifier = Modifier
                                     .size(20.dp)
                                     .align(Alignment.CenterVertically),
@@ -156,7 +156,7 @@ fun ProfileScreen()
                         Icon(
                             imageVector = Icons.Default.AccountCircle,
                             contentDescription = "",
-                            tint = Color.Blue,
+                            tint = Color(0xFF2F4AE3),
                             modifier = Modifier
                                 .size(35.dp)
                                 .align(Alignment.CenterVertically)
@@ -174,7 +174,6 @@ fun ProfileScreen()
                             textAlign = TextAlign.Left,
                             modifier = Modifier.fillMaxWidth(0.8f)
                         )
-                        Spacer(modifier = Modifier.width(20.dp))
                         IconButton(onClick = { showDialog = true}) {
                             Icon(
                                 imageVector = Icons.Filled.Edit,

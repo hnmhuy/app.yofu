@@ -65,8 +65,7 @@ fun ChooseRoleScreen(
     Surface (
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(10.dp),
+            .background(Color.White),
         elevation = 50.dp,
         shape = RoundedCornerShape(20.dp)
     )
@@ -78,14 +77,14 @@ fun ChooseRoleScreen(
                 Icon(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
-                    tint = Color.Blue,
+                    tint = Color(0xFF2F4AE3),
                     modifier = Modifier.size(60.dp)
                 )
             }
         }
         Column(modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
+            .padding(20.dp)
             .verticalScroll(rememberScrollState()))
         {
             Spacer(modifier = Modifier.height(30.dp))

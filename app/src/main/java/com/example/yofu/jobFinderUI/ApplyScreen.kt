@@ -67,7 +67,7 @@ fun ApplyScreen()
                         Icon(
                             imageVector = Icons.Default.ArrowCircleLeft,
                             contentDescription = "",
-                            tint = Color.Blue,
+                            tint = Color(0xFF2F4AE3),
                             modifier = Modifier.size(50.dp)
                         )
                     }
@@ -116,7 +116,7 @@ fun ApplyScreen()
                             Icon(
                                 imageVector = Icons.Default.Upload,
                                 contentDescription = "",
-                                tint = Color.Blue,
+                                tint = Color(0xFF2F4AE3),
                                 modifier = Modifier.size(50.dp)
                             )
                             Text(
@@ -167,7 +167,7 @@ fun ApplyScreen()
                     .heightIn(50.dp)
                     .padding(horizontal = 10.dp),
                 contentPadding = PaddingValues(),
-                colors = ButtonDefaults.buttonColors(Color.Blue),
+                colors = ButtonDefaults.buttonColors(Color(0xFF2F4AE3)),
                 shape = RoundedCornerShape(50.dp),
                 enabled = isUploaded
             ) {

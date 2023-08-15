@@ -95,7 +95,7 @@ fun LoginScreen(
                 modifier = Modifier.clickable {pop = !pop}.fillMaxWidth(),
                 text ="Forgot your password",
                 fontFamily = NormalFont,
-                color = Color.Blue,
+                color = Color(0xFF2F4AE3),
                 style = TextStyle(
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,

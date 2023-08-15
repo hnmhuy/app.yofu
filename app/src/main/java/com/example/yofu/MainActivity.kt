@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import com.example.yofu.employerUI.CompanyProfileScreen
 import com.example.yofu.employerUI.CompanyScreen
+import com.example.yofu.jobFinderUI.ApplyScreen
 import com.example.yofu.jobFinderUI.DetailedJobScreen
 import com.example.yofu.jobFinderUI.ProfileScreen
 
@@ -15,10 +16,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setContent{
             //Navigation()
-            //ProfileScreen()
-            // DetailedJobScreen()
-            CompanyScreen()
-            //CompanyProfileScreen()
+            CompanyProfileScreen()
         }
 //        val account = UserLogin("minhhuu3323@gmail.com", "1234567890")
         //val userInfo = User(fullName = "Huy", birthDate = Timestamp.now(), userType = "JobFinder")
