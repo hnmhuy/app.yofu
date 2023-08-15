@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -64,6 +65,7 @@ val mediumFont = FontFamily(
 @Composable
 fun DetailedJobScreen()
 {
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -99,6 +101,61 @@ fun DetailedJobScreen()
                         )
                     }
                 }
+                if (isTinted) {
+                    AlertDialog(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.3f)
+                            .align(Alignment.CenterVertically)
+                            .padding(20.dp),
+
+                        onDismissRequest = { isTinted = false },
+                        title = {
+                            Text(text = "Oops, Failed!",
+                                fontFamily = BoldFont,
+                                color = Color.Red,
+                                textAlign = TextAlign.Center,
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontStyle = FontStyle.Normal),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        },
+                        text = {
+                            Text(text = "Sorry this feature is not supported yet! Please try again later",
+                                fontFamily = NormalFont,
+                                color = Color.Black,
+                                textAlign = TextAlign.Center,
+                                style = TextStyle(
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontStyle = FontStyle.Normal),
+                            )
+                        },
+                        confirmButton = {
+                            Button(
+                                onClick = { isTinted = false },
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .fillMaxWidth(),
+                                shape = RoundedCornerShape(20.dp),
+                                colors = ButtonDefaults.buttonColors(Color.Blue),
+                            ) {
+                                Text(text = "OK",
+                                    fontFamily = BoldFont,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center,
+                                    style = TextStyle(
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        fontStyle = FontStyle.Normal),
+                                )
+                            }
+                        },
+                        shape = RoundedCornerShape(30.dp)
+                    )
+                }
             }
             Surface(
                 modifier = Modifier
@@ -117,6 +174,7 @@ fun DetailedJobScreen()
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
+                    // Hỏi lại mọi người mấy tấm hình display làm shaoooo
                     Image(painter = painterResource(id = R.drawable.logo),
                         contentDescription = "logo",
                         contentScale = ContentScale.Fit,
@@ -271,31 +329,19 @@ fun DetailedJobScreen()
                     .heightIn(50.dp)
                     .padding(horizontal = 10.dp),
                 contentPadding = PaddingValues(),
-                colors = ButtonDefaults.buttonColors(Color.Transparent),
+                colors = ButtonDefaults.buttonColors(Color.Blue),
                 shape = RoundedCornerShape(50.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(42.dp)
-                        .background(
-                            color = Color.Blue,
-                            shape = RoundedCornerShape(50.dp)
-                        ),
-                    contentAlignment = Alignment.Center
+                val boldFont = FontFamily(
+                    Font(R.font.raleway_bold, FontWeight.Bold),
                 )
-                {
-                    val boldFont = FontFamily(
-                        Font(R.font.raleway_bold, FontWeight.Bold),
-                    )
-                    Text(
-                        text = "Apply",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = boldFont,
-                        color = Color.White
-                    )
-                }
+                Text(
+                    text = "Apply",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = BoldFont,
+                    color = Color.White
+                )
             }
         }
     }
