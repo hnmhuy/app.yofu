@@ -1,4 +1,4 @@
-package com.example.yofu.employerUI
+package com.example.yofu.jobFinderUI
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

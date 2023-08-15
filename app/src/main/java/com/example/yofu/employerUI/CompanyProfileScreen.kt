@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
@@ -22,9 +24,13 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.BusinessCenter
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.Composable
@@ -43,18 +49,27 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.yofu.accountUI.BoldFont
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
+import com.example.yofu.jobFinderUI.NormalFont
 
 
 @Preview
 @Composable
-fun ProfileScreen()
+fun CompanyProfileScreen()
 {
-    var userName = "Uyen Nhi"
-    var email = "fanhi11211@gmail.com"
-    var phoneNumber = "0923758923"
-    var dateOfBirth = "15/09/2003"
+    var managerName = "Uyen Nhi"
+    var emailManager = "fanhi11211@gmail.com"
+    var phoneNumberManager = "0923758923"
+    var dateOfBirthManager = "15/09/2023"
+
+    var companyName = "YOFU"
+    var companyNumber = "012324534"
+    var companyEmail = "yofu@gmail.com"
+    var companyLocation = "Ho Chi Minh City, Viet Nam"
+    var companyURL = "fb.com/yofu.team"
+
     var showDialog by remember { mutableStateOf(false) }
 
     Surface(
@@ -62,7 +77,8 @@ fun ProfileScreen()
             .fillMaxWidth()
             .fillMaxHeight()
             .background(Color.White)
-            .padding(15.dp)
+            .padding(start = 15.dp, end = 15.dp, top = 15.dp)
+            .verticalScroll(rememberScrollState())
     ) {
 
         Column {
@@ -91,7 +107,7 @@ fun ProfileScreen()
                     Row(modifier = Modifier.fillMaxWidth())
                     {
                         Text(
-                            text = userName,
+                            text = companyName,
                             fontFamily = extraBoldFont,
                             textAlign = TextAlign.Center,
                             style = TextStyle(
@@ -100,6 +116,7 @@ fun ProfileScreen()
                                 fontStyle = FontStyle.Normal,
                             )
                         )
+                        Spacer(modifier = Modifier.width(20.dp))
                         IconButton(onClick = { showDialog = true}) {
                             Icon(
                                 imageVector = Icons.Filled.Edit,
@@ -114,7 +131,7 @@ fun ProfileScreen()
                     }
 
                     Text(
-                        text = email,
+                        text = companyURL,
                         fontFamily = NormalFont,
                         style = TextStyle(
                             fontSize = 13.sp,
@@ -161,10 +178,10 @@ fun ProfileScreen()
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = "Contact Information",
+                            text = "Manager's Information",
                             fontFamily = BoldFont,
                             style = TextStyle(
-                                fontSize = 19.sp,
+                                fontSize = 17.sp,
                                 fontWeight = FontWeight.Normal,
                                 fontStyle = FontStyle.Normal
                             ),
@@ -202,7 +219,7 @@ fun ProfileScreen()
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = userName,
+                            text = managerName,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -230,7 +247,7 @@ fun ProfileScreen()
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = phoneNumber,
+                            text = phoneNumberManager,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -258,7 +275,236 @@ fun ProfileScreen()
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = dateOfBirth,
+                            text = dateOfBirthManager,
+                            fontFamily = NormalFont,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color.Black,
+                            textAlign = TextAlign.Left,
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.MailOutline,
+                            contentDescription = "",
+                            tint = Color.LightGray,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = emailManager,
+                            fontFamily = NormalFont,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color.Black,
+                            textAlign = TextAlign.Left,
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+                    .fillMaxHeight(0.4f),
+                shape = RoundedCornerShape(20.dp),
+                elevation = 3.dp,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                            .align(Alignment.CenterHorizontally),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.AccountCircle,
+                            contentDescription = "",
+                            tint = Color.Blue,
+                            modifier = Modifier
+                                .size(35.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = "Company's Information",
+                            fontFamily = BoldFont,
+                            style = TextStyle(
+                                fontSize = 17.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color.Black,
+                            textAlign = TextAlign.Left,
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        IconButton(onClick = { showDialog = true}) {
+                            Icon(
+                                imageVector = Icons.Filled.Edit,
+                                contentDescription = "",
+                                tint = Color.LightGray,
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .align(Alignment.CenterVertically),
+
+                                )
+                        }
+                    }
+                    Divider(modifier = Modifier.padding(start  = 5.dp, end = 5.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Icon(
+                            imageVector = Icons.Filled.BusinessCenter,
+                            contentDescription = "",
+                            tint = Color.LightGray,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = companyName,
+                            fontFamily = NormalFont,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color.Black,
+                            textAlign = TextAlign.Left,
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.Phone,
+                            contentDescription = "",
+                            tint = Color.LightGray,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = companyNumber,
+                            fontFamily = NormalFont,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color.Black,
+                            textAlign = TextAlign.Left,
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.MailOutline,
+                            contentDescription = "",
+                            tint = Color.LightGray,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = companyEmail,
+                            fontFamily = NormalFont,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color.Black,
+                            textAlign = TextAlign.Left,
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = "",
+                            tint = Color.LightGray,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = companyLocation,
+                            fontFamily = NormalFont,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color.Black,
+                            textAlign = TextAlign.Left,
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.Link,
+                            contentDescription = "",
+                            tint = Color.LightGray,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = companyURL,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,

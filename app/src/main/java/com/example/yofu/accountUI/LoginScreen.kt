@@ -28,15 +28,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.yofu.R
-import com.example.yofu.Screen
-import com.example.yofu.UserLogin
-import com.example.yofu.employerUI.NormalFont
+import com.example.yofu.jobFinderUI.NormalFont
 
 @Composable
 fun LoginScreen(
