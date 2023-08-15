@@ -1,5 +1,6 @@
 package com.example.yofu.accountUI
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,8 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.material.icons.filled.GroupWork
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,12 +40,28 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.yofu.R
 
+const val JOB_FINDER = "JobFinder"
+const val EMPLOYER = "Employer"
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ChooseRoleScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: ChooseRoleScreenViewModel = ChooseRoleScreenViewModel()
 )
 {
+    var role = remember {
+        mutableStateOf("")
+    }
+
+    val jobFinderButton = remember {
+        mutableStateOf(false)
+    }
+
+    val employerButton = remember {
+        mutableStateOf(false)
+    }
+
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -53,7 +72,9 @@ fun ChooseRoleScreen(
     )
     {
         Box(modifier = Modifier.padding(10.dp)) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.popBackStack()
+            }) {
                 Icon(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
@@ -87,14 +108,22 @@ fun ChooseRoleScreen(
             Row(modifier = Modifier
                 .align(Alignment.CenterHorizontally)) {
                 Card(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        role.value = JOB_FINDER
+                        Log.d("role", role.value)
+                        jobFinderButton.value = !jobFinderButton.value
+                        // Update the button status
+                        if (jobFinderButton.value) {
+                            employerButton.value = false
+                        }
+                    },
                     modifier = Modifier
                         .height(250.dp)
-                        .width(150.dp)
+                        .width(180.dp)
                         .padding(10.dp),
                     elevation = 4.dp,
                     shape = RoundedCornerShape(8.dp),
-                    backgroundColor = Color.White
+                    backgroundColor = if (jobFinderButton.value) Color.LightGray else Color.White
                 )
                 {
                     Column(modifier = Modifier
@@ -116,14 +145,22 @@ fun ChooseRoleScreen(
                 }
 
                 Card(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        role.value = EMPLOYER
+                        Log.d("role", role.value)
+                        employerButton.value = !employerButton.value
+                        // Update the button status
+                        if (employerButton.value) {
+                            jobFinderButton.value = false
+                        }
+                    },
                     modifier = Modifier
                         .height(250.dp)
                         .width(180.dp)
                         .padding(10.dp),
                     elevation = 4.dp,
                     shape = RoundedCornerShape(8.dp),
-                    backgroundColor = Color.White,
+                    backgroundColor = if (employerButton.value) Color.LightGray else Color.White
                 )
                 {
                     Column(modifier = Modifier
@@ -147,7 +184,11 @@ fun ChooseRoleScreen(
             }
 
             Spacer(modifier = Modifier.height(50.dp))
-            ButtonComponent(value = "Continue")
+            ButtonComponent(value = "Continue",
+                callback = {
+                    viewModel.setRole(role.value)
+                    viewModel.continuteToCreateAccount(navController)
+                })
         }
     }
 }

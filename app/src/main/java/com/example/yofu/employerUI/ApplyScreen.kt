@@ -87,9 +87,11 @@ fun ApplyScreen()
             Column(
                 modifier = Modifier.padding(20.dp).fillMaxHeight(0.9f)
             ) {
-                TextFieldComponent(labelValue = "Full Name") // Chỗ này thêm cái SetValue dô là hết lôi
+                TextFieldComponent(labelValue = "Full Name",
+                    setValue = {}) // Chỗ này thêm cái SetValue dô là hết lôi
                 Spacer(modifier = Modifier.height(30.dp))
-                TextFieldComponent(labelValue = "Email") // Same
+                TextFieldComponent(labelValue = "Email",
+                    setValue = {}) // Same
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(
                     onClick = { /*TODO*/ },

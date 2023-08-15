@@ -26,20 +26,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.Screen
+import com.example.yofu.employer.DropDown
 
 @Composable
 fun CreateAccountScreen(
     navController: NavController,
-    userType: String,
-    createAccountViewModel: CreateAccountViewModel = CreateAccountViewModel(userType)
+    createAccountViewModel: CreateAccountViewModel
 )
 {
+    val gender = listOf("Male", "Female", "Other")
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -50,12 +49,16 @@ fun CreateAccountScreen(
     )
     {
         Box {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton( onClick = {
+                navController.popBackStack()
+            }) {
                 Icon(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
                     tint = Color.Blue,
-                    modifier = Modifier.size(60.dp).padding(10.dp)
+                    modifier = Modifier
+                        .size(60.dp)
+                        .padding(10.dp)
                 )
             }
         }
@@ -65,7 +68,9 @@ fun CreateAccountScreen(
             .padding(10.dp)
         )
         {
-            Spacer(modifier = Modifier.height(30.dp).padding(20.dp))
+            Spacer(modifier = Modifier
+                .height(30.dp)
+                .padding(20.dp))
             Image(painter = painterResource(id = R.drawable.logo),
                 contentDescription = "logo",
                 contentScale = ContentScale.Fit,
@@ -88,9 +93,16 @@ fun CreateAccountScreen(
                 }
             )
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Gender",
+//            TextFieldComponent(labelValue = "Gender",
+//                setValue = {
+//                    createAccountViewModel.setGender(it)
+//                }
+//            )
+            DropDown(
+                label = "Gender",
+                list = gender,
                 setValue = {
-                    createAccountViewModel.setGender(it)
+                createAccountViewModel.setGender(it)
                 }
             )
             Spacer(modifier = Modifier.height(15.dp))
@@ -111,11 +123,17 @@ fun CreateAccountScreen(
                     // Precondition checking
                     if (createAccountViewModel.checkPassword())
                     {
-                        createAccountViewModel.signup(
-                            navigateToHomepage = {
-                                navController.navigate("homepageScreen")
+                        createAccountViewModel.signupForIndividual() { message, error ->
+                            if(error == null)
+                            {
+                                Toast.makeText(navController.context, message, Toast.LENGTH_SHORT).show()
+                                navController.navigate(Screen.LoginScreen.name)
                             }
-                        )
+                            else {
+                                Toast.makeText(navController.context, message, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
                     }
                     else {
                         Log.d("signup", "Password not match")

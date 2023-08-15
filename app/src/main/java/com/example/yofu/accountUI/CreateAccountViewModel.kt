@@ -1,9 +1,8 @@
 package com.example.yofu.accountUI
 
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
+import com.example.yofu.Company
 import com.example.yofu.User
 import com.example.yofu.UserLogin
 import com.example.yofu.accountManage.AuthenticationProcess
@@ -13,16 +12,28 @@ import kotlinx.coroutines.flow.StateFlow
 data class CreateAccountState(
     val account: UserLogin,
     val userInfo: User,
-    val confirmPassword: String = ""
+    val confirmPassword: String = "",
+    val companyInfomation: Company
 )
 
-class CreateAccountViewModel(userType: String): ViewModel() {
+class CreateAccountViewModel(): ViewModel() {
     private val _state: MutableStateFlow<CreateAccountState> = MutableStateFlow(
         CreateAccountState(
             account = UserLogin(),
-            userInfo = User(userType = userType)
+            userInfo = User(),
+            companyInfomation = Company()
         )
     )
+
+    fun setUserType(
+        newUserType: String
+    ) {
+        _state.value = _state.value.copy(
+            userInfo = _state.value.userInfo.copy(
+                userType = newUserType
+            )
+        )
+    }
 
     val state: StateFlow<CreateAccountState>
         get() = _state
@@ -82,22 +93,89 @@ class CreateAccountViewModel(userType: String): ViewModel() {
         return false
     }
 
-    fun signup(
-        navigateToHomepage: () -> Unit
+    fun signupForIndividual(
+        onComplete: (String, Exception?) -> Unit
     ) {
         AuthenticationProcess().signup(
             _state.value.account,
             _state.value.userInfo,
             onComplete = { user, exception ->
                 if (exception == null) {
-                    Log.d("signup", "Successfully")
-                    navigateToHomepage()
+                    val message = "Create account successfully"
+                    Log.d("signup", message)
+                    onComplete(message, null)
                 }
                 else {
-                    Log.d("signup", exception.toString())
+                    val message = "Create account failed ${exception.toString()}"
+                    Log.d("signup", message)
+                    onComplete(message, exception)
                 }
             }
         )
+    }
+
+    fun setCompanyName(newName: String)
+    {
+        _state.value = _state.value.copy(
+            companyInfomation = _state.value.companyInfomation.copy(
+                name = newName
+            )
+        )
+    }
+
+    fun setCompanyAddress(newLocation: String)
+    {
+        _state.value = _state.value.copy(
+            companyInfomation = _state.value.companyInfomation.copy(
+                location = newLocation
+            )
+        )
+    }
+
+    fun setCompanyEmail(newEmail: String)
+    {
+        _state.value = _state.value.copy(
+            companyInfomation = _state.value.companyInfomation.copy(
+                email = newEmail
+            )
+        )
+    }
+
+    fun setCompanyPhone(newPhone: String)
+    {
+        _state.value = _state.value.copy(
+            companyInfomation = _state.value.companyInfomation.copy(
+                phone = newPhone
+            )
+        )
+    }
+
+    fun setCompanyWebsite(newWebsite: String)
+    {
+        _state.value = _state.value.copy(
+            companyInfomation = _state.value.companyInfomation.copy(
+                website = newWebsite
+            )
+        )
+    }
+
+    fun signupForCompany(
+        onComplete: (String, Exception?) -> Unit
+    ) {
+        AuthenticationProcess().companySignup(
+            _state.value.account,
+            _state.value.userInfo,
+            _state.value.companyInfomation
+        ) { e ->
+            if (e == null) {
+                Log.d("signup", "Create account successfully")
+                onComplete("Create account successfully", null)
+            }
+            else {
+                Log.d("signup", e.toString())
+                onComplete(e.toString(), e)
+            }
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.yofu.accountUI
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,15 +24,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.Screen
 
-@Preview
 @Composable
-fun AboutAccountCompanyScreen()
+fun AboutAccountCompanyScreen(
+    navController: NavController,
+    viewModel: CreateAccountViewModel
+    )
 {
+    val context = LocalContext.current.applicationContext
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -42,7 +49,9 @@ fun AboutAccountCompanyScreen()
     )
     {
         Box {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.popBackStack()
+            }) {
                 Icon(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
@@ -69,21 +78,50 @@ fun AboutAccountCompanyScreen()
             BoldTextComponent(value = "About Your Company")
             Spacer(modifier = Modifier.height(20.dp))
             TextFieldComponent(labelValue = "Company Name",
-                setValue = {})
+                setValue = {
+                    viewModel.setCompanyName(it)
+            })
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Company's address",
-                setValue = {})
+                setValue = {
+                    viewModel.setCompanyAddress(it)
+                })
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Email",
-                setValue = {})
+                setValue = {
+                    viewModel.setCompanyEmail(it)
+                })
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Phone Number",
-                setValue = {})
+                setValue = {
+                    viewModel.setCompanyPhone(it)
+                })
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Website",
-                setValue = {})
+                setValue = {
+                    viewModel.setCompanyWebsite(it)
+                })
             Spacer(modifier = Modifier.height(20.dp))
-            ButtonComponent(value = "Next")
+            ButtonComponent(value = "Next") {
+                viewModel.signupForCompany() { message, e ->
+                    if(e == null)
+                    {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        navController.navigate(Screen.LoginScreen.name)
+                    }
+                    else
+                    {
+                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
+}
+
+@Preview
+@Composable
+fun AboutAccountCompanyScreenPreview()
+{
+    AboutAccountCompanyScreen(navController = NavController(LocalContext.current), CreateAccountViewModel())
 }

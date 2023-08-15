@@ -1,4 +1,5 @@
 package com.example.yofu.accountUI
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,12 +16,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.Screen
 import com.example.yofu.UserLogin
 
 @Composable
@@ -29,7 +32,7 @@ fun LoginScreen(
     loginViewModel: LoginScreenViewModel = viewModel<LoginScreenViewModel>(),
 )
 {
-
+    val context = LocalContext.current.applicationContext
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -69,11 +72,13 @@ fun LoginScreen(
             ButtonComponent(
                 value = "Sign in",
                 callback = {
-                    loginViewModel.login(
-                        navigateToHomepage = {
-                            navController.navigate("createVacancyScreen")
+                    loginViewModel.login(){message, error ->
+                        if(error != null) {
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        } else {
+                            navController.navigate("JobFinder")
                         }
-                    )
+                    }
                 }
                 )
             Spacer(modifier = Modifier.height(40.dp))

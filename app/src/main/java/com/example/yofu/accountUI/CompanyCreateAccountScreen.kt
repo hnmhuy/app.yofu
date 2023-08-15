@@ -26,12 +26,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.Screen
+import com.example.yofu.employer.DropDown
 
-@Preview
+
 @Composable
-fun CompanyCreateAccountScreen()
+fun CompanyCreateAccountScreen(
+    navController: NavController,
+    viewModel: CreateAccountViewModel
+    )
 {
+    val gender = listOf<String>("Male", "Female", "Other")
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -42,7 +49,9 @@ fun CompanyCreateAccountScreen()
     )
     {
         Box {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.popBackStack()
+            }) {
                 Icon(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
@@ -69,19 +78,33 @@ fun CompanyCreateAccountScreen()
             BoldTextComponent(value = "Create New Account")
             Spacer(modifier = Modifier.height(20.dp))
             TextFieldComponent(labelValue = "Manager's Full Name",
-                setValue = {})
+                setValue = {viewModel.setFullName(it)})
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Email",
-                setValue = {})
+                setValue = {viewModel.setEmail(it)})
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Manager's Gender",
-                setValue = {})
+//            TextFieldComponent(labelValue = "Manager's Gender",
+//                setValue = {viewModel.setGender(it)})
+            DropDown(
+                label = "Manager Gender",
+                list = gender,
+                setValue = {
+                    viewModel.setGender(it)
+                }
+            )
             Spacer(modifier = Modifier.height(15.dp))
-            PasswordTextFieldComponent(labelValue = "Password")
+            PasswordTextFieldComponent(labelValue = "Password",
+                setValue =  {viewModel.setPassword(it)}
+            )
             Spacer(modifier = Modifier.height(15.dp))
-            PasswordTextFieldComponent(labelValue = "Confirm Password")
+            PasswordTextFieldComponent(labelValue = "Confirm Password",
+                setValue = {viewModel.setPassword(it)})
             Spacer(modifier = Modifier.height(20.dp))
-            ButtonComponent(value = "Next")
+            ButtonComponent(value = "Next",
+                callback = {
+                    navController.navigate(Screen.AboutAccountCompanyScreen.name)
+                }
+            )
         }
     }
 }
