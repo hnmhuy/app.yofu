@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.Screen
 import com.example.yofu.jobFinderUI.NormalFont
 
 @Composable
@@ -80,11 +81,15 @@ fun LoginScreen(
             ButtonComponent(
                 value = "Sign in",
                 callback = {
-                    loginViewModel.login(){message, error ->
+                    loginViewModel.login(){message, error, role ->
                         if(error != null) {
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                         } else {
-                            navController.navigate("JobFinder")
+                            if (role == "Employer") {
+                               navController.navigate("Employer")
+                            } else {
+                                navController.navigate("JobFinder")
+                            }
                         }
                     }
                 }
@@ -95,7 +100,7 @@ fun LoginScreen(
                 modifier = Modifier.clickable {pop = !pop}.fillMaxWidth(),
                 text ="Forgot your password",
                 fontFamily = NormalFont,
-                color = Color.Blue,
+                color = Color(0xFF2F4AE3),
                 style = TextStyle(
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,

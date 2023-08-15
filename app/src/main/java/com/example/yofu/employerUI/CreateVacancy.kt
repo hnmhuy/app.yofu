@@ -68,6 +68,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.example.yofu.Screen
 import com.example.yofu.accountUI.NormalTextComponentWithSize
 import com.example.yofu.accountUI.NotCenterBoldTextComponentWithSize
 import com.example.yofu.accountUI.extraBoldFont
@@ -1679,7 +1680,7 @@ fun CreateVacancy(
                               if (it == null)
                               {
                                   Toast.makeText(toastContex, "Create vacancy Sucessfully", Toast.LENGTH_SHORT).show()
-                                  navController.navigate("homepageScreen")
+                                  navController.navigate(Screen.Company.name)
                               }
                               else
                               {

@@ -1,10 +1,7 @@
 package com.example.yofu.employerUI
 
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import com.example.yofu.Vacancy
 import com.example.yofu.jobVacancyManage.VacancyRepository
 import kotlinx.coroutines.flow.MutableStateFlow

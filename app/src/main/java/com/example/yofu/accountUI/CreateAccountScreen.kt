@@ -42,20 +42,19 @@ fun CreateAccountScreen(
     Surface (
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(10.dp),
+            .background(Color.White),
         elevation = 50.dp,
         shape = RoundedCornerShape(20.dp)
     )
     {
-        Box {
+        Box() {
             IconButton( onClick = {
                 navController.popBackStack()
             }) {
                 Icon(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
-                    tint = Color.Blue,
+                    tint = Color(0xFF2F4AE3),
                     modifier = Modifier
                         .size(60.dp)
                         .padding(10.dp)
@@ -65,7 +64,7 @@ fun CreateAccountScreen(
         Column(modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(10.dp)
+            .padding(20.dp)
         )
         {
             Spacer(modifier = Modifier

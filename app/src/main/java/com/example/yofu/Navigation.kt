@@ -16,6 +16,8 @@ import com.example.yofu.accountUI.CreateAccountScreen
 import com.example.yofu.accountUI.CreateAccountViewModel
 import com.example.yofu.accountUI.LoginScreen
 import com.example.yofu.employer.CreateVacancy
+import com.example.yofu.employerUI.CompanyScreen
+import com.example.yofu.jobFinder.Homepage
 
 enum class Screen {
     // Authentication
@@ -24,7 +26,11 @@ enum class Screen {
     CreateAccountScreen,
     CompanyCreateAccountScreen,
     AboutAccountCompanyScreen,
-    Homepage
+    Homepage,
+    Search,
+    Company,
+    CreateVacancy,
+    CreatedVacanciesList
 }
 
 
@@ -87,9 +93,29 @@ fun Navigation() {
             startDestination = Screen.Homepage.name)
         {
             composable(Screen.Homepage.name) {
-                HomepageScreen(navController = navController)
+                Homepage(navController = navController)
+            }
+            composable(Screen.Search.name) {
+                SearchScreen(navController = navController)
             }
         }
+        navigation(
+            route = "Employer",
+            startDestination = Screen.Company.name
+        ) {
+            composable(Screen.Company.name) {
+                CompanyScreen(
+                    navController = navController
+                )
+            }
+            composable(Screen.CreateVacancy.name) {
+                CreateVacancy(navController = navController)
+            }
+            composable(Screen.CreatedVacanciesList.name) {
+                CreatedVacanciesTemp(navController)
+            }
+        }
+        
     }
 }
 

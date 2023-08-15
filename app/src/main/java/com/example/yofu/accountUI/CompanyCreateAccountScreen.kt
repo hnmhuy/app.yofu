@@ -42,13 +42,12 @@ fun CompanyCreateAccountScreen(
     Surface (
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(10.dp),
+            .background(Color.White),
         elevation = 50.dp,
         shape = RoundedCornerShape(20.dp)
     )
     {
-        Box {
+        Box() {
             IconButton(onClick = {
                 navController.popBackStack()
             }) {
@@ -63,7 +62,7 @@ fun CompanyCreateAccountScreen(
         Column(modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(10.dp)
+            .padding(20.dp)
         )
         {
             Spacer(modifier = Modifier.height(30.dp).padding(20.dp))

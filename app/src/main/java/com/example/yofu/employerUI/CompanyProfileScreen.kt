@@ -24,6 +24,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.BusinessCenter
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
@@ -116,7 +117,6 @@ fun CompanyProfileScreen()
                                 fontStyle = FontStyle.Normal,
                             )
                         )
-                        Spacer(modifier = Modifier.width(20.dp))
                         IconButton(onClick = { showDialog = true}) {
                             Icon(
                                 imageVector = Icons.Filled.Edit,
@@ -189,7 +189,6 @@ fun CompanyProfileScreen()
                             textAlign = TextAlign.Left,
                             modifier = Modifier.fillMaxWidth(0.8f)
                         )
-                        Spacer(modifier = Modifier.width(20.dp))
                         IconButton(onClick = { showDialog = true}) {
                             Icon(
                                 imageVector = Icons.Filled.Edit,
@@ -340,7 +339,7 @@ fun CompanyProfileScreen()
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
-                            imageVector = Icons.Default.AccountCircle,
+                            imageVector = Icons.Default.Business,
                             contentDescription = "",
                             tint = Color.Blue,
                             modifier = Modifier
@@ -360,7 +359,6 @@ fun CompanyProfileScreen()
                             textAlign = TextAlign.Left,
                             modifier = Modifier.fillMaxWidth(0.8f)
                         )
-                        Spacer(modifier = Modifier.width(20.dp))
                         IconButton(onClick = { showDialog = true}) {
                             Icon(
                                 imageVector = Icons.Filled.Edit,

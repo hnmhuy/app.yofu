@@ -246,7 +246,7 @@ fun ButtonComponent(
             .heightIn(50.dp)
             .padding(horizontal = 10.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Blue),
+        colors = ButtonDefaults.buttonColors(Color(0XFF2F4AE3)),
         shape = RoundedCornerShape(50.dp)
     ) {
         val boldFont = FontFamily(
@@ -299,7 +299,7 @@ fun ClickableLoginTextComponent(onTextSelected:(String) ->Unit)
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
-        withStyle(style = SpanStyle(color = Color.Blue)){
+        withStyle(style = SpanStyle(color = Color(0xFF2F4AE3))){
             pushStringAnnotation(tag = signUp, annotation = signUp)
             append(signUp)
         }

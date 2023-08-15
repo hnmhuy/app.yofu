@@ -149,7 +149,7 @@ class VacancyRepository {
             }
     }
 
-    fun getVacancyList(onComplete: (MutableList<Vacancy>, Exception?) -> Unit)
+    fun getVacancyList(onComplete: (List<Vacancy>, Exception?) -> Unit)
     {
         val auth = Firebase.auth
         val user = auth.currentUser
@@ -164,17 +164,45 @@ class VacancyRepository {
             .whereEqualTo("manager", db.collection("user").document(user.uid))
             .get()
             .addOnSuccessListener { snapShots ->
+                Log.d(DBV, "Get vacancy list successfully")
                 val vacancyList = mutableListOf<Vacancy>()
                 snapShots.forEach {doc ->
+                    Log.d(DBV, snapShots.toString())
                     val vacancy = doc.toObject(Vacancy::class.java)
                     vacancyList.add(vacancy)
                 }
-                Log.d(DBV, "Get vacancy list successfully")
+                Log.d(DBV, "Convert vacancy list successfully")
                 onComplete(vacancyList, null)
             }
             .addOnFailureListener { exception ->
                 Log.d(DBV, exception.toString())
                 onComplete(mutableListOf(), exception)
+            }
+    }
+
+    fun getAllVacancies(
+        onComplete: (List<Vacancy>) -> Unit,
+    ) {
+        val db = Firebase.firestore
+        Log.d("vacancies", "called")
+        db
+            .collection(DB_VACANCY)
+            .get()
+            .addOnSuccessListener { snapShots ->
+                val vacancies = mutableListOf<Vacancy>()
+
+                for (document in snapShots.documents) {
+//                    vacancies.add(Vacancy.fromFireStore(document))
+                    val newVacancy = document.toObject(Vacancy::class.java)
+                    if (newVacancy != null) vacancies.add(newVacancy)
+                }
+                Log.d("vacancies", "successfully")
+
+                onComplete(vacancies)
+
+            }
+            .addOnFailureListener() { e ->
+                Log.w("vacancies", e.toString())
             }
     }
 }

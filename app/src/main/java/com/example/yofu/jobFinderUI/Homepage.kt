@@ -5,6 +5,7 @@ import com.example.yofu.accountUI.normalFont
 import com.example.yofu.accountUI.extraBoldFont
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,10 +51,14 @@ import com.example.yofu.R.drawable.casual
 import androidx.compose.material.Card
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import com.example.yofu.Screen
 
 @Preview
 @Composable
-fun Homepage() = Surface (
+fun Homepage(
+    navController: NavController
+) = Surface (
     modifier = Modifier
         .fillMaxSize()
         .background(Color(0xFFF6F7F9))
@@ -110,7 +115,12 @@ fun Homepage() = Surface (
             ),
         )
         {
-            Row{
+            Row(
+                modifier = Modifier
+                    .clickable {
+                        navController.navigate(Screen.Search.name)
+                    }
+            ) {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "Icon",

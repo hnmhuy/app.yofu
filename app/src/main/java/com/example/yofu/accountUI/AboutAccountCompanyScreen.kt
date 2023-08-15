@@ -55,7 +55,7 @@ fun AboutAccountCompanyScreen(
                 Icon(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
-                    tint = Color.Blue,
+                    tint = Color(0xFF40A5FE),
                     modifier = Modifier.size(60.dp).padding(10.dp)
                 )
             }

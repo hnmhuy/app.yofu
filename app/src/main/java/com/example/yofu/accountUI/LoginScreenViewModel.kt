@@ -35,7 +35,7 @@ class LoginScreenViewModel : ViewModel() {
     }
 
     fun login(
-        oncomplete: (String, Exception?) -> Unit
+        oncomplete: (String, Exception?, String?) -> Unit
     ) {
         process.login(
             UserLogin(
@@ -45,11 +45,11 @@ class LoginScreenViewModel : ViewModel() {
             onComplete = { user, exception ->
                 if (exception == null) {
                     Log.d("login", "Login successfully")
-                    oncomplete("Welcome back ${user?.fullName}", null)
+                    oncomplete("Welcome back ${user?.fullName}", null, user?.userType)
                 }
                 else {
                     Log.d("login", exception.toString())
-                    oncomplete("Login failed ${exception.toString()}", exception)
+                    oncomplete("Login failed ${exception.toString()}", exception, null)
                 }
             }
         )

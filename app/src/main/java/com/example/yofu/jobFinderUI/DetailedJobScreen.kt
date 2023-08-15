@@ -86,13 +86,15 @@ fun DetailedJobScreen()
             "relevant experience, and examples of successful digital marketing campaigns you have managed." +
             " Please also include your salary expectations and earliest availability. Send your application " +
             "to careers@innovatetech.com with the subject line: \"Digital Marketing Specialist Application - [Your Name]\"."
-
+    var jobName = "Mobile Developer"
+    var companyName = "YOFU Team"
+    var jobLocation = "Ho Chi Minh City, Viet Nam"
+    var salary = "1,000 - 2,000 USD/month"
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color.White)
-            .padding(10.dp),
+            .background(Color.White),
         elevation = 50.dp
     )
     {
@@ -105,7 +107,7 @@ fun DetailedJobScreen()
                         Icon(
                             imageVector = Icons.Default.ArrowCircleLeft,
                             contentDescription = "",
-                            tint = Color.Blue,
+                            tint = Color(0xFF2F4AE3),
                             modifier = Modifier.size(50.dp)
                         )
                     }
@@ -159,7 +161,7 @@ fun DetailedJobScreen()
                             .shadow(elevation = 0.4.dp),
                     )
                     Text(
-                        text = "Job Name",
+                        text = jobName,
                         fontFamily = BoldFont,
                         color = Color.Black,
                         textAlign = TextAlign.Center,
@@ -170,9 +172,9 @@ fun DetailedJobScreen()
                         ),
                     )
                     Text(
-                        text = "Company Name",
+                        text = companyName,
                         fontFamily = BoldFont,
-                        color = Color.Blue,
+                        color = Color(0xFF2F4AE3),
                         textAlign = TextAlign.Center,
                         style = TextStyle(
                             fontSize = 13.sp,
@@ -193,7 +195,7 @@ fun DetailedJobScreen()
                         )
                         Text(
                             modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
-                            text = "Ha Noi, Viet Nam",
+                            text = jobLocation,
                             fontFamily = NormalFont,
                             color = Color.Gray,
                             textAlign = TextAlign.Center,
@@ -216,9 +218,9 @@ fun DetailedJobScreen()
                         )
                         Text(
                             modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
-                            text = "20,000 - 50,000 USD/month",
+                            text = salary,
                             fontFamily = NormalFont,
-                            color = Color.Blue,
+                            color = Color(0xFF2F4AE3),
                             textAlign = TextAlign.Center,
                             style = TextStyle(
                                 fontSize = 15.sp,
@@ -240,7 +242,7 @@ fun DetailedJobScreen()
                         modifier = Modifier.padding(13.dp),
                         selectedTabIndex = selectedTabIndex,
                         backgroundColor = Color.White,
-                        contentColor = Color.Blue,
+                        contentColor = Color(0xFF40A5FE),
                     )
                     {
                         tabs.forEachIndexed { index, title ->
@@ -267,7 +269,7 @@ fun DetailedJobScreen()
                     }
 
                     when (selectedTabIndex) {
-                        0 -> TabContent("Jod Description",jobDescriptionContent)
+                        0 -> TabContent("Job Description",jobDescriptionContent)
                         1 -> TabContent("Benefits", benefitContent)
                         2 -> TabContent("About",companyContent)
                     }
@@ -282,7 +284,7 @@ fun DetailedJobScreen()
                     .heightIn(50.dp)
                     .padding(horizontal = 10.dp),
                 contentPadding = PaddingValues(),
-                colors = ButtonDefaults.buttonColors(Color.Blue),
+                colors = ButtonDefaults.buttonColors(Color(0xFF2F4AE3)),
                 shape = RoundedCornerShape(50.dp)
             ) {
                 val boldFont = FontFamily(
