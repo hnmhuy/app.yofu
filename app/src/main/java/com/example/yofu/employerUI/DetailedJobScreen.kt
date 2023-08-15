@@ -1,5 +1,6 @@
 package com.example.yofu.employerUI
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +25,9 @@ import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +35,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -44,13 +51,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yofu.R
 
+val BoldFont = FontFamily(
+    Font(R.font.raleway_bold, FontWeight.Bold),
+)
+val NormalFont = FontFamily(
+    Font(R.font.raleway_regular, FontWeight.Thin),
+)
+val mediumFont = FontFamily(
+    Font(R.font.raleway_medium, FontWeight.Medium),
+)
 @Preview
 @Composable
 fun DetailedJobScreen()
 {
-    val mediumFont = FontFamily(
-        Font(R.font.raleway_medium, FontWeight.Medium),
-    )
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -90,14 +103,99 @@ fun DetailedJobScreen()
             Surface(
                 modifier = Modifier
                     .fillMaxWidth(0.95f)
-                    .fillMaxHeight(0.45f)
-                    .padding(20.dp)
+                    .fillMaxHeight(0.5f)
+                    .padding(10.dp)
                     .align(Alignment.CenterHorizontally),
                 shape = RoundedCornerShape(10.dp),
                 elevation = 4.dp
             ) {
-                Column {
-                    // Hỏi lại mọi người mấy tấm hình display làm shaoooo
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(15.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(painter = painterResource(id = R.drawable.logo),
+                        contentDescription = "logo",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .size(120.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally)
+                            .clip(shape = RoundedCornerShape(10.dp))
+                            .shadow(elevation = 0.4.dp),
+                    )
+                    Text(
+                        text = "Job Name",
+                        fontFamily = BoldFont,
+                        color = Color.Black,
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontStyle = FontStyle.Normal
+                        ),
+                    )
+                    Text(
+                        text = "Company Name",
+                        fontFamily = BoldFont,
+                        color = Color.Blue,
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontStyle = FontStyle.Normal
+                        ),
+                    )
+                    Row (
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.LocationOn,
+                            contentDescription = "",
+                            tint = Color.LightGray,
+                            modifier = Modifier.size(15.dp)
+                        )
+                        Text(
+                            modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
+                            text = "Ha Noi, Viet Nam",
+                            fontFamily = NormalFont,
+                            color = Color.Gray,
+                            textAlign = TextAlign.Center,
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontStyle = FontStyle.Normal
+                            ),
+                        )
+                    }
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.AttachMoney,
+                            contentDescription = "",
+                            tint = Color.LightGray,
+                            modifier = Modifier.size(15.dp)
+                        )
+                        Text(
+                            modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
+                            text = "20,000 - 50,000 USD/month",
+                            fontFamily = NormalFont,
+                            color = Color.Blue,
+                            textAlign = TextAlign.Center,
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontStyle = FontStyle.Normal
+                            ),
+                        )
+                    }
                 }
             }
             Surface(modifier = Modifier
@@ -136,12 +234,31 @@ fun DetailedJobScreen()
                             }
                         }
                     }
+                    var jobDescriptionContent = "InnovateTech Solutions is seeking " +
+                            "a talented and motivated Digital Marketing Specialist to join " +
+                            "our dynamic marketing team. As a Digital Marketing Specialist, " +
+                            "you will play a pivotal role in developing and implementing " +
+                            "digital marketing strategies that drive brand awareness, engagement, " +
+                            "and lead generation for our innovative tech solutions. This is an " +
+                            "exciting opportunity to contribute to a growing company at the forefront " +
+                            "of technological advancements.a growing company at the forefront of technological " +
+                            "advancements.a growing company at the forefront of technological advancements.a growing " +
+                            "company at the forefront of technological advancements."
+
+                    var benefitContent = "Bachelor's degree in Marketing, Business, " +
+                            "or a related field. Relevant certifications (e.g., Google Ads, HubSpot, etc.) are a plus.\n" +
+                            "Proven experience (2+ years) in digital marketing, including hands-on experience " +
+                            "with social media management, email marketing, SEO, and SEM.\n" +
+                            "Strong analytical skills with the ability to interpret data, draw conclusions, " +
+                            "and make data-driven recommendations."
+                    var companyContent = "To apply, please submit your resume, a cover letter outlining your " +
+                            "relevant experience, and examples of successful digital marketing campaigns you have managed." +
+                            " Please also include your salary expectations and earliest availability. Send your application " +
+                            "to careers@innovatetech.com with the subject line: \"Digital Marketing Specialist Application - [Your Name]\"."
                     when (selectedTabIndex) {
-                        0 -> TabContent("Jod Description","InnovateTech Solutions is seeking a talented and motivated Digital Marketing Specialist to join our dynamic marketing team. As a Digital Marketing Specialist, you will play a pivotal role in developing and implementing digital marketing strategies that drive brand awareness, engagement, and lead generation for our innovative tech solutions. This is an exciting opportunity to contribute to a growing company at the forefront of technological advancements.a growing company at the forefront of technological advancements.a growing company at the forefront of technological advancements.a growing company at the forefront of technological advancements.")
-                        1 -> TabContent("Benefits","Bachelor's degree in Marketing, Business, or a related field. Relevant certifications (e.g., Google Ads, HubSpot, etc.) are a plus.\n" +
-                                "Proven experience (2+ years) in digital marketing, including hands-on experience with social media management, email marketing, SEO, and SEM.\n" +
-                                "Strong analytical skills with the ability to interpret data, draw conclusions, and make data-driven recommendations.")
-                        2 -> TabContent("Company Information","To apply, please submit your resume, a cover letter outlining your relevant experience, and examples of successful digital marketing campaigns you have managed. Please also include your salary expectations and earliest availability. Send your application to careers@innovatetech.com with the subject line: \"Digital Marketing Specialist Application - [Your Name]\".")
+                        0 -> TabContent("Jod Description",jobDescriptionContent)
+                        1 -> TabContent("Benefits", benefitContent)
+                        2 -> TabContent("About",companyContent)
                     }
                 }
 
@@ -187,18 +304,13 @@ fun DetailedJobScreen()
 @Composable
 fun TabContent(heading:String, content:String)
 {
-    val normalFont = FontFamily(
-        Font(R.font.raleway_regular, FontWeight.Thin),
-    )
-    val boldFont = FontFamily(
-        Font(R.font.raleway_bold, FontWeight.Bold),
-    )
+
     Surface(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Text(
                 modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
                 text = heading,
-                fontFamily = boldFont,
+                fontFamily = BoldFont,
                 color = Color.Black,
                 style = TextStyle(
                     fontSize = 16.sp,
@@ -209,7 +321,7 @@ fun TabContent(heading:String, content:String)
             Text(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 text = content,
-                fontFamily = normalFont,
+                fontFamily = NormalFont,
                 color = Color.Black,
                 style = TextStyle(
                     fontSize = 15.sp,
