@@ -22,8 +22,13 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
+import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,14 +51,12 @@ import com.example.yofu.accountUI.normalFont
 @Composable
 fun ApplyScreen()
 {
-
+    var isUploaded by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .background(Color.White)
-            .padding(10.dp),
-        elevation = 50.dp
     )
     {
         Column(modifier = Modifier.fillMaxWidth())
@@ -87,21 +90,20 @@ fun ApplyScreen()
             Column(
                 modifier = Modifier.padding(20.dp).fillMaxHeight(0.9f)
             ) {
-                TextFieldComponent(labelValue = "Full Name",
-                    setValue = {}) // Chỗ này thêm cái SetValue dô là hết lôi
+                TextFieldComponent(labelValue = "Full Name", setValue = {})
                 Spacer(modifier = Modifier.height(30.dp))
-                TextFieldComponent(labelValue = "Email",
-                    setValue = {}) // Same
+                TextFieldComponent(labelValue = "Email", setValue = {})
                 Spacer(modifier = Modifier.height(30.dp))
+
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        isUploaded = !isUploaded},
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(150.dp)
-                        .border(1.dp, Color.Gray),
+                        .heightIn(150.dp),
                     contentPadding = PaddingValues(),
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    shape = RoundedCornerShape(30.dp),
+                    shape = RoundedCornerShape(20.dp),
                 )
                 {
                     Column(
@@ -109,26 +111,51 @@ fun ApplyScreen()
                             .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Upload,
-                            contentDescription = "",
-                            tint = Color.Blue,
-                            modifier = Modifier.size(50.dp)
-                        )
-                        Text(
-                            text = "Upload CV/Resume",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 40.dp),
-                            fontFamily = normalFont,
-                            style = TextStyle(
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.Normal,
-                                fontStyle = FontStyle.Normal,
-                                color = Color.Gray
-                            ),
-                            textAlign = TextAlign.Center
-                        )
+                        if(!isUploaded)
+                        {
+                            Icon(
+                                imageVector = Icons.Default.Upload,
+                                contentDescription = "",
+                                tint = Color.Blue,
+                                modifier = Modifier.size(50.dp)
+                            )
+                            Text(
+                                text = "Upload CV/Resume",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(min = 40.dp),
+                                fontFamily = normalFont,
+                                style = TextStyle(
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    fontStyle = FontStyle.Normal,
+                                    color = Color.Gray
+                                ),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        else {
+                            Icon(
+                                imageVector = Icons.Default.AttachFile,
+                                contentDescription = "",
+                                tint = Color.Red,
+                                modifier = Modifier.size(50.dp)
+                            )
+                            Text(
+                                text = "Uploaded Successfully",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(min = 40.dp),
+                                fontFamily = normalFont,
+                                style = TextStyle(
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    fontStyle = FontStyle.Normal,
+                                    color = Color.Gray
+                                ),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
             }
@@ -141,7 +168,8 @@ fun ApplyScreen()
                     .padding(horizontal = 10.dp),
                 contentPadding = PaddingValues(),
                 colors = ButtonDefaults.buttonColors(Color.Blue),
-                shape = RoundedCornerShape(50.dp)
+                shape = RoundedCornerShape(50.dp),
+                enabled = isUploaded
             ) {
                 val boldFont = FontFamily(
                     Font(R.font.raleway_bold, FontWeight.Bold),

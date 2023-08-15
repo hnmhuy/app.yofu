@@ -152,7 +152,8 @@ fun TextFieldComponent(
 
     OutlinedTextField(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(30.dp)),
         label = {Text(text = labelValue)},
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
@@ -162,9 +163,9 @@ fun TextFieldComponent(
             unfocusedBorderColor = Color.LightGray
         ),
         keyboardOptions = KeyboardOptions.Default,
-        shape = RoundedCornerShape(50.dp),
+        shape = RoundedCornerShape(30.dp),
         value = textValue.value,
-
+        singleLine = true,
         onValueChange = {
             textValue.value = it
             setValue(it)
@@ -186,8 +187,9 @@ fun PasswordTextFieldComponent(
     }
     OutlinedTextField(
         modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(50.dp),
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(30.dp)),
+        shape = RoundedCornerShape(30.dp),
         label = {Text(text = labelValue)},
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
