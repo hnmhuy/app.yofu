@@ -60,6 +60,10 @@ import androidx.compose.material.RangeSlider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
@@ -74,9 +78,29 @@ import com.example.yofu.accountUI.NotCenterBoldTextComponentWithSize
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
 import com.example.yofu.employerUI.CreateVacancyViewModel
+import java.time.LocalDateTime
+import java.time.ZoneId
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerScreen() {
+
+    val dateTime = LocalDateTime.now()
+
+    val datePickerState = remember {
+        DatePickerState(
+            yearRange = (2023..2024),
+            initialSelectedDateMillis = dateTime.toMillis(),
+            initialDisplayMode = DisplayMode.Picker,
+            initialDisplayedMonthMillis = null
+        )
+    }
+
+    DatePicker(state = datePickerState)
+}
+fun LocalDateTime.toMillis() = this.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 private fun roundToNearestTenth(value: Float): Float {
     return (value * 10).roundToInt() / 10.0f
 }

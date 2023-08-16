@@ -58,7 +58,7 @@ import com.example.yofu.R
 import com.example.yofu.accountUI.NotCenterBoldTextComponentWithSize
 import com.example.yofu.accountUI.TextFieldComponent
 import com.example.yofu.accountUI.extraBoldFont
-import com.example.yofu.employer.DatePickerScreen
+//import com.example.yofu.employer.DatePickerScreen
 import com.example.yofu.employer.DropDown
 import com.example.yofu.employer.JobTypeCheckbox
 import com.example.yofu.employer.PositionCheckbox
