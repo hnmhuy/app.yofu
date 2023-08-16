@@ -1,8 +1,8 @@
 package com.example.yofu.employer
 
 
-import android.app.DatePickerDialog
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -61,61 +60,29 @@ import androidx.compose.material.RangeSlider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.key.Key.Companion.Calendar
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction.Companion.Done
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import com.example.yofu.Screen
 import com.example.yofu.accountUI.NormalTextComponentWithSize
 import com.example.yofu.accountUI.NotCenterBoldTextComponentWithSize
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import com.example.yofu.employerUI.CreateVacancyViewModel
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
-
-
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerState
-import androidx.compose.material3.DisplayMode
-
-import androidx.compose.runtime.remember
-import androidx.compose.ui.draw.scale
-import java.time.LocalDateTime
-import java.time.ZoneId
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickerScreen() {
-
-    val dateTime = LocalDateTime.now()
-
-    val datePickerState = remember {
-        DatePickerState(
-            yearRange = (1900..2050),
-            initialSelectedDateMillis = dateTime.toMillis(),
-            initialDisplayMode = DisplayMode.Picker,
-            initialDisplayedMonthMillis = null
-        )
-    }
-
-    DatePicker(state = datePickerState)
-}
-
-fun LocalDateTime.toMillis() = this.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 private fun roundToNearestTenth(value: Float): Float {
     return (value * 10).roundToInt() / 10.0f
 }
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun MyUI() {
+private fun MyUI(setSalary: (Float, Float) -> Unit) {
 
     var sliderValues by remember {
         mutableStateOf(0f..20f) // pass the initial values
@@ -140,6 +107,7 @@ private fun MyUI() {
             )
             val roundedStart = ceil(sliderValues.start)
             val roundedEnd = ceil(sliderValues.endInclusive)
+            setSalary(roundedStart, roundedEnd)
         }
     )
 
@@ -152,10 +120,1324 @@ private fun MyUI() {
 
 
 @Composable
-fun DropDown(){
+fun DropDown(label: String, list: List<String>, setValue: (String) -> Unit) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
+    var selectedItem by remember{
+        mutableStateOf("")
+    }
+    var textFieldSize by remember{
+        mutableStateOf(Size.Zero)
+    }
+    val icon = if(isExpanded){
+        Icons.Filled.KeyboardArrowUp
+    }else{
+        Icons.Filled.KeyboardArrowDown
+    }
+
+    Column{
+        OutlinedTextField(
+            enabled = false,
+            value = selectedItem,
+            onValueChange = { selectedItem = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { layoutCoordinates ->
+                    textFieldSize = layoutCoordinates.size
+                        .toSize()
+                },
+            shape = RoundedCornerShape(50.dp),
+            label = { Text(text = label) },
+            trailingIcon = {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = "",
+                    modifier = Modifier.clickable { isExpanded = !isExpanded }
+                )
+            }
+
+        )
+        DropdownMenu(expanded = isExpanded,
+            onDismissRequest = { isExpanded  = false },
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            list.forEach { label-> DropdownMenuItem(
+                onClick = { selectedItem = label
+                        isExpanded = false
+                        setValue(label)}
+            )
+            {
+                Text(text = label)
+            }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun JobTypeCheckbox(setJobType: (String)-> Unit) {
+    val selectedCheckbox = remember { mutableStateOf(1) }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    )
+    {
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 1
+                            setJobType("Full Time")
+                            Log.d("JobType", "Full Time")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 1) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Full Time",
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 2
+                            setJobType("Contract")
+                            Log.d("JobType", "Contract")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 2) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Contract",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 3
+                            setJobType("Internship")
+                            Log.d("JobType", "Internship")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 3) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Internship",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 4
+                            setJobType("Part Time")
+                            Log.d("JobType", "Part Time")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 4) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Part Time",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 5
+                            setJobType("Temporary")
+                            Log.d("JobType", "Temporary")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 5) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Temporary",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 6
+                            setJobType("Other")
+                            Log.d("JobType", "Other")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 6) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Other",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+        }
+    }
+}
+
+@Composable
+fun PositionCheckbox(
+    setJobPosition: (String) -> Unit
+) {
+    val selectedCheckbox = remember { mutableStateOf(1) }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 1
+                            setJobPosition("Software Engineer")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 1) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Software Engineer",
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 2
+                            setJobPosition("Fullstack Engineer")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 2) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Fullstack Engineer",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 3
+                            setJobPosition("Security Engineer")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 3) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Security Engineer",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 4
+                            setJobPosition("Business Analysist")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 4) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Business Analysist",
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 5
+                            setJobPosition("Web Designer")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 5) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Web Designer",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 6
+                            setJobPosition("Game Developer")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 6) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Game Developer",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 7
+                            setJobPosition("Developer")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 7) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 7) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 7) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Developer",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 8
+                            setJobPosition("Data Scientist")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 8) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 8) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 8) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Data Scientist",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 9
+                            setJobPosition("Tester")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 9) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 9) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 9) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Tester",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 10
+                            setJobPosition("Front-end")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 10) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 10) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 10) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Front-end",
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 11
+                            setJobPosition("Back-end")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 11) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 11) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 11) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Back-end",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox.value = 12
+                            setJobPosition("Other")
+                        }
+                        .background(
+                            color = if (selectedCheckbox.value == 12) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox.value == 12) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox.value == 12) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Other",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+        }
+    }
+}
+@Composable
+fun ProgrammingLanguageCheckbox(updateProgammingLanguage: (Int) -> Unit) {
+    var selectedCheckbox1 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox2 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox3 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox4 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox5 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox6 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox7 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox8 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox9 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox10 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox11 by remember {
+        mutableStateOf(false)
+    }
+    var selectedCheckbox12 by remember {
+        mutableStateOf(false)
+    }
+
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox1 = !selectedCheckbox1
+                            updateProgammingLanguage(0)
+                        }
+                        .background(
+                            color = if (selectedCheckbox1) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox1) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox1) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Java Script",
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox2 = !selectedCheckbox2
+                            updateProgammingLanguage(1)
+                        }
+                        .background(
+                            color = if (selectedCheckbox2) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox2) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox2) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Java",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox3 = !selectedCheckbox3
+                            updateProgammingLanguage(2)
+                        }
+                        .background(
+                            color = if (selectedCheckbox3) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox3) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox3) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Kotlin",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox4 = !selectedCheckbox4
+                            updateProgammingLanguage(3)
+                        }
+                        .background(
+                            color = if (selectedCheckbox4) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox4) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox4) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("PHP",
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox5 = !selectedCheckbox5
+                            updateProgammingLanguage(4)
+                        }
+                        .background(
+                            color = if (selectedCheckbox5) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox5) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox5) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("C#",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox6 = !selectedCheckbox6
+                            updateProgammingLanguage(5)
+                        }
+                        .background(
+                            color = if (selectedCheckbox6) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox6) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox6) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("C/C++",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox7 = !selectedCheckbox7
+                            updateProgammingLanguage(6)
+                        }
+                        .background(
+                            color = if (selectedCheckbox7) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox7) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox7) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("HTML",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox8 = !selectedCheckbox8
+                            updateProgammingLanguage(7)
+                        }
+                        .background(
+                            color = if (selectedCheckbox8) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox8) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox8) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("CSS",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox9 = !selectedCheckbox9
+                            updateProgammingLanguage(8)
+                        }
+                        .background(
+                            color = if (selectedCheckbox9) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox9) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox9) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Matlab",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox10 = !selectedCheckbox10
+                            updateProgammingLanguage(9)
+                        }
+                        .background(
+                            color = if (selectedCheckbox10) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox10) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox10) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("TypeScript",
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox11 = !selectedCheckbox11
+                            updateProgammingLanguage(10)
+                        }
+                        .background(
+                            color = if (selectedCheckbox11) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox11) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox11) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("SQL",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(size = 20.dp)
+                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clickable {
+                            selectedCheckbox12 = !selectedCheckbox12
+                            updateProgammingLanguage(11)
+                        }
+                        .background(
+                            color = if (selectedCheckbox12) Color(0xFF40A5FE) else Color.White,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedCheckbox12) Color(0xFF40A5FE) else Color.Gray,
+                            shape = RoundedCornerShape(size = 6.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedCheckbox12) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Text("Other",
+
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ),)
+            }
+        }
+    }
+}
+
+private val fruitsList: List<String> = listOf("Apple", "Mangoes", "Melons")
+@Composable
+private fun ListCheckBox() {
+
+    Column(horizontalAlignment = Alignment.Start) {
+        fruitsList.forEach { fruitName ->
+            var checked by remember {
+                mutableStateOf(true)
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(
+                    checked = checked,
+                    onCheckedChange = { checked_ ->
+                        checked = checked_
+
+                    }
+                )
+
+                Text(
+                    modifier = Modifier.padding(start = 2.dp),
+                    text = fruitName
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun CreateVacancy(
+    navController: NavController,
+    viewModel: CreateVacancyViewModel = CreateVacancyViewModel()
+) = Surface (
+    modifier = Modifier
+        .fillMaxSize()
+        .background(Color(0xFFF6F7F9))
+)
+{
     val list = listOf(
         "An Giang",
         "Ba Ria – Vung Tau",
@@ -221,1250 +1503,7 @@ fun DropDown(){
         "Vinh Phuc",
         "Yen Bai"
     )
-    var selectedItem by remember{
-        mutableStateOf("")
-    }
-    var textFieldSize by remember{
-        mutableStateOf(Size.Zero)
-    }
-    val icon = if(isExpanded){
-        Icons.Filled.KeyboardArrowUp
-    }else{
-        Icons.Filled.KeyboardArrowDown
-    }
-
-    Column{
-        OutlinedTextField(
-            enabled = false,
-            value = selectedItem,
-            onValueChange = {selectedItem = it},
-            modifier = Modifier
-                .fillMaxWidth()
-                .onGloballyPositioned { layoutCoordinates ->
-                    textFieldSize = layoutCoordinates.size
-                        .toSize()
-                },
-            shape = RoundedCornerShape(50.dp),
-            label = { Text(text = "Select Location") },
-            trailingIcon = {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = "",
-                    modifier = Modifier.clickable { isExpanded = !isExpanded }
-                )
-            }
-
-        )
-        DropdownMenu(expanded = isExpanded,
-            onDismissRequest = { isExpanded  = false },
-            modifier = Modifier.fillMaxWidth()
-        )
-        {
-            list.forEach{
-                    label-> DropdownMenuItem(onClick = { selectedItem = label
-                isExpanded = false}) {
-                Text(text = label)
-            }
-            }
-        }
-    }
-}
-
-
-@Composable
-fun JobTypeCheckbox() {
-    val selectedCheckbox = remember { mutableStateOf(1) }
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 1
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 1) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Full Time",
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 2
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 2) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Contract",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 3
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 3) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Internship",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 4
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 4) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Part Time",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 5
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 5) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Temporary",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 6
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 6) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Other",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-        }
-    }
-}
-
-@Composable
-fun PositionCheckbox() {
-    val selectedCheckbox = remember { mutableStateOf(1) }
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 1
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 1) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Software Engineer",
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 2
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 2) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Fullstack Engineer",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 3
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 3) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Security Engineer",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 4
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 4) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Business Analysist",
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 5
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 5) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Web Designer",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 6
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 6) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Game Developer",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 7
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 7) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 7) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 7) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Developer",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 8
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 8) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 8) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 8) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Data Scientist",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 9
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 9) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 9) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 9) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Tester",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 10
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 10) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 10) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 10) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Front-end",
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 11
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 11) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 11) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 11) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Back-end",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox.value = 12
-                        }
-                        .background(
-                            color = if (selectedCheckbox.value == 12) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox.value == 12) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox.value == 12) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Other",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-        }
-    }
-}
-@Composable
-fun ProgrammingLanguageCheckbox() {
-    var selectedCheckbox1 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox2 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox3 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox4 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox5 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox6 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox7 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox8 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox9 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox10 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox11 by remember {
-        mutableStateOf(false)
-    }
-    var selectedCheckbox12 by remember {
-        mutableStateOf(false)
-    }
-
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox1 = !selectedCheckbox1
-                        }
-                        .background(
-                            color = if (selectedCheckbox1) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox1) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox1) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Java Script",
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox2 = !selectedCheckbox2
-                        }
-                        .background(
-                            color = if (selectedCheckbox2) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox2) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox2) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Java",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox3 = !selectedCheckbox3
-                        }
-                        .background(
-                            color = if (selectedCheckbox3) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox3) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox3) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Kotlin",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox4 = !selectedCheckbox4
-                        }
-                        .background(
-                            color = if (selectedCheckbox4) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox4) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox4) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("PHP",
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox5 = !selectedCheckbox5
-                        }
-                        .background(
-                            color = if (selectedCheckbox5) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox5) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox5) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("C#",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox6 = !selectedCheckbox6
-                        }
-                        .background(
-                            color = if (selectedCheckbox6) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox6) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox6) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("C/C++",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox7 = !selectedCheckbox7
-                        }
-                        .background(
-                            color = if (selectedCheckbox7) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox7) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox7) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("HTML",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox8 = !selectedCheckbox8
-                        }
-                        .background(
-                            color = if (selectedCheckbox8) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox8) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox8) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("CSS",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox9 = !selectedCheckbox9
-                        }
-                        .background(
-                            color = if (selectedCheckbox9) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox9) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox9) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Matlab",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox10 = !selectedCheckbox10
-                        }
-                        .background(
-                            color = if (selectedCheckbox10) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox10) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox10) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("TypeScript",
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox11 = !selectedCheckbox11
-                        }
-                        .background(
-                            color = if (selectedCheckbox11) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox11) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox11) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("SQL",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
-                        .clickable {
-                            selectedCheckbox12 = !selectedCheckbox12
-                        }
-                        .background(
-                            color = if (selectedCheckbox12) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (selectedCheckbox12) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selectedCheckbox12) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-                Text("Other",
-
-                    fontFamily = normalFont,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),)
-            }
-        }
-    }
-}
-
-
-
-
-@Preview
-@Composable
-fun CreateVacancy() = Surface (
-    modifier = Modifier
-        .fillMaxSize()
-        .background(Color(0xFFF6F7F9))
-)
-{
+    val toastContex = LocalContext.current.applicationContext
     Column(modifier = Modifier
         .background(Color(0xFFF6F7F9))
         .verticalScroll(rememberScrollState()))
@@ -1488,7 +1527,10 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Job Title", 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.1.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(5.dp))
-                    TextFieldComponent(labelValue = "Job's Title")
+                    TextFieldComponent(labelValue = "Job's Title",
+                        setValue = {
+                            viewModel.setTitle(it)
+                        })
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -1503,7 +1545,11 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Location", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(5.dp))
-                    DropDown()
+                    DropDown("Select location", list,
+                        setValue = {
+                            viewModel.setLocation(it)
+                        }
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -1518,29 +1564,13 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Salary", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(5.dp))
-                    MyUI()
-                }
-            }}
-        Column(modifier = Modifier.padding(28.dp)) {
-            Spacer(modifier = Modifier.height(20.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(10))
-                    .background(Color.White)
-                    .padding(18.dp)
-            )
-            {
-                Column {
-                    NotCenterBoldTextComponentWithSize(value = "Due Date", size = 20.sp)
-                    Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
-                    Spacer(modifier = Modifier.height(10.dp))
-
+                    MyUI(
+                        setSalary = {min, max ->
+                            viewModel.setSalary(min, max)
+                        }
+                    )
                 }
             }
-        }
-        DatePickerScreen()
-        Column(modifier = Modifier.padding(28.dp)){
             Spacer(modifier = Modifier.height(20.dp))
             Box(
                 modifier = Modifier
@@ -1553,7 +1583,11 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Job Type", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(10.dp))
-                    JobTypeCheckbox()
+                    JobTypeCheckbox(
+                        setJobType = {
+                            viewModel.setJobType(it)
+                        }
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -1568,7 +1602,11 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Position", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(10.dp))
-                    PositionCheckbox()
+                    PositionCheckbox(
+                        setJobPosition = {
+                            viewModel.setPosition(it)
+                        }
+                    )
                 }
             }
 
@@ -1584,10 +1622,13 @@ fun CreateVacancy() = Surface (
                     NotCenterBoldTextComponentWithSize(value = "Programming Language", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(10.dp))
-                    ProgrammingLanguageCheckbox()
+                    ProgrammingLanguageCheckbox(
+                        updateProgammingLanguage = {
+                            viewModel.updateProgram(it)
+                        }
+                    )
                 }
             }
-
             Spacer(modifier = Modifier.height(20.dp))
             Box(
                 modifier = Modifier
@@ -1619,6 +1660,7 @@ fun CreateVacancy() = Surface (
                         value = textValue.value,
                         onValueChange = {
                             textValue.value = it
+                            viewModel.setDescription(it)
                         },)
                     Spacer(modifier = Modifier.height(20.dp))
 
@@ -1633,7 +1675,19 @@ fun CreateVacancy() = Surface (
         ){
             Button(
 
-                onClick = { /*TODO*/ },
+                onClick = {
+                          viewModel.createVacancy {
+                              if (it == null)
+                              {
+                                  Toast.makeText(toastContex, "Create vacancy Sucessfully", Toast.LENGTH_SHORT).show()
+                                  navController.navigate(Screen.Company.name)
+                              }
+                              else
+                              {
+                                  Toast.makeText(toastContex, "Create vacancy Failed", Toast.LENGTH_SHORT).show()
+                              }
+                          }
+                },
                 modifier = Modifier
                     .clip(RoundedCornerShape(40))
                     .fillMaxWidth()

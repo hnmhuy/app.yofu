@@ -19,11 +19,11 @@ class AuthenticationProcess {
                 if (auth.currentUser?.isEmailVerified == true) {
                     Log.d(LOGIN,"Login successful: UID = ${auth.currentUser?.uid.toString()}")
 
-//                    val process = UserRepository()
-//                    process.fetch(auth.currentUser?.uid.toString()) { user, exception ->
-//                        onComplete(user, exception)
-//                    }
-                    onComplete(null, null)
+                    val process = UserRepository()
+                    process.fetch(auth.currentUser?.uid.toString()) { user, exception ->
+                        onComplete(user, exception)
+                    }
+//                    onComplete(null, null)
                 }
                 else {
                     Log.d(LOGIN, "This account hasn't verified the email")

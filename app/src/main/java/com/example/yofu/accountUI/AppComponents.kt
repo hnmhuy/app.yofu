@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
@@ -47,6 +49,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,6 +61,9 @@ val normalFont = FontFamily(
 )
 val extraBoldFont = FontFamily(
     Font(R.font.raleway_black, FontWeight.Black),
+)
+val BoldFont = FontFamily(
+    Font(R.font.raleway_bold, FontWeight.Bold),
 )
 @Composable
 fun NormalTextComponent(value: String)
@@ -140,7 +146,10 @@ fun LessBoldTextComponent(value: String)
     )
 }
 @Composable
-fun TextFieldComponent(labelValue: String)
+fun TextFieldComponent(
+    labelValue: String,
+    setValue: (String) -> Unit
+)
 {
     val textValue = remember {
         mutableStateOf("")
@@ -148,7 +157,8 @@ fun TextFieldComponent(labelValue: String)
 
     OutlinedTextField(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(30.dp)),
         label = {Text(text = labelValue)},
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
@@ -158,16 +168,20 @@ fun TextFieldComponent(labelValue: String)
             unfocusedBorderColor = Color.LightGray
         ),
         keyboardOptions = KeyboardOptions.Default,
-        shape = RoundedCornerShape(50.dp),
+        shape = RoundedCornerShape(30.dp),
         value = textValue.value,
-
+        singleLine = true,
         onValueChange = {
             textValue.value = it
+            setValue(it)
         },
     )
 }
 @Composable
-fun PasswordTextFieldComponent(labelValue: String)
+fun PasswordTextFieldComponent(
+    labelValue: String,
+    setValue: (String) -> Unit = {}
+    )
 {
     val password = remember {
         mutableStateOf("")
@@ -177,8 +191,9 @@ fun PasswordTextFieldComponent(labelValue: String)
     }
     OutlinedTextField(
         modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(50.dp),
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(30.dp)),
+        shape = RoundedCornerShape(30.dp),
         label = {Text(text = labelValue)},
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
@@ -192,6 +207,7 @@ fun PasswordTextFieldComponent(labelValue: String)
         value = password.value,
         onValueChange = {
             password.value = it
+            setValue(it)
         },
         trailingIcon = {
             val iconImage = if(passwordVisible.value) {
@@ -217,40 +233,32 @@ fun PasswordTextFieldComponent(labelValue: String)
 }
 
 @Composable
-fun ButtonComponent(value: String)
+fun ButtonComponent(
+    value: String,
+    callback: () -> Unit = {}
+    )
 {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = { callback() },
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(50.dp),
+            .heightIn(50.dp)
+            .padding(horizontal = 10.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        colors = ButtonDefaults.buttonColors(Color(0XFF2F4AE3)),
         shape = RoundedCornerShape(50.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(42.dp)
-                .background(
-                    color = Color.Blue,
-                    shape = RoundedCornerShape(50.dp)
-                ),
-            contentAlignment = Alignment.Center
+        val boldFont = FontFamily(
+            Font(R.font.raleway_bold, FontWeight.Bold),
         )
-        {
-            val boldFont = FontFamily(
-                Font(R.font.raleway_bold, FontWeight.Bold),
-            )
-            Text(
-                text = value,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = boldFont,
-                color = Color.White
-            )
+        Text(
+            text = value,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = boldFont,
+            color = Color.White
+        )
         }
-    }
 }
 
 @Composable
@@ -290,7 +298,7 @@ fun ClickableLoginTextComponent(onTextSelected:(String) ->Unit)
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
-        withStyle(style = SpanStyle(color = Color.Blue)){
+        withStyle(style = SpanStyle(color = Color(0xFF2F4AE3))){
             pushStringAnnotation(tag = signUp, annotation = signUp)
             append(signUp)
         }
@@ -320,6 +328,7 @@ fun ClickableLoginTextComponent(onTextSelected:(String) ->Unit)
 
         })
 }
+
 
 @Composable
 fun NormalTextComponentWithSize(value: String, size: TextUnit)
@@ -388,5 +397,59 @@ fun NotCenterBoldTextComponent(value: String)
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal,
         ),
+    )
+}
+
+@Composable
+fun alert(showDialog: Boolean, onClose: (Boolean)-> Unit)
+{
+    AlertDialog(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.3f)
+            .padding(20.dp),
+        onDismissRequest = { onClose(!showDialog) },
+        title = {
+            Text(text = "Oops, Failed!",
+                fontFamily = BoldFont,
+                color = Color.Red,
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Normal),
+            )
+        },
+        text = {
+            Text(text = "Sorry this feature is not supported yet! Please try again later",
+                fontFamily = normalFont,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Normal),
+            )
+        },
+        confirmButton = {
+            Button(
+                onClick = { onClose(!showDialog) },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Text(text = "OK",
+                    fontFamily = BoldFont,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Normal),
+                )
+            }
+        },
+        shape = RoundedCornerShape(30.dp)
     )
 }

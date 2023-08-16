@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -19,15 +20,42 @@ data class Vacancy(
     var vid: String = "", //Vacancy Id
     var manager: DocumentReference = emptyCompanyRef,
     var title: String = "",
-    var minSalary: Double = 0.0,
-    var maxSalary: Double = 0.0,
+    var minSalary: Float = 0.0f,
+    var maxSalary: Float = 0.0f,
     var location: String = "",
     var position: String = "",
     var jobType: String = "",
+    var description: String = "",
+    val programmingLanguage: List<String> = emptyList(),
     var updatedDate: Timestamp = Timestamp(0,0),
     var expiredDate: Timestamp = Timestamp(0,0),
     var isActive: Boolean = false,
-)
+) {
+    companion object {
+//        fun fromFireStore(document: DocumentSnapshot): Vacancy {
+//            return Vacancy(
+//                expiredDate = document["expiredDate"] as Timestamp ?: Timestamp(0, 0),
+//                isActive = document["isActive"] as Boolean ?: true,
+//                jobType = document["jobType"] as String ?: "",
+//                maxSalary = document["maxSalary"] as Double ?: 0,
+//                minSalary = document["minSalary"] as Double ?: 0,
+//                title = document["title"] as String ?: "",
+//                updatedDate = document["updatedDate"] as Timestamp ?: Timestamp(0, 0),
+//                location = document["workLocation"] as String ?: "",
+//                position = document["workPosition"] as String ?: "",
+//            )
+//        }
+    }
+    fun doesMatchSearchQuery(query: String): Boolean {
+        val matchingCombinations = listOf(
+            "$title",
+            "${title.first()}"
+        )
+        return matchingCombinations.any {
+            it.contains(query, ignoreCase = true)
+        }
+    }
+}
 
 data class JobApplication(
     var aid: String = "",

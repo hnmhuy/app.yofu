@@ -1,5 +1,7 @@
 package com.example.yofu.accountUI
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -24,41 +26,50 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.Screen
+import com.example.yofu.employer.DropDown
 
-@Preview
 @Composable
-fun CreateAccountScreen()
+fun CreateAccountScreen(
+    navController: NavController,
+    createAccountViewModel: CreateAccountViewModel
+)
 {
+    val gender = listOf("Male", "Female", "Other")
     Surface (
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(10.dp),
+            .background(Color.White),
         elevation = 50.dp,
         shape = RoundedCornerShape(20.dp)
     )
     {
-        Box {
-            IconButton(onClick = { /*TODO*/ }) {
+        Box() {
+            IconButton( onClick = {
+                navController.popBackStack()
+            }) {
                 Icon(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
-                    tint = Color.Blue,
-                    modifier = Modifier.size(60.dp).padding(10.dp)
+                    tint = Color(0xFF2F4AE3),
+                    modifier = Modifier
+                        .size(60.dp)
+                        .padding(10.dp)
                 )
             }
         }
         Column(modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(10.dp)
+            .padding(20.dp)
         )
         {
-            Spacer(modifier = Modifier.height(30.dp).padding(20.dp))
+            Spacer(modifier = Modifier
+                .height(30.dp)
+                .padding(20.dp))
             Image(painter = painterResource(id = R.drawable.logo),
                 contentDescription = "logo",
                 contentScale = ContentScale.Fit,
@@ -69,17 +80,64 @@ fun CreateAccountScreen()
             )
             BoldTextComponent(value = "Create New Account")
             Spacer(modifier = Modifier.height(20.dp))
-            TextFieldComponent(labelValue = "Full name")
+            TextFieldComponent(labelValue = "Full name",
+                setValue = {
+                    createAccountViewModel.setFullName(it)
+                }
+            )
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Email")
+            TextFieldComponent(labelValue = "Email",
+                setValue = {
+                    createAccountViewModel.setEmail(it)
+                }
+            )
             Spacer(modifier = Modifier.height(15.dp))
-            TextFieldComponent(labelValue = "Gender")
+//            TextFieldComponent(labelValue = "Gender",
+//                setValue = {
+//                    createAccountViewModel.setGender(it)
+//                }
+//            )
+            DropDown(
+                label = "Gender",
+                list = gender,
+                setValue = {
+                createAccountViewModel.setGender(it)
+                }
+            )
             Spacer(modifier = Modifier.height(15.dp))
-            PasswordTextFieldComponent(labelValue = "Password")
+            PasswordTextFieldComponent(labelValue = "Password",
+                setValue = {
+                    createAccountViewModel.setPassword(it)
+                }
+            )
             Spacer(modifier = Modifier.height(15.dp))
-            PasswordTextFieldComponent(labelValue = "Confirm Password")
+            PasswordTextFieldComponent(labelValue = "Confirm Password",
+                setValue = {
+                    createAccountViewModel.setConfirmPassword(it)
+                }
+            )
             Spacer(modifier = Modifier.height(20.dp))
-            ButtonComponent(value = "Sign up")
+            ButtonComponent(value = "Sign up",
+                callback = {
+                    // Precondition checking
+                    if (createAccountViewModel.checkPassword())
+                    {
+                        createAccountViewModel.signupForIndividual() { message, error ->
+                            if(error == null)
+                            {
+                                Toast.makeText(navController.context, message, Toast.LENGTH_SHORT).show()
+                                navController.navigate(Screen.LoginScreen.name)
+                            }
+                            else {
+                                Toast.makeText(navController.context, message, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
+                    }
+                    else {
+                        Log.d("signup", "Password not match")
+                    }
+                })
         }
     }
 }
