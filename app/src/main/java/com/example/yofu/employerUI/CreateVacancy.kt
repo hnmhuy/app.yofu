@@ -1,6 +1,7 @@
 package com.example.yofu.employer
 
 
+import android.app.DatePickerDialog
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -59,20 +61,55 @@ import androidx.compose.material.RangeSlider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.key.Key.Companion.Calendar
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction.Companion.Done
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.yofu.accountUI.NormalTextComponentWithSize
 import com.example.yofu.accountUI.NotCenterBoldTextComponentWithSize
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
+
+
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.DisplayMode
+
+import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.scale
+import java.time.LocalDateTime
+import java.time.ZoneId
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerScreen() {
+
+    val dateTime = LocalDateTime.now()
+
+    val datePickerState = remember {
+        DatePickerState(
+            yearRange = (1900..2050),
+            initialSelectedDateMillis = dateTime.toMillis(),
+            initialDisplayMode = DisplayMode.Picker,
+            initialDisplayedMonthMillis = null
+        )
+    }
+
+    DatePicker(state = datePickerState)
+}
+
+fun LocalDateTime.toMillis() = this.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 private fun roundToNearestTenth(value: Float): Float {
     return (value * 10).roundToInt() / 10.0f
 }
@@ -1417,33 +1454,7 @@ fun ProgrammingLanguageCheckbox() {
     }
 }
 
-private val fruitsList: List<String> = listOf("Apple", "Mangoes", "Melons")
-@Composable
-private fun ListCheckBox() {
 
-    Column(horizontalAlignment = Alignment.Start) {
-        fruitsList.forEach { fruitName ->
-            var checked by remember {
-                mutableStateOf(true)
-            }
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = checked,
-                    onCheckedChange = { checked_ ->
-                        checked = checked_
-
-                    }
-                )
-
-                Text(
-                    modifier = Modifier.padding(start = 2.dp),
-                    text = fruitName
-                )
-            }
-        }
-    }
-}
 
 
 @Preview
@@ -1509,7 +1520,27 @@ fun CreateVacancy() = Surface (
                     Spacer(modifier = Modifier.height(5.dp))
                     MyUI()
                 }
+            }}
+        Column(modifier = Modifier.padding(28.dp)) {
+            Spacer(modifier = Modifier.height(20.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(10))
+                    .background(Color.White)
+                    .padding(18.dp)
+            )
+            {
+                Column {
+                    NotCenterBoldTextComponentWithSize(value = "Due Date", size = 20.sp)
+                    Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                }
             }
+        }
+        DatePickerScreen()
+        Column(modifier = Modifier.padding(28.dp)){
             Spacer(modifier = Modifier.height(20.dp))
             Box(
                 modifier = Modifier
@@ -1556,6 +1587,7 @@ fun CreateVacancy() = Surface (
                     ProgrammingLanguageCheckbox()
                 }
             }
+
             Spacer(modifier = Modifier.height(20.dp))
             Box(
                 modifier = Modifier
