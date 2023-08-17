@@ -262,7 +262,7 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
             FavoriteScreen(navController = navController)
         }
         composable(Screen.ProfileIndividual.name) {
-            ProfileScreen(navController = navController, mainController = mainNavController)
+            ProfileScreen(navController, mainNavController)
         }
     }
 }

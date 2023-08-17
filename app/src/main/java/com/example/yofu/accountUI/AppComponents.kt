@@ -177,6 +177,38 @@ fun TextFieldComponent(
         },
     )
 }
+
+@Composable
+fun DescriptionTextFieldComponent(
+    labelValue: String,
+    setValue: (String) -> Unit
+)
+{
+    val textValue = remember {
+        mutableStateOf("")
+    }
+
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(30.dp)),
+        label = {Text(text = labelValue)},
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Black,
+            focusedLabelColor = Color.Black,
+            cursorColor = Color.Black,
+            disabledTextColor = Color.Transparent,
+            unfocusedBorderColor = Color.LightGray
+        ),
+        keyboardOptions = KeyboardOptions.Default,
+        shape = RoundedCornerShape(30.dp),
+        value = textValue.value,
+        onValueChange = {
+            textValue.value = it
+            setValue(it)
+        },
+    )
+}
 @Composable
 fun PasswordTextFieldComponent(
     labelValue: String,
