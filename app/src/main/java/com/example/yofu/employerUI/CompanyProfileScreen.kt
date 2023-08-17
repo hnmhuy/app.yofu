@@ -50,15 +50,16 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.yofu.accountUI.BoldFont
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.jobFinderUI.NormalFont
+import com.google.firebase.auth.FirebaseAuth
 
 
-@Preview
 @Composable
-fun CompanyProfileScreen()
+fun CompanyProfileScreen(navController: NavController, mainController: NavController)
 {
     var managerName = "Uyen Nhi"
     var emailManager = "fanhi11211@gmail.com"
@@ -519,7 +520,9 @@ fun CompanyProfileScreen()
 
             Spacer(modifier = Modifier.height(20.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    FirebaseAuth.getInstance().signOut()
+                    mainController.navigate("Authentication") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(50.dp)

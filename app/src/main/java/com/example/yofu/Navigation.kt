@@ -126,7 +126,7 @@ fun Navigation() {
         )
         {
             composable("JobFinderApp") {
-                JobFinderApp()
+                JobFinderApp(mainNavController = navController)
             }
         }
         navigation(
@@ -134,7 +134,7 @@ fun Navigation() {
             startDestination = "EmployerApp"
         ) {
             composable("EmployerApp") {
-                EmployerApp()
+                EmployerApp(mainNavController = navController)
             }
         }
         
@@ -232,17 +232,17 @@ fun BottomNavigationBarForJobFinder(navController: NavController)
 }
 
 @Composable
-fun JobFinderApp(navController: NavHostController = rememberNavController())
+fun JobFinderApp(navController: NavHostController = rememberNavController(), mainNavController: NavHostController)
 {
     Scaffold(
         bottomBar = { BottomNavigationBarForJobFinder(navController) }
     ) {
-        JobFinderNavGraph(navController = navController, it)
+        JobFinderNavGraph(navController = navController, it, mainNavController)
     }
 }
 
 @Composable
-fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues)
+fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues, mainNavController: NavHostController)
 {
     NavHost(
         navController = navController,
@@ -262,7 +262,7 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues)
             FavoriteScreen(navController = navController)
         }
         composable(Screen.ProfileIndividual.name) {
-            ProfileScreen()
+            ProfileScreen(navController, mainNavController)
         }
     }
 }
@@ -368,17 +368,17 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
 }
 
 @Composable
-fun EmployerApp(navController: NavHostController = rememberNavController())
+fun EmployerApp(navController: NavHostController = rememberNavController(), mainNavController: NavHostController)
 {
     Scaffold(
         bottomBar = { BottomNavigateBarForEmployer(navController) }
     ) {
-        EmployerNavGraph(navController = navController, it)
+        EmployerNavGraph(navController = navController, it, mainNavController)
     }
 }
 
 @Composable
-fun EmployerNavGraph(navController: NavHostController, it: PaddingValues) {
+fun EmployerNavGraph(navController: NavHostController, it: PaddingValues, mainController: NavHostController){
     NavHost(
         navController = navController,
         startDestination = Screen.Company.name,
@@ -399,7 +399,7 @@ fun EmployerNavGraph(navController: NavHostController, it: PaddingValues) {
             ApplicationListTemp(navController)
         }
         composable(Screen.ProfileCompany.name) {
-            CompanyProfileScreen()
+            CompanyProfileScreen(navController, mainController)
         }
     }
 }
