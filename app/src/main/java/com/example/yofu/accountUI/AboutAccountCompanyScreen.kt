@@ -56,7 +56,9 @@ fun AboutAccountCompanyScreen(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
                     tint = Color(0xFF40A5FE),
-                    modifier = Modifier.size(60.dp).padding(10.dp)
+                    modifier = Modifier
+                        .size(60.dp)
+                        .padding(10.dp)
                 )
             }
         }
@@ -66,7 +68,9 @@ fun AboutAccountCompanyScreen(
             .padding(10.dp)
         )
         {
-            Spacer(modifier = Modifier.height(30.dp).padding(20.dp))
+            Spacer(modifier = Modifier
+                .height(30.dp)
+                .padding(20.dp))
             Image(painter = painterResource(id = R.drawable.logo),
                 contentDescription = "logo",
                 contentScale = ContentScale.Fit,
@@ -101,6 +105,8 @@ fun AboutAccountCompanyScreen(
                 setValue = {
                     viewModel.setCompanyWebsite(it)
                 })
+            Spacer(modifier = Modifier.height(20.dp))
+            DescriptionTextFieldComponent(labelValue = "Description", setValue = {}) // Description
             Spacer(modifier = Modifier.height(20.dp))
             ButtonComponent(value = "Next") {
                 viewModel.signupForCompany() { message, e ->
