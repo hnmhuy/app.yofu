@@ -1,5 +1,6 @@
 package com.example.yofu.employerUI
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,6 +36,7 @@ import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,26 +53,48 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.yofu.Company
+import com.example.yofu.User
+import com.example.yofu.accountManage.CompanyRepository
+import com.example.yofu.accountManage.UserRepository
 import com.example.yofu.accountUI.BoldFont
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.jobFinderUI.NormalFont
+import com.example.yofu.jobFinderUI.convertDay
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 @Composable
 fun CompanyProfileScreen(navController: NavController, mainController: NavController)
 {
-    var managerName = "Uyen Nhi"
-    var emailManager = "fanhi11211@gmail.com"
-    var phoneNumberManager = "0923758923"
-    var dateOfBirthManager = "15/09/2023"
+    val userInfo = MutableStateFlow(User())
+    val companyInfo = MutableStateFlow(Company())
+    val userEmail = MutableStateFlow("")
 
-    var companyName = "YOFU"
-    var companyNumber = "012324534"
-    var companyEmail = "yofu@gmail.com"
-    var companyLocation = "Ho Chi Minh City, Viet Nam"
-    var companyURL = "fb.com/yofu.team"
+    val auth = Firebase.auth
+    UserRepository().fetch(auth.currentUser?.uid.toString()) { user, exception ->
+        if (exception == null) {
+            userEmail.value = auth.currentUser?.email.toString()
+            userInfo.value = user ?: User()
+            Log.d("ProfileView", "Get user successfully ${userInfo.value.uid}")
+            Log.d("ProfileView", userInfo.value.toString())
+            val userType = userInfo.value.userType
+            if (userType == "Employer") {
+                val companyRef = userInfo.value.cid
+                CompanyRepository().fetch(companyRef) { company, e ->
+                    if (e == null) {
+                        companyInfo.value = company ?: Company()
+                    }
+                }
+            }
+        } else {
+            Log.d("ProfileView", exception.toString())
+        }
+    }
 
     var showDialog by remember { mutableStateOf(false) }
 
@@ -109,7 +133,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     Row(modifier = Modifier.fillMaxWidth())
                     {
                         Text(
-                            text = companyName,
+                            text = companyInfo.collectAsState().value.name,
                             fontFamily = extraBoldFont,
                             textAlign = TextAlign.Center,
                             style = TextStyle(
@@ -132,7 +156,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     }
 
                     Text(
-                        text = companyURL,
+                        text = companyInfo.collectAsState().value.website,
                         fontFamily = NormalFont,
                         style = TextStyle(
                             fontSize = 13.sp,
@@ -219,7 +243,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = managerName,
+                            text = userInfo.collectAsState().value.fullName,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -247,7 +271,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = phoneNumberManager,
+                            text = userInfo.collectAsState().value.phone,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -275,7 +299,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = dateOfBirthManager,
+                            text = convertDay(userInfo.collectAsState().value.birthDate),
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -303,7 +327,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = emailManager,
+                            text = userEmail.collectAsState().value,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -389,7 +413,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = companyName,
+                            text = companyInfo.collectAsState().value.name,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -417,7 +441,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = companyNumber,
+                            text = companyInfo.collectAsState().value.phone,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -445,7 +469,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = companyEmail,
+                            text = companyInfo.collectAsState().value.email,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -474,7 +498,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = companyLocation,
+                            text = companyInfo.collectAsState().value.location,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -503,7 +527,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = companyURL,
+                            text = companyInfo.collectAsState().value.website,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
