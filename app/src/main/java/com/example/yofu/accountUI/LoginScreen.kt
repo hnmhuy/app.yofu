@@ -86,9 +86,18 @@ fun LoginScreen(
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                         } else {
                             if (role == "Employer") {
-                               navController.navigate("Employer")
+                               navController.navigate("Employer") {
+                                      popUpTo("Authentication") {
+                                        inclusive = true
+                                      }
+                               }
                             } else {
                                 navController.navigate("JobFinder")
+                                {
+                                    popUpTo("Authentication") {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         }
                     }
@@ -112,7 +121,7 @@ fun LoginScreen(
             DividerTextComponent()
             Spacer(modifier = Modifier.height(20.dp))
             ClickableLoginTextComponent(onTextSelected = {
-                navController.navigate("ChooseRoleScreen")
+                navController.navigate(Screen.ChooseRoleScreen.name)
             })
             if(pop)
             {

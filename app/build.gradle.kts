@@ -59,7 +59,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     // UI Compose dependencies
-    val compose_version = "1.4.3"
+    val compose_version = "1.5.0"
 
     implementation("androidx.compose.animation:animation-core:$compose_version")
     implementation("androidx.compose.animation:animation:$compose_version")

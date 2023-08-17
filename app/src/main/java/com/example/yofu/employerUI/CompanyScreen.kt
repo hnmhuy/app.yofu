@@ -77,25 +77,6 @@ fun CompanyScreen(
     {
         Column()
         {
-            Button(
-                onClick = {
-                    navController.navigate(Screen.CreateVacancy.name)
-                }
-            ) {
-                Text(
-                    text = "Create new job"
-                )
-            }
-
-            Button(
-                onClick = {
-                    navController.navigate(Screen.CreatedVacanciesList.name)
-                }
-            ) {
-                Text(
-                    text = "View created Jobs"
-                )
-            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

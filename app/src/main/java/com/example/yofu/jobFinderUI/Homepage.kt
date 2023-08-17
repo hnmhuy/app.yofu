@@ -54,7 +54,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.example.yofu.Screen
 
-@Preview
 @Composable
 fun Homepage(
     navController: NavController
