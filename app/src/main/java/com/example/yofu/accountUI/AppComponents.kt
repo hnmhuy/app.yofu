@@ -1,31 +1,46 @@
 package com.example.yofu.accountUI
 
+import androidx.compose.material.Icon
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
@@ -37,6 +52,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -452,4 +468,149 @@ fun alert(showDialog: Boolean, onClose: (Boolean)-> Unit)
         },
         shape = RoundedCornerShape(30.dp)
     )
+}
+
+@Composable
+fun jobTag(value : String)
+{
+    Box(
+
+        modifier = Modifier
+            .clip(RoundedCornerShape(40))
+            .background(
+                color = Color(0xFF40A5FE)
+            )
+
+            .padding(5.dp),
+
+    )
+    {
+        Text(
+            text = value,
+            fontFamily = normalFont,
+            style = TextStyle(
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Normal,
+                fontStyle = FontStyle.Normal
+            ),
+            textAlign = TextAlign.Center,
+            color = Color.White
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Preview
+@Composable
+fun jobCard()
+{
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        elevation = 10.dp,
+        modifier = Modifier.padding(10.dp),
+        onClick = { Log.d("Click", "CardExample: Card Click")},
+        ) {
+        Column(
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Row {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(2.dp))
+                        .size(70.dp)
+                )
+                {
+                    Image(painter = painterResource(id = R.drawable.heart), contentDescription = "")
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    Column(
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        val extraBoldFont = FontFamily(
+                            Font(R.font.raleway_bold, FontWeight.Bold),
+                        )
+                        Text(
+                            text = "Job name",
+                            fontFamily = extraBoldFont,
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal,
+                            ),
+                        )
+                        Text(
+                            text = "Company name",
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                        )
+                    }
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(25.dp),
+                            painter = painterResource(id = R.drawable.heart_empty),
+                            contentDescription = "Icon"
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
+            Spacer(modifier = Modifier.height(15.dp))
+            Row {
+                Spacer(modifier = Modifier.size(90.dp))
+                Column {
+                    Row{
+                        Icon(Icons.Filled.Place, contentDescription = "Icon")
+                        NotCenterNormalTextComponent(value = "Location", size = 14.sp)
+                    }
+                    Row{
+                        Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
+                        Text(
+                            text = "Salary Range",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp),
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color(0xFF2F4AE3)
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.horizontalScroll(rememberScrollState())
+                    )
+                    {
+                        val list = listOf<String>(
+                            "C/C++",
+                            "Python",
+                            "JavaScript",
+                            "Bootstrap",
+                        )
+                        list.forEach{
+                            jobTag(value = it)
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
+                    }
+                }
+            }
+
+
+        }
+    }
 }
