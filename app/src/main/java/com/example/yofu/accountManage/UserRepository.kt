@@ -11,12 +11,18 @@ const val DBU = "user database"
 class UserRepository() {
     fun fetch(uid: String, onComplete: (User?, Exception?) -> Unit) {
         val db = Firebase.firestore
+        if(uid == "")
+        {
+            onComplete(null, Exception("UID empty"))
+            return
+        }
         db.collection(DB_USER).document(uid)
             .get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val user = document.toObject<User>()
                     Log.d(DBU, "DocumentSnapshot data: ${document.id}")
+                    Log.d(DBU, user.toString())
                     onComplete(user, null)
                 } else {
                     Log.d(DBU, "No such document")

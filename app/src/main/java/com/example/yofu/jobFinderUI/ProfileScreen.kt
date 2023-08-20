@@ -1,5 +1,6 @@
 package com.example.yofu.jobFinderUI
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,20 +45,71 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
+import com.example.yofu.Company
+import com.example.yofu.Screen
+import com.example.yofu.User
+import com.example.yofu.accountManage.CompanyRepository
+import com.example.yofu.accountManage.UserRepository
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.jobFinderUI.BoldFont
 import com.example.yofu.jobFinderUI.NormalFont
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.MutableStateFlow
+import java.text.SimpleDateFormat
+import java.util.Locale
 
+data class ProfileState(
+    var userInfo: User,
+    var companyInfo: Company,
+    var userEmail: String,
+)
 
-@Preview
+fun convertDay(data: Timestamp): String {
+    val date = data.toDate()
+    val format = "dd/MM/yyyy"
+    val dateFormat = SimpleDateFormat(format, Locale.getDefault())
+    return dateFormat.format(date)
+}
+
 @Composable
-fun ProfileScreen()
-{
-    var userName = "Uyen Nhi"
-    var email = "fanhi11211@gmail.com"
-    var phoneNumber = "0923758923"
-    var dateOfBirth = "15/09/2003"
+fun ProfileScreen(navController: NavController,
+                  mainController: NavController, ) {
+    val userInfo = MutableStateFlow(User())
+    val companyInfo = MutableStateFlow(Company())
+    val userEmail = MutableStateFlow("")
+
+    val auth = Firebase.auth
+    UserRepository().fetch(auth.currentUser?.uid.toString()) { user, exception ->
+        if(exception == null)
+        {
+            userEmail.value = auth.currentUser?.email.toString()
+            userInfo.value = if (user != null) user else User()
+            Log.d("ProfileView", "Get user successfully ${userInfo.value.uid}")
+            Log.d("ProfileView", userInfo.value.toString())
+            val userType = userInfo.value.userType
+            if(userType == "Employer")
+            {
+                val companyRef = userInfo.value.cid
+                CompanyRepository().fetch(companyRef) { company, e ->
+                    if(e == null)
+                    {
+                        companyInfo.value = if (company != null) company else Company()
+                    }
+                }
+            }
+        }
+        else
+        {
+            Log.d("ProfileView", exception.toString())
+        }
+    }
+
     var showDialog by remember { mutableStateOf(false) }
 
     Surface(
@@ -93,7 +146,7 @@ fun ProfileScreen()
                     Row(modifier = Modifier.fillMaxWidth())
                     {
                         Text(
-                            text = userName,
+                            text = userInfo.collectAsState().value.fullName,
                             fontFamily = extraBoldFont,
                             textAlign = TextAlign.Center,
                             style = TextStyle(
@@ -116,7 +169,7 @@ fun ProfileScreen()
                     }
 
                     Text(
-                        text = email,
+                        text = userEmail.collectAsState().value,
                         fontFamily = NormalFont,
                         style = TextStyle(
                             fontSize = 13.sp,
@@ -203,7 +256,7 @@ fun ProfileScreen()
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = userName,
+                            text = userInfo.collectAsState().value.fullName,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -231,7 +284,7 @@ fun ProfileScreen()
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = phoneNumber,
+                            text = userInfo.collectAsState().value.phone,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -259,7 +312,7 @@ fun ProfileScreen()
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = dateOfBirth,
+                            text = convertDay(userInfo.collectAsState().value.birthDate),
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -276,7 +329,10 @@ fun ProfileScreen()
 
             Spacer(modifier = Modifier.height(20.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    FirebaseAuth.getInstance().signOut()
+                    mainController.navigate("Authentication")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(50.dp)

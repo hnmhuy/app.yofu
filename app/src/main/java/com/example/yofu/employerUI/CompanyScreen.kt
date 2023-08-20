@@ -1,5 +1,6 @@
 package com.example.yofu.employerUI
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,8 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,28 +45,45 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.yofu.Company
 import com.example.yofu.R
 import com.example.yofu.Screen
+import com.example.yofu.accountManage.CompanyRepository
+import com.example.yofu.accountManage.UserRepository
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
 import com.example.yofu.jobFinderUI.NormalFont
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun CompanyScreen(
     navController: NavController
 )
 {
-    var companyName = "YOFU"
-    var aboutCompany = "YOFU is a dynamic IT company dedicated to revolutionizing the job search " +
-            "and employment industry. We leverage the latest technological advancements to create " +
-            "innovative online platforms and tools that connect job seekers with their ideal " +
-            "employment opportunities."
-    var companyLocation = "Headquartered in Ho Chi Minh City, Viet Nam, we thrive in a tech hub " +
-            "that enables collaboration with industry leaders and experts. Our strategic " +
-            "location keeps us at the forefront of innovation in IT and job search."
-    var companyNumber = "012413234"
-    var companyEmail = "yofu@gmail.com"
+    val company = MutableStateFlow(Company())
+//    var companyName = MutableStateFlow<String>("Sample company")
+//    var aboutCompany = MutableStateFlow<String>("")
+//    var companyLocation = MutableStateFlow<String>("")
+//    var companyNumber = MutableStateFlow<String>("123456789")
+//    var companyEmail = MutableStateFlow<String>("sample@gmail.com")
+    val auth = Firebase.auth
+    UserRepository().fetch(auth.currentUser!!.uid) { user, exception ->
+        if (exception == null) {
+            val companyRef = user!!.cid
+            CompanyRepository().fetch(companyRef!!) { data, exception ->
+                if (exception == null) {
+                    company.value = data!!
+                    Log.d("CompanyScreen", "Fetch company successfully")
+                    Log.d("CompanyScreen", company.value.toString())
+                }
+            }
+        }
+
+    }
     var showDialog by remember { mutableStateOf(false) }
 
     Surface(
@@ -132,7 +152,7 @@ fun CompanyScreen(
                     Row(modifier = Modifier.fillMaxWidth())
                     {
                         Text(
-                            text = companyName,
+                            text = company.collectAsState().value.name,
                             fontFamily = extraBoldFont,
                             textAlign = TextAlign.Center,
                             style = TextStyle(
@@ -160,8 +180,8 @@ fun CompanyScreen(
 
             }
 
-            section("About company", aboutCompany)
-            section(heading = "Location", content = companyLocation)
+            section("About company", company.collectAsState().value.description)
+            section(heading = "Location", content = company.collectAsState().value.location)
             Text(
                 text = "Contact us",
                 fontFamily = extraBoldFont,
@@ -202,7 +222,7 @@ fun CompanyScreen(
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = companyNumber,
+                            text = company.collectAsState().value.phone,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
@@ -231,7 +251,7 @@ fun CompanyScreen(
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = companyEmail,
+                            text = company.collectAsState().value.email,
                             fontFamily = NormalFont,
                             style = TextStyle(
                                 fontSize = 16.sp,
