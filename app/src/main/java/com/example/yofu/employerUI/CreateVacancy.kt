@@ -101,24 +101,7 @@ import java.util.Date
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickerScreen() {
 
-    val dateTime = LocalDateTime.now()
-
-    val datePickerState = remember {
-        DatePickerState(
-            yearRange = (2023..2024),
-            initialSelectedDateMillis = dateTime.toMillis(),
-            initialDisplayMode = DisplayMode.Picker,
-            initialDisplayedMonthMillis = null
-        )
-    }
-
-    DatePicker(state = datePickerState)
-}
-fun LocalDateTime.toMillis() = this.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 private fun roundToNearestTenth(value: Float): Float {
     return (value * 10).roundToInt() / 10.0f
 }
