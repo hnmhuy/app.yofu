@@ -343,7 +343,7 @@ fun ProfileScreen(navController: NavController,
             ) {
                 Row {
                     Text(
-                        text = "Logout",
+                        text = "Log out",
                         fontFamily = BoldFont,
                         style = TextStyle(
                             fontSize = 16.sp,
