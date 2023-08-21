@@ -21,7 +21,7 @@ data class Vacancy(
     var manager: DocumentReference = emptyCompanyRef,
     var title: String = "",
     var minSalary: Float = 0.0f,
-    var maxSalary: Float = 0.0f,
+    var maxSalary: Float = 20.0f,
     var location: String = "",
     var position: String = "",
     var jobType: String = "",

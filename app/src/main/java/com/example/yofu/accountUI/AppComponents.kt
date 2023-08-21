@@ -1,5 +1,7 @@
 package com.example.yofu.accountUI
 
+import android.annotation.SuppressLint
+import android.icu.text.SimpleDateFormat
 import androidx.compose.material.Icon
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
@@ -37,13 +39,21 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -70,6 +80,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yofu.R
+import java.util.Date
 
 
 val normalFont = FontFamily(
@@ -183,10 +194,10 @@ fun TextFieldComponent(
             disabledTextColor = Color.Transparent,
             unfocusedBorderColor = Color.LightGray
         ),
+        singleLine = true,
         keyboardOptions = KeyboardOptions.Default,
         shape = RoundedCornerShape(30.dp),
         value = textValue.value,
-        singleLine = true,
         onValueChange = {
             textValue.value = it
             setValue(it)
@@ -251,6 +262,7 @@ fun PasswordTextFieldComponent(
             unfocusedBorderColor = Color.LightGray,
             trailingIconColor = Color.LightGray
         ),
+        singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         value = password.value,
         onValueChange = {
@@ -645,4 +657,86 @@ fun jobCard()
 
         }
     }
+}
+
+@SuppressLint("UnrememberedMutableState")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerDialogSample(openDialog: MutableState<Boolean>, onSelected: (Double)->Unit) {
+    // Decoupled snackbar host state from scaffold state for demo purposes.
+    if (openDialog.value) {
+        val datePickerState = rememberDatePickerState()
+        val confirmEnabled = derivedStateOf { datePickerState.selectedDateMillis != null }
+        DatePickerDialog(
+            onDismissRequest = {
+                // Dismiss the dialog when the user clicks outside the dialog or on the back
+                // button. If you want to disable that functionality, simply use an empty
+                // onDismissRequest.
+                openDialog.value = false
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                        onSelected(datePickerState.selectedDateMillis!!.toDouble())
+                    },
+                    enabled = confirmEnabled.value
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+}
+
+//Convert date from milisecond to date
+fun convertDate(milisecond: Double): String {
+    val date = Date(milisecond.toLong())
+    val format = SimpleDateFormat("dd/MM/yyyy")
+    return format.format(date)
+}
+
+@Composable
+fun dockedDatePicker(isOpenDialog: MutableState<Boolean>, onSelected: (Double)->Unit)
+{
+    val selectedDate = remember { mutableStateOf("Select date") }
+    OutlinedTextField(
+        enabled = false,
+        readOnly = true,
+        textStyle = TextStyle(color = Color.Black),
+        value = selectedDate.value,
+        onValueChange = {},
+        modifier = Modifier.fillMaxWidth(),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            disabledBorderColor = Color.Transparent,
+            errorBorderColor = Color.Transparent
+        ),
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Filled.EditCalendar,
+                modifier = Modifier.clickable {
+                    isOpenDialog.value = true
+                },
+                contentDescription = null
+            )
+        }
+    )
+    DatePickerDialogSample(openDialog = isOpenDialog, onSelected =
+    {
+        selectedDate.value = convertDate(it)
+        onSelected(it)
+    })
 }

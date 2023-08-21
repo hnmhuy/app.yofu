@@ -4,11 +4,14 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.yofu.Vacancy
 import com.example.yofu.jobVacancyManage.VacancyRepository
+import com.google.firebase.Timestamp
+import com.google.type.DateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+
 class CreateVacancyViewModel : ViewModel() {
-    private val _state = MutableStateFlow<Vacancy>(Vacancy())
+    private val _state = MutableStateFlow<Vacancy>(Vacancy(updatedDate = Timestamp.now(), expiredDate = Timestamp.now()))
     private val _program = MutableStateFlow<MutableList<Boolean>>(MutableList(12) { false })
     private val programmingLanguage = listOf<String>("Java Script", "Java", "Kotlin", "PHP", "C#", "C/C++", "HTML", "CSS", "Matlab", "TypeScript", "SQL", "Order");
     val process = VacancyRepository()
@@ -82,6 +85,13 @@ class CreateVacancyViewModel : ViewModel() {
             }
         }
         return result
+    }
+
+    fun setDueDate(newDateDue: Double)
+    {
+        _state.value = _state.value.copy(
+            expiredDate = Timestamp((newDateDue/1000).toLong(), ((newDateDue % 1000) * 1000).toInt())
+        )
     }
 
     fun createVacancy(navigate: (Exception?)-> Unit)

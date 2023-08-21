@@ -1,6 +1,8 @@
 package com.example.yofu.employer
 
 
+import android.annotation.SuppressLint
+import android.icu.text.SimpleDateFormat
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -58,14 +60,26 @@ import androidx.compose.ui.unit.toSize
 import androidx.compose.material.Text
 import androidx.compose.material.RangeSlider
 import androidx.compose.material.SliderDefaults
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.internal.enableLiveLiterals
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.Key.Companion.Calendar
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -75,11 +89,15 @@ import androidx.navigation.NavController
 import com.example.yofu.Screen
 import com.example.yofu.accountUI.NormalTextComponentWithSize
 import com.example.yofu.accountUI.NotCenterBoldTextComponentWithSize
+import com.example.yofu.accountUI.dockedDatePicker
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
 import com.example.yofu.employerUI.CreateVacancyViewModel
+import com.example.yofu.jobFinderUI.convertDay
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.Date
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
@@ -164,6 +182,7 @@ fun DropDown(label: String, list: List<String>, setValue: (String) -> Unit) {
         OutlinedTextField(
             enabled = false,
             value = selectedItem,
+            textStyle = TextStyle(color = Color.Black),
             onValueChange = { selectedItem = it },
             modifier = Modifier
                 .fillMaxWidth()
@@ -1423,35 +1442,9 @@ fun ProgrammingLanguageCheckbox(updateProgammingLanguage: (Int) -> Unit) {
     }
 }
 
-private val fruitsList: List<String> = listOf("Apple", "Mangoes", "Melons")
-@Composable
-private fun ListCheckBox() {
-
-    Column(horizontalAlignment = Alignment.Start) {
-        fruitsList.forEach { fruitName ->
-            var checked by remember {
-                mutableStateOf(true)
-            }
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = checked,
-                    onCheckedChange = { checked_ ->
-                        checked = checked_
-
-                    }
-                )
-
-                Text(
-                    modifier = Modifier.padding(start = 2.dp),
-                    text = fruitName
-                )
-            }
-        }
-    }
-}
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateVacancy(
     navController: NavController,
@@ -1528,6 +1521,7 @@ fun CreateVacancy(
         "Yen Bai"
     )
     val toastContex = LocalContext.current.applicationContext
+    val isOpenDialog = remember { mutableStateOf(false) }
     Column(modifier = Modifier
         .background(Color(0xFFF6F7F9))
         .verticalScroll(rememberScrollState()))
@@ -1594,6 +1588,23 @@ fun CreateVacancy(
                         }
                     )
                 }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(10))
+                    .background(Color.White)
+                    .padding(18.dp))
+            {
+                Column{
+                    NotCenterBoldTextComponentWithSize(value = "Due Date", size = 20.sp)
+                    Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
+                    Spacer(modifier = Modifier.height(5.dp))
+                    dockedDatePicker(isOpenDialog = isOpenDialog) {
+                        viewModel.setDueDate(it)
+                    }
+            }
             }
             Spacer(modifier = Modifier.height(20.dp))
             Box(
