@@ -41,6 +41,8 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -541,13 +543,12 @@ fun jobTag(value : String)
 }
 
 @OptIn(ExperimentalMaterialApi::class)
-@Preview
 @Composable
 fun jobCard()
 {
     Card(
         shape = RoundedCornerShape(10.dp),
-        elevation = 10.dp,
+        elevation = 0.dp,
         modifier = Modifier.padding(10.dp),
         onClick = { Log.d("Click", "CardExample: Card Click")},
         ) {
@@ -561,7 +562,7 @@ fun jobCard()
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(2.dp))
-                        .size(70.dp)
+                        .size(50.dp)
                 )
                 {
                     Image(painter = painterResource(id = R.drawable.heart), contentDescription = "")
@@ -611,7 +612,120 @@ fun jobCard()
             Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
             Spacer(modifier = Modifier.height(15.dp))
             Row {
-                Spacer(modifier = Modifier.size(90.dp))
+                Spacer(modifier = Modifier.size(70.dp))
+                Column {
+                    Row{
+                        Icon(Icons.Filled.Place, contentDescription = "Icon")
+                        NotCenterNormalTextComponent(value = "Location", size = 14.sp)
+                    }
+                    Row{
+                        Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
+                        Text(
+                            text = "Salary Range",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp),
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color(0xFF2F4AE3)
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.horizontalScroll(rememberScrollState())
+                    )
+                    {
+                        val list = listOf<String>(
+                            "C/C++",
+                            "Python",
+                            "JavaScript",
+                            "Bootstrap",
+                        )
+                        list.forEach{
+                            jobTag(value = it)
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun jobCard_Employer()
+{
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        elevation = 0.dp,
+        modifier = Modifier.padding(10.dp),
+        onClick = { Log.d("Click", "CardExample: Card Click")},
+    ) {
+        Column(
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Row {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(2.dp))
+                        .size(50.dp)
+                )
+                {
+                    Image(painter = painterResource(id = R.drawable.logo), contentDescription = "")
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    Column(
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        val extraBoldFont = FontFamily(
+                            Font(R.font.raleway_bold, FontWeight.Bold),
+                        )
+                        Text(
+                            text = "Job name",
+                            fontFamily = extraBoldFont,
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal,
+                            ),
+                        )
+                        Text(
+                            text = "Company name",
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                        )
+                    }
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(15.dp),
+                            painter = painterResource(id = R.drawable.edit),
+                            contentDescription = "Icon"
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
+            Spacer(modifier = Modifier.height(15.dp))
+            Row {
+                Spacer(modifier = Modifier.size(70.dp))
                 Column {
                     Row{
                         Icon(Icons.Filled.Place, contentDescription = "Icon")
@@ -656,12 +770,119 @@ fun jobCard()
     }
 }
 
-fun dateValidate(status: Boolean)
+@OptIn(ExperimentalMaterialApi::class)
+@Preview
+@Composable
+fun jobCard_Employer_applications()
 {
-    if(status)
-    {
-        val now: Long = System.currentTimeMillis()
-        return
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        elevation = 0.dp,
+        modifier = Modifier.padding(10.dp),
+        onClick = { Log.d("Click", "CardExample: Card Click")},
+    ) {
+        Column(
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Row {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(2.dp))
+                        .size(50.dp)
+                )
+                {
+                    Image(painter = painterResource(id = R.drawable.logo), contentDescription = "")
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    Column(
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        val extraBoldFont = FontFamily(
+                            Font(R.font.raleway_bold, FontWeight.Bold),
+                        )
+                        Text(
+                            text = "Job name",
+                            fontFamily = extraBoldFont,
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal,
+                            ),
+                        )
+                        Text(
+                            text = "Company name",
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                        )
+                    }
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(15.dp),
+                            imageVector = Icons.Filled.KeyboardArrowRight,
+                            contentDescription = "Icon"
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
+            Spacer(modifier = Modifier.height(15.dp))
+            Row {
+                Spacer(modifier = Modifier.size(70.dp))
+                Column {
+                    Row{
+                        Icon(Icons.Filled.Place, contentDescription = "Icon")
+                        NotCenterNormalTextComponent(value = "Location", size = 14.sp)
+                    }
+                    Row{
+                        Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
+                        Text(
+                            text = "Salary Range",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp),
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color(0xFF2F4AE3)
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.horizontalScroll(rememberScrollState())
+                    )
+                    {
+                        val list = listOf<String>(
+                            "C/C++",
+                            "Python",
+                            "JavaScript",
+                            "Bootstrap",
+                        )
+                        list.forEach{
+                            jobTag(value = it)
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
+                    }
+                }
+            }
+
+
+        }
     }
 }
 
@@ -701,6 +922,7 @@ fun DatePickerDialog(openDialog: MutableState<Boolean>, title: String = "", disa
                 }
             },
         ) {
+
             DatePicker(
                 state = datePickerState,
                 dateValidator = {
