@@ -2,6 +2,8 @@ package com.example.yofu.jobVacancyManage
 
 import android.util.Log
 import com.example.yofu.Vacancy
+import com.example.yofu.accountManage.CompanyRepository
+import com.example.yofu.accountManage.UserRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -88,22 +90,40 @@ class VacancyRepository {
         val user = auth.currentUser
         if (user != null) {
             newVacancy.manager = db.collection("user").document(user.uid.toString())
+            // Get company name
+            UserRepository().fetch(user.uid.toString()) { user, e ->
+                if (e == null)
+                {
+                    CompanyRepository().fetch(user!!.cid) {company, e ->
+                        if (e == null)
+                        {
+                            newVacancy.companyName = company!!.name
+                            Log.d(DBV, "Get company name successfully + ${newVacancy.companyName}")
+                            db.collection(DB_VACANCY)
+                                .add(newVacancy)
+                                .addOnSuccessListener { documentSnapshot ->
+                                    newVacancy.vid = documentSnapshot.id
+                                    Log.d(DBV, "Create vacancy successfully")
+                                    onComplete(newVacancy, null)
+                                }
+                                .addOnFailureListener {
+                                    Log.d(DBV, it.toString())
+                                    onComplete(null, it)
+                                }
+                        }
+                        else {
+                            Log.d(DBV, e.toString())
+                            onComplete(null, e)
+                            Log.d(DBV, "Get company name failed")
+                        }
+                    }
+                }
+            }
         }
         else {
             Log.d(DBV, "No user")
             onComplete(null, Exception("No user"))
         }
-        db.collection(DB_VACANCY)
-            .add(newVacancy)
-            .addOnSuccessListener { documentSnapshot ->
-                newVacancy.vid = documentSnapshot.id
-                Log.d(DBV, "Create vacancy successfully")
-                onComplete(newVacancy, null)
-            }
-            .addOnFailureListener {
-                Log.d(DBV, it.toString())
-                onComplete(null, it)
-            }
     }
 
     fun update(newVacancy: Vacancy,
@@ -172,6 +192,8 @@ class VacancyRepository {
                     vacancyList.add(vacancy)
                 }
                 Log.d(DBV, "Convert vacancy list successfully")
+                // Sort this list by updatedDate
+                vacancyList.sortByDescending { it.updatedDate }
                 onComplete(vacancyList, null)
             }
             .addOnFailureListener { exception ->

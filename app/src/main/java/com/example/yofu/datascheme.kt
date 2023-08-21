@@ -19,6 +19,7 @@ val emptyVacancy = db.collection("vacancy").document("VID")
 data class Vacancy(
     var vid: String = "", //Vacancy Id
     var manager: DocumentReference = emptyCompanyRef,
+    var companyName: String = "",
     var title: String = "",
     var minSalary: Float = 0.0f,
     var maxSalary: Float = 20.0f,

@@ -3,8 +3,11 @@ package com.example.yofu.employerUI
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.yofu.Vacancy
+import com.example.yofu.accountManage.UserRepository
 import com.example.yofu.jobVacancyManage.VacancyRepository
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.type.DateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

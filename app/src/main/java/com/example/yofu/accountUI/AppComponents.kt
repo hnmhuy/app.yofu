@@ -77,6 +77,10 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yofu.R
+import com.example.yofu.Vacancy
+import com.example.yofu.accountManage.UserRepository
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.Date
 
 
@@ -541,9 +545,8 @@ fun jobTag(value : String)
 }
 
 @OptIn(ExperimentalMaterialApi::class)
-@Preview
 @Composable
-fun jobCard()
+fun jobCard(content: Vacancy)
 {
     Card(
         shape = RoundedCornerShape(10.dp),
@@ -564,7 +567,7 @@ fun jobCard()
                         .size(70.dp)
                 )
                 {
-                    Image(painter = painterResource(id = R.drawable.heart), contentDescription = "")
+                    Image(painter = painterResource(id = R.drawable.logo), contentDescription = "")
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Row(
@@ -578,7 +581,7 @@ fun jobCard()
                             Font(R.font.raleway_bold, FontWeight.Bold),
                         )
                         Text(
-                            text = "Job name",
+                            text = content.title,
                             fontFamily = extraBoldFont,
                             style = TextStyle(
                                 fontSize = 18.sp,
@@ -587,7 +590,7 @@ fun jobCard()
                             ),
                         )
                         Text(
-                            text = "Company name",
+                            text = content.companyName,
                             fontFamily = normalFont,
                             style = TextStyle(
                                 fontSize = 14.sp,
@@ -615,12 +618,12 @@ fun jobCard()
                 Column {
                     Row{
                         Icon(Icons.Filled.Place, contentDescription = "Icon")
-                        NotCenterNormalTextComponent(value = "Location", size = 14.sp)
+                        NotCenterNormalTextComponent(value = content.location, size = 14.sp)
                     }
                     Row{
                         Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
                         Text(
-                            text = "Salary Range",
+                            text = "${content.minSalary}k - ${content.maxSalary}k",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .heightIn(min = 40.dp),
@@ -637,12 +640,7 @@ fun jobCard()
                         modifier = Modifier.horizontalScroll(rememberScrollState())
                     )
                     {
-                        val list = listOf<String>(
-                            "C/C++",
-                            "Python",
-                            "JavaScript",
-                            "Bootstrap",
-                        )
+                        val list = content.programmingLanguage
                         list.forEach{
                             jobTag(value = it)
                             Spacer(modifier = Modifier.width(10.dp))
@@ -653,15 +651,6 @@ fun jobCard()
 
 
         }
-    }
-}
-
-fun dateValidate(status: Boolean)
-{
-    if(status)
-    {
-        val now: Long = System.currentTimeMillis()
-        return
     }
 }
 
