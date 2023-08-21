@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import androidx.compose.material.Icon
 import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +33,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -48,6 +45,7 @@ import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
@@ -60,7 +58,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -659,10 +656,19 @@ fun jobCard()
     }
 }
 
+fun dateValidate(status: Boolean)
+{
+    if(status)
+    {
+        val now: Long = System.currentTimeMillis()
+        return
+    }
+}
+
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerDialogSample(openDialog: MutableState<Boolean>, onSelected: (Double)->Unit) {
+fun DatePickerDialog(openDialog: MutableState<Boolean>, title: String = "", disablePast: Boolean = true, onSelected: (Double)->Unit) {
     // Decoupled snackbar host state from scaffold state for demo purposes.
     if (openDialog.value) {
         val datePickerState = rememberDatePickerState()
@@ -693,9 +699,19 @@ fun DatePickerDialogSample(openDialog: MutableState<Boolean>, onSelected: (Doubl
                 ) {
                     Text("Cancel")
                 }
-            }
+            },
         ) {
-            DatePicker(state = datePickerState)
+            DatePicker(
+                state = datePickerState,
+                dateValidator = {
+                    if (disablePast) {
+                        it >= System.currentTimeMillis()
+                    } else {
+                        true
+                    }
+                },
+                title = { Text(title) }
+            )
         }
     }
 }
@@ -708,7 +724,7 @@ fun convertDate(milisecond: Double): String {
 }
 
 @Composable
-fun dockedDatePicker(isOpenDialog: MutableState<Boolean>, onSelected: (Double)->Unit)
+fun dockedDatePicker(isOpenDialog: MutableState<Boolean>, title: String = "", disiablePast: Boolean = false, onSelected: (Double)->Unit)
 {
     val selectedDate = remember { mutableStateOf("Select date") }
     OutlinedTextField(
@@ -734,9 +750,9 @@ fun dockedDatePicker(isOpenDialog: MutableState<Boolean>, onSelected: (Double)->
             )
         }
     )
-    DatePickerDialogSample(openDialog = isOpenDialog, onSelected =
+    DatePickerDialog(openDialog = isOpenDialog, title = title, disablePast = disiablePast)
     {
         selectedDate.value = convertDate(it)
         onSelected(it)
-    })
+    }
 }

@@ -6,6 +6,7 @@ import com.example.yofu.Company
 import com.example.yofu.User
 import com.example.yofu.UserLogin
 import com.example.yofu.accountManage.AuthenticationProcess
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -44,6 +45,15 @@ class CreateAccountViewModel(): ViewModel() {
         _state.value = _state.value.copy(
             userInfo = _state.value.userInfo.copy(
                 fullName = newFullName
+            )
+        )
+    }
+
+    fun setBirthDate(newDateDue: Double)
+    {
+        _state.value = _state.value.copy(
+            userInfo = _state.value.userInfo.copy(
+                birthDate =  Timestamp((newDateDue/1000).toLong(), ((newDateDue % 1000) * 1000).toInt())
             )
         )
     }

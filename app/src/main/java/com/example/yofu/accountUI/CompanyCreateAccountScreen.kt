@@ -2,6 +2,7 @@ package com.example.yofu.accountUI
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,15 +16,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
+import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -39,6 +46,7 @@ fun CompanyCreateAccountScreen(
     )
 {
     val gender = listOf<String>("Male", "Female", "Other")
+    val isOpenDialog = remember { mutableStateOf(false) }
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -91,6 +99,36 @@ fun CompanyCreateAccountScreen(
                     viewModel.setGender(it)
                 }
             )
+            Spacer(modifier = Modifier.height(15.dp))
+            val selectedDate = remember { mutableStateOf("Date of birth") }
+            OutlinedTextField(
+                enabled = false,
+                readOnly = true,
+                textStyle = TextStyle(color = Color.Black),
+                value = selectedDate.value,
+                onValueChange = {},
+                shape = RoundedCornerShape(30.dp),
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black
+                ),
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.EditCalendar,
+                        modifier = Modifier.clickable {
+                            isOpenDialog.value = true
+                        },
+                        contentDescription = null
+                    )
+                }
+            )
+            DatePickerDialog(openDialog = isOpenDialog, disablePast = false)
+            {
+                selectedDate.value = convertDate(it)
+                viewModel.setBirthDate(it)
+            }
+            Spacer(modifier = Modifier.height(15.dp))
             Spacer(modifier = Modifier.height(15.dp))
             PasswordTextFieldComponent(labelValue = "Password",
                 setValue =  {viewModel.setPassword(it)}

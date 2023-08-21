@@ -63,6 +63,9 @@ class CreateVacancyViewModel : ViewModel() {
     fun updateProgram(index: Int)
     {
        _program.value[index] = !_program.value[index]
+        _state.value = _state.value.copy(
+            programmingLanguage = getProgram()
+        )
         Log.d("CreateVacancyViewModel", _program.value.toString())
     }
 
@@ -94,12 +97,62 @@ class CreateVacancyViewModel : ViewModel() {
         )
     }
 
+    fun verify(onComplete: (String) -> Unit): Boolean
+    {
+        // Check if title is empty
+        if (_state.value.title == "")
+        {
+            onComplete("Please enter title")
+            return false
+        }
+        // Check if location is empty
+        if (_state.value.location == "")
+        {
+            onComplete("Please enter location")
+            return false
+        }
+        // Check if position is empty
+        if (_state.value.position == "")
+        {
+            onComplete("Please enter position")
+            return false
+        }
+        // Check if job type is empty
+        if (_state.value.jobType == "")
+        {
+            onComplete("Please enter job type")
+            return false
+        }
+        // Check if description is empty
+        if (_state.value.description == "")
+        {
+            onComplete("Please enter description")
+            return false
+        }
+        // Check if programming language is empty
+        if (_state.value.programmingLanguage.isEmpty())
+        {
+            onComplete("Please choose at least one programming language")
+            return false
+        }
+        // Check if due date is empty
+        if (_state.value.expiredDate == Timestamp(0,0))
+        {
+            onComplete("Please choose due date")
+            return false
+        }
+        // Check position
+        if (_state.value.position == "")
+        {
+            onComplete("Please choose position")
+            return false
+        }
+        return true
+    }
+
     fun createVacancy(navigate: (Exception?)-> Unit)
     {
         var message = ""
-        _state.value = _state.value.copy(
-            programmingLanguage = getProgram()
-        )
         process.create(_state.value) { vacancy, e ->
             if (e != null){
                 Log.d("CreateVacancyViewModel", e.toString())

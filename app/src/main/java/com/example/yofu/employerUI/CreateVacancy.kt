@@ -222,7 +222,7 @@ fun DropDown(label: String, list: List<String>, setValue: (String) -> Unit) {
 
 @Composable
 fun JobTypeCheckbox(setJobType: (String)-> Unit) {
-    val selectedCheckbox = remember { mutableStateOf(1) }
+    val selectedCheckbox = remember { mutableStateOf(0) }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -473,8 +473,7 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
 fun PositionCheckbox(
     setJobPosition: (String) -> Unit
 ) {
-    val selectedCheckbox = remember { mutableStateOf(1) }
-
+    val selectedCheckbox = remember { mutableStateOf(0) }
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -1709,19 +1708,24 @@ fun CreateVacancy(
                 .padding(28.dp)
         ){
             Button(
-
                 onClick = {
-                          viewModel.createVacancy {
-                              if (it == null)
-                              {
-                                  Toast.makeText(toastContex, "Create vacancy Sucessfully", Toast.LENGTH_SHORT).show()
-                                  navController.navigate(Screen.Company.name)
-                              }
-                              else
-                              {
-                                  Toast.makeText(toastContex, "Create vacancy Failed", Toast.LENGTH_SHORT).show()
-                              }
-                          }
+                    var message = ""
+                    if(viewModel.verify { message = it })
+                    {
+                        viewModel.createVacancy {
+                            if (it == null)
+                            {
+                                Toast.makeText(toastContex, "Create vacancy Sucessfully", Toast.LENGTH_SHORT).show()
+                                navController.navigate(Screen.Company.name)
+                            }
+                            else
+                            {
+                                Toast.makeText(toastContex, "Create vacancy Failed", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                    else
+                        Toast.makeText(toastContex, message, Toast.LENGTH_SHORT).show()
                 },
                 modifier = Modifier
                     .clip(RoundedCornerShape(40))
