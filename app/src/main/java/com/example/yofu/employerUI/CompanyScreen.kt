@@ -49,7 +49,7 @@ import com.example.yofu.accountManage.UserRepository
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
-import com.example.yofu.jobfinderUI.NormalFont
+import com.example.yofu.jobFinderUI.NormalFont
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow

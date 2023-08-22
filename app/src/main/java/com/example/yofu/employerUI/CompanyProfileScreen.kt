@@ -59,7 +59,7 @@ import com.example.yofu.accountManage.UserRepository
 import com.example.yofu.accountUI.BoldFont
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
-import com.example.yofu.jobfinderUI.NormalFont
+import com.example.yofu.jobFinderUI.NormalFont
 import com.example.yofu.jobFinderUI.convertDay
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

@@ -77,6 +77,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.Screen
 import com.example.yofu.Vacancy
 import java.util.Date
 import kotlin.math.roundToInt
@@ -552,7 +553,7 @@ fun JobCard(content: Vacancy, navController: NavController)
         modifier = Modifier.padding(10.dp),
         onClick = {
             Log.d("Click", "CardExample: Card Click")
-            navController.navigate("JobDetailScreen/vid=${content.vid}")},
+            navController.navigate("${Screen.DetailVacancy.name}/${content.vid}")},
         ) {
         Column(
 

@@ -1,5 +1,6 @@
 package com.example.yofu
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -44,9 +45,9 @@ import com.example.yofu.employer.CreateVacancy
 import com.example.yofu.employerUI.CompanyProfileScreen
 import com.example.yofu.employerUI.CompanyScreen
 import com.example.yofu.employerUI.CreatedJobs
-import com.example.yofu.jobFinder.Homepage
+import com.example.yofu.jobFinderUI.Homepage
+import com.example.yofu.jobFinderUI.DetailedJobScreen
 import com.example.yofu.jobFinderUI.ProfileScreen
-import com.example.yofu.jobfinderUI.DetailedJobScreen
 
 enum class Screen {
     // Authentication
@@ -275,6 +276,7 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
             arguments = listOf(navArgument("vid") { type = NavType.StringType })
         ) {
             var vid = it.arguments?.getString("vid")
+            Log.d("NavigateDetailed", vid.toString())
             if (vid == null) vid = "VID"
             DetailedJobScreen(vid = vid, navController = navController)
         }

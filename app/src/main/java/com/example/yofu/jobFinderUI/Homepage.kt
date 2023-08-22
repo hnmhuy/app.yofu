@@ -1,5 +1,5 @@
 @file:OptIn(ExperimentalMaterialApi::class)
-package com.example.yofu.jobFinder
+package com.example.yofu.jobFinderUI
 
 import com.example.yofu.accountUI.normalFont
 import com.example.yofu.accountUI.extraBoldFont

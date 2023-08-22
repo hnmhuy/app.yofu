@@ -1,4 +1,4 @@
-package com.example.yofu.jobfinderUI
+package com.example.yofu.jobFinderUI
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -10,13 +10,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class DetailedJobViewModel(): ViewModel(){
-    private val vacancyId = "VID"
+    private var vacancyId = "VID"
     private val _state = MutableStateFlow<Vacancy>(Vacancy())
     private val companyInfo = MutableStateFlow<String>("")
 
     fun setVacancyId(id: String)
     {
-        this.vacancyId.replace("VID", id)
+        this.vacancyId = id
+        Log.d("NavigateDetailedModel", this.vacancyId)
     }
 
     val state: StateFlow<Vacancy>

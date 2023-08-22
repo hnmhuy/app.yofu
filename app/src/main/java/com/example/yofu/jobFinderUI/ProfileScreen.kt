@@ -51,8 +51,6 @@ import com.example.yofu.accountManage.CompanyRepository
 import com.example.yofu.accountManage.UserRepository
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
-import com.example.yofu.jobfinderUI.BoldFont
-import com.example.yofu.jobfinderUI.NormalFont
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

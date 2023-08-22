@@ -55,7 +55,7 @@ import com.example.yofu.accountUI.BoldFont
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
-import com.example.yofu.jobfinderUI.NormalFont
+import com.example.yofu.jobFinderUI.NormalFont
 
 
 @Preview

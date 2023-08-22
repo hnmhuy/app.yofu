@@ -1,4 +1,4 @@
-package com.example.yofu.jobfinderUI
+package com.example.yofu.jobFinderUI
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -73,12 +73,13 @@ val mediumFont = FontFamily(
 
 @Composable
 fun DetailedJobScreen(
-    vid: String = "VID",
+    vid: String,
     navController: NavController,
     detailedJobScreenViewModel: DetailedJobViewModel = viewModel<DetailedJobViewModel>()
 )
 {
     detailedJobScreenViewModel.setVacancyId(vid)
+    detailedJobScreenViewModel.loadVacancy()
     val jobContent by detailedJobScreenViewModel.state.collectAsState()
     val companyContent by detailedJobScreenViewModel.company.collectAsState()
     Surface(
