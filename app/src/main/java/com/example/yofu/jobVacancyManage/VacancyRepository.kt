@@ -225,7 +225,7 @@ class VacancyRepository {
                     val newVacancy = document.toObject(Vacancy::class.java)
                     if (newVacancy != null) vacancies.add(newVacancy)
                 }
-                Log.d("vacancies", "successfully")
+                Log.d("vacancies", "Get list of vacancies successfully")
 
                 onComplete(vacancies)
 

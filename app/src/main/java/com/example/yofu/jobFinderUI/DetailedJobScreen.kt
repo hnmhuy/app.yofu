@@ -1,4 +1,4 @@
-package com.example.yofu.jobFinderUI
+package com.example.yofu.jobfinderUI
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,15 +50,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.yofu.R
-import com.example.yofu.Vacancy
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.jobTag
-import com.example.yofu.jobfinderUI.DetailedJobScreenViewModel
+
+
+import kotlin.math.roundToInt
 
 val BoldFont = FontFamily(
     Font(R.font.raleway_bold, FontWeight.Bold),
@@ -74,37 +75,12 @@ val mediumFont = FontFamily(
 fun DetailedJobScreen(
     vid: String = "VID",
     navController: NavController,
-    viewModel: DetailedJobScreenViewModel = DetailedJobScreenViewModel(vid),
+    detailedJobScreenViewModel: DetailedJobViewModel = viewModel<DetailedJobViewModel>()
 )
 {
-    val jobContent by viewModel.state.collectAsState()
-    val companyContent by viewModel.company.collectAsState()
-
-    var jobDescriptionContent = "InnovateTech Solutions is seeking " +
-            "a talented and motivated Digital Marketing Specialist to join " +
-            "our dynamic marketing team. As a Digital Marketing Specialist, " +
-            "you will play a pivotal role in developing and implementing " +
-            "digital marketing strategies that drive brand awareness, engagement, " +
-            "and lead generation for our innovative tech solutions. This is an " +
-            "exciting opportunity to contribute to a growing company at the forefront " +
-            "of technological advancements.a growing company at the forefront of technological " +
-            "advancements.a growing company at the forefront of technological advancements.a growing " +
-            "company at the forefront of technological advancements."
-
-    var benefitContent = "Bachelor's degree in Marketing, Business, " +
-            "or a related field. Relevant certifications (e.g., Google Ads, HubSpot, etc.) are a plus.\n" +
-            "Proven experience (2+ years) in digital marketing, including hands-on experience " +
-            "with social media management, email marketing, SEO, and SEM.\n" +
-            "Strong analytical skills with the ability to interpret data, draw conclusions, " +
-            "and make data-driven recommendations."
-//    var companyContent = "To apply, please submit your resume, a cover letter outlining your " +
-//            "relevant experience, and examples of successful digital marketing campaigns you have managed." +
-//            " Please also include your salary expectations and earliest availability. Send your application " +
-//            "to careers@innovatetech.com with the subject line: \"Digital Marketing Specialist Application - [Your Name]\"."
-    var jobName = "Mobile Developer"
-    var companyName = "YOFU Team"
-    var jobLocation = "Ho Chi Minh City, Viet Nam"
-    var salary = "1,000 - 2,000 USD/month"
+    detailedJobScreenViewModel.setVacancyId(vid)
+    val jobContent by detailedJobScreenViewModel.state.collectAsState()
+    val companyContent by detailedJobScreenViewModel.company.collectAsState()
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -235,7 +211,7 @@ fun DetailedJobScreen(
                         )
                         Text(
                             modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
-                            text = salary,
+                            text = "${((jobContent.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((jobContent.maxSalary * 10).roundToInt() / 10.0f) * 1000} USD/month",
                             fontFamily = NormalFont,
                             color = Color(0xFF2F4AE3),
                             textAlign = TextAlign.Center,

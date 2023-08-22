@@ -49,7 +49,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -60,7 +59,7 @@ import com.example.yofu.accountManage.UserRepository
 import com.example.yofu.accountUI.BoldFont
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
-import com.example.yofu.jobFinderUI.NormalFont
+import com.example.yofu.jobfinderUI.NormalFont
 import com.example.yofu.jobFinderUI.convertDay
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

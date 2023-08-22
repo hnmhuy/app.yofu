@@ -34,7 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.yofu.R
 import com.example.yofu.Screen
-import com.example.yofu.jobFinderUI.NormalFont
+import com.example.yofu.jobfinderUI.NormalFont
 
 @Composable
 fun LoginScreen(

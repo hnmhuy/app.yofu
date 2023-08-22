@@ -75,6 +75,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.yofu.R
 import com.example.yofu.Vacancy
 import java.util.Date
@@ -543,13 +544,15 @@ fun jobTag(value : String)
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun JobCard(content: Vacancy)
+fun JobCard(content: Vacancy, navController: NavController)
 {
     Card(
         shape = RoundedCornerShape(10.dp),
         elevation = 0.dp,
         modifier = Modifier.padding(10.dp),
-        onClick = { Log.d("Click", "CardExample: Card Click")},
+        onClick = {
+            Log.d("Click", "CardExample: Card Click")
+            navController.navigate("JobDetailScreen/vid=${content.vid}")},
         ) {
         Column(
 

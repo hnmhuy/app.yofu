@@ -27,10 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.yofu.accountUI.AboutAccountCompanyScreen
 import com.example.yofu.accountUI.ChooseRoleScreen
@@ -44,7 +46,7 @@ import com.example.yofu.employerUI.CompanyScreen
 import com.example.yofu.employerUI.CreatedJobs
 import com.example.yofu.jobFinder.Homepage
 import com.example.yofu.jobFinderUI.ProfileScreen
-import com.example.yofu.jobfinderUI.Search
+import com.example.yofu.jobfinderUI.DetailedJobScreen
 
 enum class Screen {
     // Authentication
@@ -64,7 +66,8 @@ enum class Screen {
     CreateVacancy,
     CreatedVacanciesList,
     ApplicationList,
-    ProfileCompany
+    ProfileCompany,
+    DetailVacancy
 }
 
 
@@ -255,7 +258,8 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
             Homepage(navController = navController)
         }
         composable(Screen.Search.name) {
-            Search(navController)
+            //Search(navController)
+            SearchScreen(navController = navController)
         }
         composable(Screen.MyApplication.name) {
             MyApplicationScreen(navController = navController)
@@ -265,6 +269,14 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
         }
         composable(Screen.ProfileIndividual.name) {
             ProfileScreen(navController, mainNavController)
+        }
+        composable(
+            "${Screen.DetailVacancy.name}/{vid}",
+            arguments = listOf(navArgument("vid") { type = NavType.StringType })
+        ) {
+            var vid = it.arguments?.getString("vid")
+            if (vid == null) vid = "VID"
+            DetailedJobScreen(vid = vid, navController = navController)
         }
     }
 }

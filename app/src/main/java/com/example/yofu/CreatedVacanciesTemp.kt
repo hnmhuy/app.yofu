@@ -48,7 +48,7 @@ fun CreatedVacanciesTemp(
             if (!refreshing) {
                 items(createdVacanciesViewModel.vacancies.value.size) {
                     // Add jobCard
-                    JobCard(content = createdVacanciesViewModel.vacancies.collectAsState().value[it])
+                    JobCard(content = createdVacanciesViewModel.vacancies.collectAsState().value[it], navController = navController)
                 }
 
             }

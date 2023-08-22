@@ -1,5 +1,6 @@
 package com.example.yofu
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.yofu.accountUI.JobCard
+import com.example.yofu.accountUI.jobCardEmployer
 
 @Composable
 fun SearchScreen(
@@ -80,11 +83,19 @@ fun SearchScreen(
 
        Spacer(modifier = Modifier.height(16.dp))
 
-       LazyColumn() {
+       LazyColumn(
+           modifier = Modifier
+               .fillMaxWidth()
+               .background(Color(0xFFF6F7F9))
+       ) {
            items(vacancies) { vacancy ->
-               Text(
-                   text = vacancy.title
-               )
+               Row(
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .padding(10.dp, 0.dp, 10.dp, 0.dp)
+               ) {
+                   JobCard(content = vacancy, navController = navController)
+               }
            }
        }
    }

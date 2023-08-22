@@ -86,7 +86,6 @@ fun CreatedJobs(
                         jobCardEmployer(content = createdVacanciesViewModel.vacancies.collectAsState().value[it])
                     }
                 }
-
             }
         }
         PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))

@@ -3,13 +3,6 @@ package com.example.yofu
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.LaunchedEffect
-import com.example.yofu.accountUI.SplashScreen
-import com.example.yofu.employerUI.CompanyProfileScreen
-import com.example.yofu.employerUI.CompanyScreen
-import com.example.yofu.jobFinderUI.ApplyScreen
-import com.example.yofu.jobFinderUI.DetailedJobScreen
-import com.example.yofu.jobFinderUI.ProfileScreen
 import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
