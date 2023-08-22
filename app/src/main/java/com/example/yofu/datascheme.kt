@@ -27,6 +27,7 @@ data class Vacancy(
     var position: String = "",
     var jobType: String = "",
     var description: String = "",
+    var benefit: String = "",
     val programmingLanguage: List<String> = emptyList(),
     var updatedDate: Timestamp = Timestamp(0,0),
     var expiredDate: Timestamp = Timestamp(0,0),

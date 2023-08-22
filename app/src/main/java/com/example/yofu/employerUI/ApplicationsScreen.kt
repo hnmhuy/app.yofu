@@ -3,7 +3,6 @@ package com.example.yofu.employerUI
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
@@ -33,9 +32,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Place
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -61,16 +58,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.example.yofu.R
-import com.example.yofu.accountUI.ExtraBoldTextComponent
 import com.example.yofu.accountUI.LessBoldTextComponent
 import com.example.yofu.accountUI.NormalTextComponent
-import com.example.yofu.accountUI.NotCenterNormalTextComponent
 import com.example.yofu.accountUI.extraBoldFont
 
-import com.example.yofu.accountUI.jobCard
-import com.example.yofu.accountUI.jobCard_Employer
-import com.example.yofu.accountUI.jobCard_Employer_applications
-import com.example.yofu.accountUI.jobTag
+import com.example.yofu.accountUI.jobcardEmployerApplications
 import com.example.yofu.accountUI.normalFont
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -232,23 +224,23 @@ fun view_jobs()= Surface (
         )
 
         Column(modifier = Modifier.padding(15.dp)) {
-            jobCard_Employer_applications()
+            jobcardEmployerApplications()
             Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer_applications()
+            jobcardEmployerApplications()
             Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer_applications()
+            jobcardEmployerApplications()
             Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer_applications()
+            jobcardEmployerApplications()
             Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer_applications()
+            jobcardEmployerApplications()
             Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer_applications()
+            jobcardEmployerApplications()
             Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer_applications()
+            jobcardEmployerApplications()
             Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer_applications()
+            jobcardEmployerApplications()
             Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer_applications()
+            jobcardEmployerApplications()
             Spacer(modifier = Modifier.height(10.dp))
         }
     }

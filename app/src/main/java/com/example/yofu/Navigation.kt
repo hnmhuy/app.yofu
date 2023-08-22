@@ -41,8 +41,10 @@ import com.example.yofu.accountUI.LoginScreen
 import com.example.yofu.employer.CreateVacancy
 import com.example.yofu.employerUI.CompanyProfileScreen
 import com.example.yofu.employerUI.CompanyScreen
+import com.example.yofu.employerUI.CreatedJobs
 import com.example.yofu.jobFinder.Homepage
 import com.example.yofu.jobFinderUI.ProfileScreen
+import com.example.yofu.jobfinderUI.Search
 
 enum class Screen {
     // Authentication
@@ -253,7 +255,7 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
             Homepage(navController = navController)
         }
         composable(Screen.Search.name) {
-            SearchScreen(navController = navController)
+            Search(navController)
         }
         composable(Screen.MyApplication.name) {
             MyApplicationScreen(navController = navController)
@@ -321,9 +323,10 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
             onClick = {
                 navigateInBottomBar(navController, Screen.CreateVacancy.name)
             },
-            modifier = Modifier.graphicsLayer {
-                shape = androidx.compose.foundation.shape.CircleShape
-            }
+            modifier = Modifier
+                .graphicsLayer {
+                    shape = androidx.compose.foundation.shape.CircleShape
+                }
                 .size(56.dp),
             containerColor = Color.White
 
@@ -393,7 +396,7 @@ fun EmployerNavGraph(navController: NavHostController, it: PaddingValues, mainCo
             CreateVacancy(navController = navController)
         }
         composable(Screen.CreatedVacanciesList.name) {
-            CreatedVacanciesTemp(navController)
+            CreatedJobs(navigate = navController)
         }
         composable(Screen.ApplicationList.name) {
             ApplicationListTemp(navController)

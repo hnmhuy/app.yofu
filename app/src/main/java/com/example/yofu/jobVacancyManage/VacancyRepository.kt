@@ -104,6 +104,13 @@ class VacancyRepository {
                                 .addOnSuccessListener { documentSnapshot ->
                                     newVacancy.vid = documentSnapshot.id
                                     Log.d(DBV, "Create vacancy successfully")
+                                    this.update(newVacancy) { e ->
+                                        if (e == null) {
+                                            Log.d(DBV, "Update vacancy id")
+                                        } else {
+                                            Log.d(DBV, e.toString())
+                                        }
+                                    }
                                     onComplete(newVacancy, null)
                                 }
                                 .addOnFailureListener {

@@ -2,16 +2,19 @@ package com.example.yofu.jobFinderUI
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -29,6 +32,7 @@ import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,8 +53,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.Vacancy
 import com.example.yofu.accountUI.alert
+import com.example.yofu.accountUI.jobTag
+import com.example.yofu.jobfinderUI.DetailedJobScreenViewModel
 
 val BoldFont = FontFamily(
     Font(R.font.raleway_bold, FontWeight.Bold),
@@ -61,10 +69,17 @@ val NormalFont = FontFamily(
 val mediumFont = FontFamily(
     Font(R.font.raleway_medium, FontWeight.Medium),
 )
-@Preview
+
 @Composable
-fun DetailedJobScreen()
+fun DetailedJobScreen(
+    vid: String = "VID",
+    navController: NavController,
+    viewModel: DetailedJobScreenViewModel = DetailedJobScreenViewModel(vid),
+)
 {
+    val jobContent by viewModel.state.collectAsState()
+    val companyContent by viewModel.company.collectAsState()
+
     var jobDescriptionContent = "InnovateTech Solutions is seeking " +
             "a talented and motivated Digital Marketing Specialist to join " +
             "our dynamic marketing team. As a Digital Marketing Specialist, " +
@@ -82,10 +97,10 @@ fun DetailedJobScreen()
             "with social media management, email marketing, SEO, and SEM.\n" +
             "Strong analytical skills with the ability to interpret data, draw conclusions, " +
             "and make data-driven recommendations."
-    var companyContent = "To apply, please submit your resume, a cover letter outlining your " +
-            "relevant experience, and examples of successful digital marketing campaigns you have managed." +
-            " Please also include your salary expectations and earliest availability. Send your application " +
-            "to careers@innovatetech.com with the subject line: \"Digital Marketing Specialist Application - [Your Name]\"."
+//    var companyContent = "To apply, please submit your resume, a cover letter outlining your " +
+//            "relevant experience, and examples of successful digital marketing campaigns you have managed." +
+//            " Please also include your salary expectations and earliest availability. Send your application " +
+//            "to careers@innovatetech.com with the subject line: \"Digital Marketing Specialist Application - [Your Name]\"."
     var jobName = "Mobile Developer"
     var companyName = "YOFU Team"
     var jobLocation = "Ho Chi Minh City, Viet Nam"
@@ -103,7 +118,9 @@ fun DetailedJobScreen()
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 Box(modifier = Modifier.padding(10.dp)) {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
                         Icon(
                             imageVector = Icons.Default.ArrowCircleLeft,
                             contentDescription = "",
@@ -161,7 +178,7 @@ fun DetailedJobScreen()
                             .shadow(elevation = 0.4.dp),
                     )
                     Text(
-                        text = jobName,
+                        text = jobContent.title,
                         fontFamily = BoldFont,
                         color = Color.Black,
                         textAlign = TextAlign.Center,
@@ -172,7 +189,7 @@ fun DetailedJobScreen()
                         ),
                     )
                     Text(
-                        text = companyName,
+                        text = jobContent.companyName,
                         fontFamily = BoldFont,
                         color = Color(0xFF2F4AE3),
                         textAlign = TextAlign.Center,
@@ -195,7 +212,7 @@ fun DetailedJobScreen()
                         )
                         Text(
                             modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
-                            text = jobLocation,
+                            text = jobContent.location,
                             fontFamily = NormalFont,
                             color = Color.Gray,
                             textAlign = TextAlign.Center,
@@ -228,6 +245,18 @@ fun DetailedJobScreen()
                                 fontStyle = FontStyle.Normal
                             ),
                         )
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.horizontalScroll(rememberScrollState())
+                    )
+                    {
+                        val list = jobContent.programmingLanguage
+                        list.forEach{
+                            jobTag(value = it)
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
                     }
                 }
             }
@@ -269,8 +298,8 @@ fun DetailedJobScreen()
                     }
 
                     when (selectedTabIndex) {
-                        0 -> TabContent("Job Description",jobDescriptionContent)
-                        1 -> TabContent("Benefits", benefitContent)
+                        0 -> TabContent("Job Description", jobContent.description)
+                        1 -> TabContent("Benefits", jobContent.benefit)
                         2 -> TabContent("About",companyContent)
                     }
                 }

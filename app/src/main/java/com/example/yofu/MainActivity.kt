@@ -18,7 +18,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setContent{
-            Navigation()
+            //DetailedJobScreen()
+           Navigation()
 //            CompanyProfileScreen()
         }
 //        val account = UserLogin("minhhuu3323@gmail.com", "1234567890")

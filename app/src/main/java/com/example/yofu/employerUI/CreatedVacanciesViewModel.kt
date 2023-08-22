@@ -1,9 +1,8 @@
-package com.example.yofu
+package com.example.yofu.employerUI
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.yofu.Vacancy
 import com.example.yofu.jobVacancyManage.VacancyRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

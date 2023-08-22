@@ -41,13 +41,11 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.EditCalendar
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
@@ -74,16 +72,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yofu.R
 import com.example.yofu.Vacancy
-import com.example.yofu.accountManage.UserRepository
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import java.util.Date
+import kotlin.math.roundToInt
 
 
 val normalFont = FontFamily(
@@ -548,11 +543,11 @@ fun jobTag(value : String)
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun jobCard(content: Vacancy)
+fun JobCard(content: Vacancy)
 {
     Card(
         shape = RoundedCornerShape(10.dp),
-        elevation = 10.dp,
+        elevation = 0.dp,
         modifier = Modifier.padding(10.dp),
         onClick = { Log.d("Click", "CardExample: Card Click")},
         ) {
@@ -562,15 +557,20 @@ fun jobCard(content: Vacancy)
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
-            Row {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(2.dp))
-                        .size(70.dp)
-                )
-                {
-                    Image(painter = painterResource(id = R.drawable.logo), contentDescription = "")
-                }
+            Row(
+                modifier = Modifier.height(70.dp)
+            ){
+//                Box(
+//                    modifier = Modifier
+//                        .clip(RoundedCornerShape(2.dp))
+//                        .size(70.dp)
+//                )
+//                {
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "",
+                    modifier = Modifier.size(70.dp)
+                    )
                 Spacer(modifier = Modifier.width(20.dp))
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -582,6 +582,7 @@ fun jobCard(content: Vacancy)
                         val extraBoldFont = FontFamily(
                             Font(R.font.raleway_bold, FontWeight.Bold),
                         )
+                        Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             text = content.title,
                             fontFamily = extraBoldFont,
@@ -591,6 +592,7 @@ fun jobCard(content: Vacancy)
                                 fontStyle = FontStyle.Normal,
                             ),
                         )
+                        Spacer(modifier = Modifier.height(7.dp))
                         Text(
                             text = content.companyName,
                             fontFamily = normalFont,
@@ -616,19 +618,29 @@ fun jobCard(content: Vacancy)
             Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
             Spacer(modifier = Modifier.height(15.dp))
             Row {
-                Spacer(modifier = Modifier.size(90.dp))
                 Column {
                     Row{
                         Icon(Icons.Filled.Place, contentDescription = "Icon")
-                        NotCenterNormalTextComponent(value = content.location, size = 14.sp)
+//                        NotCenterNormalTextComponent(value = content.location, size = 14.sp)
+                        Text(
+                            text = content.location,
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                        )
                     }
+                    Spacer(modifier = Modifier.height(5.dp))
                     Row{
                         Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
                         Text(
-                            text = "${content.minSalary}k - ${content.maxSalary}k",
+                            text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000}",
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 40.dp),
+                                .fillMaxWidth(),
                             fontFamily = normalFont,
                             style = TextStyle(
                                 fontSize = 14.sp,
@@ -638,6 +650,7 @@ fun jobCard(content: Vacancy)
                             color = Color(0xFF2F4AE3)
                         )
                     }
+                    Spacer(modifier = Modifier.height(5.dp))
                     Row(
                         modifier = Modifier.horizontalScroll(rememberScrollState())
                     )
@@ -715,7 +728,7 @@ fun convertDate(milisecond: Double): String {
 }
 
 @Composable
-fun dockedDatePicker(isOpenDialog: MutableState<Boolean>, title: String = "", disiablePast: Boolean = false, onSelected: (Double)->Unit)
+fun dockedDatePicker(isOpenDialog: MutableState<Boolean>, title: String = "", disiablePast: Boolean = true, onSelected: (Double)->Unit)
 {
     val selectedDate = remember { mutableStateOf("Select date") }
     OutlinedTextField(
@@ -750,11 +763,11 @@ fun dockedDatePicker(isOpenDialog: MutableState<Boolean>, title: String = "", di
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun jobCard_Employer(content: Vacancy)
+fun jobCardEmployer(content: Vacancy = Vacancy())
 {
     Card(
         shape = RoundedCornerShape(10.dp),
-        elevation = 10.dp,
+        elevation = 0.dp,
         modifier = Modifier.padding(10.dp),
         onClick = { Log.d("Click", "CardExample: Card Click")},
     ) {
@@ -771,7 +784,7 @@ fun jobCard_Employer(content: Vacancy)
                         .size(70.dp)
                 )
                 {
-                    Image(painter = painterResource(id = R.drawable.edit), contentDescription = "")
+                    Image(painter = painterResource(id = R.drawable.logo), contentDescription = "")
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Row(
@@ -784,6 +797,7 @@ fun jobCard_Employer(content: Vacancy)
                         val extraBoldFont = FontFamily(
                             Font(R.font.raleway_bold, FontWeight.Bold),
                         )
+                        Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             text = content.title,
                             fontFamily = extraBoldFont,
@@ -793,6 +807,7 @@ fun jobCard_Employer(content: Vacancy)
                                 fontStyle = FontStyle.Normal,
                             ),
                         )
+                        Spacer(modifier = Modifier.height(7.dp))
                         Text(
                             text = content.companyName,
                             fontFamily = normalFont,
@@ -808,7 +823,7 @@ fun jobCard_Employer(content: Vacancy)
                     ) {
                         Icon(
                             modifier = Modifier.size(25.dp),
-                            painter = painterResource(id = R.drawable.heart_empty),
+                            painter = painterResource(id = R.drawable.edit),
                             contentDescription = "Icon"
                         )
                     }
@@ -818,7 +833,6 @@ fun jobCard_Employer(content: Vacancy)
             Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
             Spacer(modifier = Modifier.height(15.dp))
             Row {
-                Spacer(modifier = Modifier.size(90.dp))
                 Column {
                     Row{
                         Icon(Icons.Filled.Place, contentDescription = "Icon")
@@ -827,7 +841,7 @@ fun jobCard_Employer(content: Vacancy)
                     Row{
                         Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
                         Text(
-                            text = "${content.minSalary}k - ${content.maxSalary}k",
+                            text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000}",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .heightIn(min = 40.dp),
@@ -860,7 +874,7 @@ fun jobCard_Employer(content: Vacancy)
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun jobCard_Employer_applications(content: Vacancy)
+fun jobcardEmployerApplications(content: Vacancy = Vacancy())
 {
     Card(
         shape = RoundedCornerShape(10.dp),
@@ -937,7 +951,7 @@ fun jobCard_Employer_applications(content: Vacancy)
                     Row{
                         Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
                         Text(
-                            text = "${content.minSalary}k - ${content.maxSalary}k",
+                            text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000}",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .heightIn(min = 40.dp),

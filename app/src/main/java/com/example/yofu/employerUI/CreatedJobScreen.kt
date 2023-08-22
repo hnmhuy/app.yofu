@@ -1,145 +1,94 @@
 package com.example.yofu.employerUI
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-
 import androidx.compose.foundation.layout.padding
-
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-
 import androidx.compose.foundation.verticalScroll
-
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.accountUI.JobCard
+import com.example.yofu.accountUI.jobCardEmployer
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-import com.example.yofu.accountUI.jobCard
-import com.example.yofu.accountUI.jobCard_Employer
 
-
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun createdJobs()= Surface (
+fun CreatedJobs(
+    navigate: NavController,
+    createdVacanciesViewModel: CreatedVacanciesViewModel = viewModel<CreatedVacanciesViewModel>()
+)= Surface (
     modifier = Modifier
         .fillMaxSize()
         .background(Color(0xFFF6F7F9))
 )
 {
-    val list = listOf(
-        "An Giang",
-        "Ba Ria – Vung Tau",
-        "Bac Giang",
-        "Bac Kan",
-        "Bac Lieu",
-        "Bac Ninh",
-        "Ben Tre",
-        "Binh Dinh",
-        "Binh Duong",
-        "Binh Phuoc",
-        "Binh Thuan",
-        "Ca Mau",
-        "Can Tho",
-        "Cao Bang",
-        "Da Nang",
-        "Dak Lak",
-        "Dak Nong",
-        "Dien Bien",
-        "Dong Nai",
-        "Dong Thap",
-        "Gia Lai",
-        "Ha Giang",
-        "Ha Nam",
-        "Ha Noi",
-        "Ha Tinh",
-        "Hai Duong",
-        "Hai Phong",
-        "Hau Giang",
-        "Hoa Binh",
-        "Hung Yen",
-        "Khanh Hoa",
-        "Kien Giang",
-        "Kon Tum",
-        "Lai Chau",
-        "Lam Dong",
-        "Lang Son",
-        "Lao Cai",
-        "Long An",
-        "Nam Dinh",
-        "Nghe An",
-        "Ninh Binh",
-        "Ninh Thuan",
-        "Phu Tho",
-        "Phu Yen",
-        "Quang Binh",
-        "Quang Nam",
-        "Quang Ngai",
-        "Quang Ninh",
-        "Quang Tri",
-        "Soc Trang",
-        "Son La",
-        "Tay Ninh",
-        "Thai Binh",
-        "Thai Nguyen",
-        "Thanh Hoa",
-        "Thua Thien Hue",
-        "Tien Giang",
-        "Ho Chi Minh City",
-        "Tra Vinh",
-        "Tuyen Quang",
-        "Vinh Long",
-        "Vinh Phuc",
-        "Yen Bai"
-    )
-    val toastContex = LocalContext.current.applicationContext
-    val isOpenDialog = remember { mutableStateOf(false) }
-    Column(
-        modifier = Modifier
-            .background(Color(0xFFF6F7F9))
-            .verticalScroll(rememberScrollState())
-    )
-    {
-        Image(
-            painter = painterResource(id = R.drawable.createdjob),
-            contentDescription = "",
-            contentScale = ContentScale.FillWidth,
-            modifier = Modifier
-                .fillMaxWidth()
-        )
+    val refreshScope = rememberCoroutineScope()
+    var refreshing by remember { mutableStateOf(false) }
 
-        Column(modifier = Modifier.padding(15.dp)) {
-            jobCard_Employer()
-            Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer()
-            Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer()
-            Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer()
-            Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer()
-            Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer()
-            Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer()
-            Spacer(modifier = Modifier.height(10.dp))
-            jobCard_Employer()
-            Spacer(modifier = Modifier.height(10.dp))
+    fun refresh() = refreshScope.launch {
+        refreshing = true
+        delay(1500)
+        createdVacanciesViewModel.loadVacancies()
+        refreshing = false
+    }
+
+    val state = rememberPullRefreshState(refreshing, ::refresh)
+    Box(modifier = Modifier
+        .pullRefresh(state)
+        .background(Color(0xFFF6F7F9))
+    ) {
+        LazyColumn(Modifier.fillMaxSize()) {
+            if (!refreshing) {
+                item {
+                    Image(
+                        painter = painterResource(id = R.drawable.createdjob),
+                        contentDescription = "",
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+                items(createdVacanciesViewModel.vacancies.value.size) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp, 0.dp, 10.dp, 0.dp)
+                    ) {
+                        jobCardEmployer(content = createdVacanciesViewModel.vacancies.collectAsState().value[it])
+                    }
+                }
+
+            }
         }
+        PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
     }
 }

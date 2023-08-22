@@ -27,7 +27,6 @@ class CreateVacancyViewModel : ViewModel() {
         _state.value = _state.value.copy(
             title = newTitle
         )
-        Log.d("CreateVacancyViewModel", _state.value.title)
     }
 
     fun setLocation(newLocation: String)
@@ -35,7 +34,6 @@ class CreateVacancyViewModel : ViewModel() {
         _state.value = _state.value.copy(
             location = newLocation
         )
-        Log.d("CreateVacancyViewModel", _state.value.location)
     }
 
     fun setSalary(min: Float, max: Float) {
@@ -43,8 +41,6 @@ class CreateVacancyViewModel : ViewModel() {
             minSalary = min,
             maxSalary = max
         )
-        Log.d("CreateVacancyViewModel", _state.value.minSalary.toString())
-        Log.d("CreateVacancyViewModel", _state.value.maxSalary.toString())
     }
 
     fun setPosition(newPosition: String)
@@ -52,7 +48,6 @@ class CreateVacancyViewModel : ViewModel() {
         _state.value = _state.value.copy(
             position = newPosition
         )
-        Log.d("CreateVacancyViewModel", _state.value.position)
     }
 
     fun setJobType(newJobType: String)
@@ -60,7 +55,6 @@ class CreateVacancyViewModel : ViewModel() {
         _state.value = _state.value.copy(
             jobType = newJobType
         )
-        Log.d("CreateVacancyViewModel", _state.value.jobType)
     }
 
     fun updateProgram(index: Int)
@@ -69,7 +63,6 @@ class CreateVacancyViewModel : ViewModel() {
         _state.value = _state.value.copy(
             programmingLanguage = getProgram()
         )
-        Log.d("CreateVacancyViewModel", _program.value.toString())
     }
 
     fun setDescription(newDescription: String)
@@ -77,7 +70,6 @@ class CreateVacancyViewModel : ViewModel() {
         _state.value = _state.value.copy(
             description = newDescription
         )
-        Log.d("CreateVacancyViewModel", _state.value.description)
     }
 
     private fun getProgram(): List<String>
@@ -99,6 +91,14 @@ class CreateVacancyViewModel : ViewModel() {
             expiredDate = Timestamp((newDateDue/1000).toLong(), ((newDateDue % 1000) * 1000).toInt())
         )
     }
+
+    fun setBenefit(newBenefit: String)
+    {
+        _state.value = _state.value.copy(
+            benefit = newBenefit
+        )
+    }
+
 
     fun verify(onComplete: (String) -> Unit): Boolean
     {

@@ -130,9 +130,7 @@ private fun MyUI(setSalary: (Float, Float) -> Unit) {
                 "MainActivity",
                 "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
             )
-            val roundedStart = ceil(sliderValues.start)
-            val roundedEnd = ceil(sliderValues.endInclusive)
-            setSalary(roundedStart, roundedEnd)
+            setSalary(sliderValues.start, sliderValues.endInclusive)
         }
     )
 
@@ -1656,6 +1654,43 @@ fun CreateVacancy(
             {
                 Column{
                     NotCenterBoldTextComponentWithSize(value = "Job Description", size = 20.sp)
+                    Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
+                    Spacer(modifier = Modifier.height(10.dp))
+                    val textValue = remember {
+                        mutableStateOf("")
+                    }
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(BorderStroke(0.1.dp, Color.Transparent)),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Black,
+                            focusedLabelColor = Color.Black,
+                            cursorColor = Color.Black,
+                            disabledTextColor = Color.Transparent,
+                            unfocusedBorderColor = Color.LightGray
+                        ),
+                        keyboardOptions = KeyboardOptions.Default,
+                        shape = RoundedCornerShape(50.dp),
+                        value = textValue.value,
+                        onValueChange = {
+                            textValue.value = it
+                            viewModel.setDescription(it)
+                        },)
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(10))
+                    .background(Color.White)
+                    .padding(18.dp))
+            {
+                Column{
+                    NotCenterBoldTextComponentWithSize(value = "Job Benefit", size = 20.sp)
                     Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(10.dp))
                     val textValue = remember {
