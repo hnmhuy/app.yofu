@@ -747,3 +747,223 @@ fun dockedDatePicker(isOpenDialog: MutableState<Boolean>, title: String = "", di
         onSelected(it)
     }
 }
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun jobCard_Employer(content: Vacancy)
+{
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        elevation = 10.dp,
+        modifier = Modifier.padding(10.dp),
+        onClick = { Log.d("Click", "CardExample: Card Click")},
+    ) {
+        Column(
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Row {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(2.dp))
+                        .size(70.dp)
+                )
+                {
+                    Image(painter = painterResource(id = R.drawable.edit), contentDescription = "")
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    Column(
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        val extraBoldFont = FontFamily(
+                            Font(R.font.raleway_bold, FontWeight.Bold),
+                        )
+                        Text(
+                            text = content.title,
+                            fontFamily = extraBoldFont,
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal,
+                            ),
+                        )
+                        Text(
+                            text = content.companyName,
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                        )
+                    }
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(25.dp),
+                            painter = painterResource(id = R.drawable.heart_empty),
+                            contentDescription = "Icon"
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
+            Spacer(modifier = Modifier.height(15.dp))
+            Row {
+                Spacer(modifier = Modifier.size(90.dp))
+                Column {
+                    Row{
+                        Icon(Icons.Filled.Place, contentDescription = "Icon")
+                        NotCenterNormalTextComponent(value = content.location, size = 14.sp)
+                    }
+                    Row{
+                        Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
+                        Text(
+                            text = "${content.minSalary}k - ${content.maxSalary}k",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp),
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color(0xFF2F4AE3)
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.horizontalScroll(rememberScrollState())
+                    )
+                    {
+                        val list = content.programmingLanguage
+                        list.forEach{
+                            jobTag(value = it)
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
+                    }
+                }
+            }
+
+
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun jobCard_Employer_applications(content: Vacancy)
+{
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        elevation = 0.dp,
+        modifier = Modifier.padding(10.dp),
+        onClick = { Log.d("Click", "CardExample: Card Click")},
+    ) {
+        Column(
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Row {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(2.dp))
+                        .size(70.dp)
+                )
+                {
+                    Image(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = "")
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    Column(
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        val extraBoldFont = FontFamily(
+                            Font(R.font.raleway_bold, FontWeight.Bold),
+                        )
+                        Text(
+                            text = content.title,
+                            fontFamily = extraBoldFont,
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal,
+                            ),
+                        )
+                        Text(
+                            text = content.companyName,
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                        )
+                    }
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(25.dp),
+                            painter = painterResource(id = R.drawable.heart_empty),
+                            contentDescription = "Icon"
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
+            Spacer(modifier = Modifier.height(15.dp))
+            Row {
+                Spacer(modifier = Modifier.size(90.dp))
+                Column {
+                    Row{
+                        Icon(Icons.Filled.Place, contentDescription = "Icon")
+                        NotCenterNormalTextComponent(value = content.location, size = 14.sp)
+                    }
+                    Row{
+                        Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
+                        Text(
+                            text = "${content.minSalary}k - ${content.maxSalary}k",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp),
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                            color = Color(0xFF2F4AE3)
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.horizontalScroll(rememberScrollState())
+                    )
+                    {
+                        val list = content.programmingLanguage
+                        list.forEach{
+                            jobTag(value = it)
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
+                    }
+                }
+            }
+
+
+        }
+    }
+}
