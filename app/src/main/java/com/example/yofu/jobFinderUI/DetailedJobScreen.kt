@@ -143,7 +143,6 @@ fun DetailedJobScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    // Hỏi lại mọi người mấy tấm hình display làm shaoooo
                     Image(painter = painterResource(id = R.drawable.logo),
                         contentDescription = "logo",
                         contentScale = ContentScale.Fit,
