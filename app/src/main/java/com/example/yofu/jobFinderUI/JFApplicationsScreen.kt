@@ -83,14 +83,13 @@ fun ApplicationCard()
         tagContentColor = Color(0xFFF75656)
     }
 
-    Card(
+    Surface(
         shape = RoundedCornerShape(10.dp),
         elevation = 4.dp,
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp, top = 10.dp, bottom = 10.dp)
             .height(90.dp)
             .fillMaxWidth(),
-        onClick = {},
     )
     {
         Row(modifier = Modifier.fillMaxWidth(),

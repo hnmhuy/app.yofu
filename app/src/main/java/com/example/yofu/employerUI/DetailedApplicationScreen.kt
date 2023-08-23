@@ -79,257 +79,260 @@ fun DetailedApplicationScreen()
             .padding(15.dp)
     ) {
 
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowCircleLeft,
-                        contentDescription = "",
-                        tint = Color(0xFF2F4AE3),
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
-
-                Text(
-                    text = "Applications",
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    fontFamily = extraBoldFont,
-                    style = TextStyle(
-                        fontSize = 27.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal,
-                    ),
-                )
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "",
-                    tint = Color.LightGray,
-                    modifier = Modifier.size(90.dp)
-                )
-                Column(
-                    modifier = Modifier.align(Alignment.CenterVertically)
+        Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween)
+        {
+            Column{
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = userName,
-                        fontFamily = extraBoldFont,
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            fontSize = 35.sp,
-                            fontWeight = FontWeight.Normal,
-                            fontStyle = FontStyle.Normal,
-                        )
-                    )
 
-                    Text(
-                        text = email,
-                        fontFamily = normalFont,
-                        style = TextStyle(
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Normal,
-                            fontStyle = FontStyle.Italic
-                        ),
-                        textDecoration = TextDecoration.Underline
-                    )
-                }
-                Spacer(modifier = Modifier.width(20.dp))
-
-
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            Divider(modifier = Modifier.padding(start = 5.dp, end = 5.dp))
-            Spacer(modifier = Modifier.height(10.dp))
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                shape = RoundedCornerShape(20.dp),
-                elevation = 3.dp,
-            ) {
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp, start = 10.dp, end = 10.dp)
-                            .align(Alignment.CenterHorizontally),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    IconButton(onClick = { /*TODO*/ }) {
                         Icon(
-                            imageVector = Icons.Default.AccountCircle,
+                            imageVector = Icons.Default.ArrowCircleLeft,
                             contentDescription = "",
                             tint = Color(0xFF2F4AE3),
-                            modifier = Modifier
-                                .size(35.dp)
-                                .align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = "Contact Information",
-                            fontFamily = BoldFont,
-                            style = TextStyle(
-                                fontSize = 19.sp,
-                                fontWeight = FontWeight.Normal,
-                                fontStyle = FontStyle.Normal
-                            ),
-                            color = Color.Black,
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier.fillMaxWidth(0.8f)
+                            modifier = Modifier.size(40.dp)
                         )
                     }
-                    Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
-                    Row(
+
+                    Text(
+                        text = "Applications",
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                            .fillMaxWidth(),
+                        fontFamily = extraBoldFont,
+                        style = TextStyle(
+                            fontSize = 27.sp,
+                            fontWeight = FontWeight.Normal,
+                            fontStyle = FontStyle.Normal,
+                        ),
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Icon(
+                        imageVector = Icons.Default.AccountCircle,
+                        contentDescription = "",
+                        tint = Color.LightGray,
+                        modifier = Modifier.size(90.dp)
+                    )
+                    Column(
+                        modifier = Modifier.align(Alignment.CenterVertically)
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.PersonOutline,
-                            contentDescription = "",
-                            tint = Color.LightGray,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = userName,
-                            fontFamily = NormalFont,
+                            fontFamily = extraBoldFont,
+                            textAlign = TextAlign.Center,
                             style = TextStyle(
-                                fontSize = 16.sp,
+                                fontSize = 35.sp,
                                 fontWeight = FontWeight.Normal,
-                                fontStyle = FontStyle.Normal
-                            ),
-                            color = Color.Black,
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier.fillMaxWidth(0.8f)
+                                fontStyle = FontStyle.Normal,
+                            )
                         )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Phone,
-                            contentDescription = "",
-                            tint = Color.LightGray,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = phoneNumber,
-                            fontFamily = NormalFont,
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Normal,
-                                fontStyle = FontStyle.Normal
-                            ),
-                            color = Color.Black,
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier.fillMaxWidth(0.8f)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.MailOutline,
-                            contentDescription = "",
-                            tint = Color.LightGray,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
+
                         Text(
                             text = email,
-                            fontFamily = NormalFont,
+                            fontFamily = normalFont,
                             style = TextStyle(
-                                fontSize = 16.sp,
+                                fontSize = 13.sp,
                                 fontWeight = FontWeight.Normal,
-                                fontStyle = FontStyle.Normal
+                                fontStyle = FontStyle.Italic
                             ),
-                            color = Color.Black,
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier.fillMaxWidth(0.8f)
+                            textDecoration = TextDecoration.Underline
                         )
+                    }
+                    Spacer(modifier = Modifier.width(20.dp))
+
+
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Divider(modifier = Modifier.padding(start = 5.dp, end = 5.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    elevation = 3.dp,
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                                .align(Alignment.CenterHorizontally),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.AccountCircle,
+                                contentDescription = "",
+                                tint = Color(0xFF2F4AE3),
+                                modifier = Modifier
+                                    .size(35.dp)
+                                    .align(Alignment.CenterVertically)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "Contact Information",
+                                fontFamily = BoldFont,
+                                style = TextStyle(
+                                    fontSize = 19.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    fontStyle = FontStyle.Normal
+                                ),
+                                color = Color.Black,
+                                textAlign = TextAlign.Left,
+                                modifier = Modifier.fillMaxWidth(0.8f)
+                            )
+                        }
+                        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.PersonOutline,
+                                contentDescription = "",
+                                tint = Color.LightGray,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .align(Alignment.CenterVertically)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = userName,
+                                fontFamily = NormalFont,
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    fontStyle = FontStyle.Normal
+                                ),
+                                color = Color.Black,
+                                textAlign = TextAlign.Left,
+                                modifier = Modifier.fillMaxWidth(0.8f)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Phone,
+                                contentDescription = "",
+                                tint = Color.LightGray,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .align(Alignment.CenterVertically)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = phoneNumber,
+                                fontFamily = NormalFont,
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    fontStyle = FontStyle.Normal
+                                ),
+                                color = Color.Black,
+                                textAlign = TextAlign.Left,
+                                modifier = Modifier.fillMaxWidth(0.8f)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.MailOutline,
+                                contentDescription = "",
+                                tint = Color.LightGray,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .align(Alignment.CenterVertically)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = email,
+                                fontFamily = NormalFont,
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    fontStyle = FontStyle.Normal
+                                ),
+                                color = Color.Black,
+                                textAlign = TextAlign.Left,
+                                modifier = Modifier.fillMaxWidth(0.8f)
+                            )
+                        }
                     }
                 }
-            }
 
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                shape = RoundedCornerShape(20.dp),
-                elevation = 3.dp,
-            ) {
-                Column(
+                Surface(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    elevation = 3.dp,
                 ) {
-                    Row(
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp, start = 10.dp, end = 10.dp)
-                            .align(Alignment.CenterHorizontally),
-                        verticalAlignment = Alignment.CenterVertically
+                            .align(Alignment.CenterHorizontally)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.FilePresent,
-                            contentDescription = "",
-                            tint = Color.Blue,
+                        Row(
                             modifier = Modifier
-                                .size(35.dp)
-                                .align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = "Candidate's CV/Resume",
-                            fontFamily = BoldFont,
-                            style = TextStyle(
-                                fontSize = 19.sp,
-                                fontWeight = FontWeight.Normal,
-                                fontStyle = FontStyle.Normal
-                            ),
-                            color = Color.Black,
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                    Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(painter = painterResource(id = R.drawable.pdf),
-                            contentDescription = "pdf",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier
-                                .size(40.dp)
                                 .fillMaxWidth()
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
+                                .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                                .align(Alignment.CenterHorizontally),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.FilePresent,
+                                contentDescription = "",
+                                tint = Color.Blue,
+                                modifier = Modifier
+                                    .size(35.dp)
+                                    .align(Alignment.CenterVertically)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "Candidate's CV/Resume",
+                                fontFamily = BoldFont,
+                                style = TextStyle(
+                                    fontSize = 19.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    fontStyle = FontStyle.Normal
+                                ),
+                                color = Color.Black,
+                                textAlign = TextAlign.Left,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(painter = painterResource(id = R.drawable.pdf),
+                                contentDescription = "pdf",
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .fillMaxWidth()
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
 //                        Text(
 //                            text = userName,
 //                            fontFamily = NormalFont,
@@ -343,53 +346,55 @@ fun DetailedApplicationScreen()
 //                            modifier = Modifier.fillMaxWidth(0.8f)
 //                        )
 
-                        Column {
-                            Text(
-                                text = fileName,
-                                fontFamily = NormalFont,
-                                style = TextStyle(
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Normal
-                                ),
-                                color = Color.Black,
-                                textAlign = TextAlign.Left,
-                                modifier = Modifier.fillMaxWidth(0.8f)
-                            )
+                            Column {
+                                Text(
+                                    text = fileName,
+                                    fontFamily = NormalFont,
+                                    style = TextStyle(
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        fontStyle = FontStyle.Normal
+                                    ),
+                                    color = Color.Black,
+                                    textAlign = TextAlign.Left,
+                                    modifier = Modifier.fillMaxWidth(0.8f)
+                                )
 
-                            Text(
-                                text = fileSize,
-                                fontFamily = NormalFont,
-                                style = TextStyle(
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    fontStyle = FontStyle.Normal
-                                ),
-                                color = Color.Black,
-                                textAlign = TextAlign.Left,
-                                modifier = Modifier.fillMaxWidth(0.8f)
-                            )
+                                Text(
+                                    text = fileSize,
+                                    fontFamily = NormalFont,
+                                    style = TextStyle(
+                                        fontSize = 15.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        fontStyle = FontStyle.Normal
+                                    ),
+                                    color = Color.Black,
+                                    textAlign = TextAlign.Left,
+                                    modifier = Modifier.fillMaxWidth(0.8f)
+                                )
 
 
+                            }
+                            IconButton(onClick = { showDialog = true}) {
+                                Icon(
+                                    imageVector = Icons.Filled.FileDownload,
+                                    contentDescription = "",
+                                    tint = Color(0xFFFF6E58),
+                                    modifier = Modifier
+                                        .size(30.dp)
+                                )
+                            }
                         }
-                        IconButton(onClick = { showDialog = true}) {
-                            Icon(
-                                imageVector = Icons.Filled.FileDownload,
-                                contentDescription = "",
-                                tint = Color(0xFFFF6E58),
-                                modifier = Modifier
-                                    .size(30.dp)
-                            )
-                        }
+
+                        Divider(modifier = Modifier.padding(start = 5.dp, end = 10.dp))
+
+
                     }
-
-                    Divider(modifier = Modifier.padding(start = 5.dp, end = 10.dp))
-
-
                 }
+
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+
 
             Row(modifier = Modifier.fillMaxWidth().padding(10.dp).align(Alignment.CenterHorizontally), horizontalArrangement = Arrangement.SpaceBetween)
             {

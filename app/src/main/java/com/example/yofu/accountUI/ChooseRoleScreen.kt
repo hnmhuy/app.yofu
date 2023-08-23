@@ -134,7 +134,7 @@ fun ChooseRoleScreen(
                         Icon(
                             imageVector = Icons.Default.GroupWork,
                             contentDescription = "",
-                            tint = Color.LightGray,
+                            tint = Color(0xFF246BFD),
                             modifier = Modifier.size(50.dp)
                         )
                         Spacer(modifier = Modifier.height(5.dp))
@@ -171,7 +171,7 @@ fun ChooseRoleScreen(
                         Icon(
                             imageVector = Icons.Default.AccountCircle,
                             contentDescription = "",
-                            tint = Color.LightGray,
+                            tint = Color(0xFFFEA01D),
                             modifier = Modifier.size(50.dp)
                         )
                         Spacer(modifier = Modifier.height(5.dp))
