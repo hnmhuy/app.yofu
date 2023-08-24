@@ -45,6 +45,7 @@ import com.example.yofu.employer.CreateVacancy
 import com.example.yofu.employerUI.CompanyProfileScreen
 import com.example.yofu.employerUI.CompanyScreen
 import com.example.yofu.employerUI.CreatedJobs
+import com.example.yofu.jobFinderUI.ApplyScreen
 import com.example.yofu.jobFinderUI.Homepage
 import com.example.yofu.jobFinderUI.DetailedJobScreen
 import com.example.yofu.jobFinderUI.ProfileScreen
@@ -63,6 +64,7 @@ enum class Screen {
     MyApplication,
     Favorite,
     ProfileIndividual,
+    Apply,
     // Employer
     Company,
     CreateVacancy,
@@ -279,6 +281,9 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
             Log.d("NavigateDetailed", vid.toString())
             if (vid == null) vid = "VID"
             DetailedJobScreen(vid = vid, navController = navController)
+        }
+        composable(Screen.Apply.name) {
+            ApplyScreen(navController)
         }
     }
 }

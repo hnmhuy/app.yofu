@@ -1,5 +1,8 @@
 package com.example.yofu.jobFinderUI
 
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -41,17 +44,32 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.yofu.R
 import com.example.yofu.accountUI.TextFieldComponent
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
 
 
-@Preview
 @Composable
-fun ApplyScreen()
+fun ApplyScreen(
+    navController: NavController
+)
 {
     var isUploaded by remember { mutableStateOf(false) }
+
+    val pickPDFLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            Log.d("PDF", uri.toString())
+
+            //setPdfUri(uri)
+
+            //uploadPDFToFirebase()
+
+            isUploaded = !isUploaded
+        }
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -97,7 +115,8 @@ fun ApplyScreen()
 
                 Button(
                     onClick = {
-                        isUploaded = !isUploaded},
+                        pickPDFLauncher.launch("application/pdf")
+                              },
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(150.dp),

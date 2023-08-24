@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.Screen
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.jobTag
 
@@ -283,7 +284,9 @@ fun DetailedJobScreen(
             }
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                          navController.navigate(Screen.Apply.name)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(50.dp)
