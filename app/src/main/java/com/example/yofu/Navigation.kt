@@ -48,6 +48,7 @@ import com.example.yofu.employerUI.CreatedJobs
 import com.example.yofu.jobFinderUI.Homepage
 import com.example.yofu.jobFinderUI.DetailedJobScreen
 import com.example.yofu.jobFinderUI.ProfileScreen
+import com.example.yofu.jobFinderUI.Search
 
 enum class Screen {
     // Authentication
@@ -259,8 +260,7 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
             Homepage(navController = navController)
         }
         composable(Screen.Search.name) {
-            //Search(navController)
-            SearchScreen(navController = navController)
+            Search(navController)
         }
         composable(Screen.MyApplication.name) {
             MyApplicationScreen(navController = navController)

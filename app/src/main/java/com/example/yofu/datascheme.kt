@@ -50,8 +50,7 @@ data class Vacancy(
     }
     fun doesMatchSearchQuery(query: String): Boolean {
         val matchingCombinations = listOf(
-            "$title",
-            "${title.first()}"
+            "$title"
         )
         return matchingCombinations.any {
             it.contains(query, ignoreCase = true)

@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setContent{
             //DetailedJobScreen()
-           //Navigation()
+           Navigation()
 //            CompanyProfileScreen()
         }
 //        val account = UserLogin("minhhuu3323@gmail.com", "1234567890")

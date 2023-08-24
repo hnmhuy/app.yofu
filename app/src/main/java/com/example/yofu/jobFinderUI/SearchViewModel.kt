@@ -1,4 +1,4 @@
-package com.example.yofu.jobfinderUI
+package com.example.yofu.jobFinderUI
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
