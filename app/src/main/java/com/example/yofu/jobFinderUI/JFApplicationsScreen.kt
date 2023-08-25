@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.yofu.JobApplication
 import com.example.yofu.R
+import com.example.yofu.Screen
 import com.example.yofu.Vacancy
 import com.example.yofu.accountUI.jobCardEmployer
 import com.example.yofu.accountUI.normalFont
@@ -70,7 +71,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ApplicationCard(data: JobApplication)
+fun ApplicationCard(data: JobApplication, navController: NavController)
 {
     val jobData : MutableStateFlow<Vacancy> = MutableStateFlow(Vacancy())
 
@@ -180,7 +181,9 @@ fun ApplicationCard(data: JobApplication)
 
                 }
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.navigate("${Screen.DetailVacancy.name}/${jobData.value.vid}")
+            }) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowRight,
                     contentDescription = "",
@@ -211,7 +214,7 @@ fun JFApplicationScreen(
 
         fun refresh() = refreshScope.launch {
             refreshing = true
-            delay(1500)
+            delay(1000)
             jfApplicationViewModel.getApplicationList()
             refreshing = false
         }
@@ -269,7 +272,7 @@ fun JFApplicationScreen(
                                     .fillMaxWidth()
                                     .padding(10.dp, 0.dp, 10.dp, 0.dp)
                             ) {
-                                ApplicationCard(jfApplicationViewModel.applicationList.collectAsState().value[it])
+                                ApplicationCard(jfApplicationViewModel.applicationList.collectAsState().value[it], navController)
                             }
                         }
                     }

@@ -15,6 +15,8 @@ data class LoginState(
 class LoginScreenViewModel : ViewModel() {
     val process = AuthenticationProcess()
 
+    val isLogin = MutableStateFlow(false)
+
     private val _state = MutableStateFlow<LoginState>(LoginState())
 
     val state: StateFlow<LoginState>
@@ -48,6 +50,7 @@ class LoginScreenViewModel : ViewModel() {
     fun login(
         oncomplete: (String, Exception?, String?) -> Unit
     ) {
+        isLogin.value = true
         process.login(
             UserLogin(
                 email = _state.value.email,
@@ -59,6 +62,7 @@ class LoginScreenViewModel : ViewModel() {
                     oncomplete("Welcome back ${user?.fullName}", null, user?.userType)
                 }
                 else {
+                    isLogin.value = false
                     Log.d("login", exception.toString())
                     oncomplete("Login failed ${exception.toString()}", exception, null)
                 }

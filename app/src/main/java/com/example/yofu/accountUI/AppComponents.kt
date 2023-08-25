@@ -324,6 +324,45 @@ fun ButtonComponent(
 }
 
 @Composable
+fun ButtonComponentWithLoading(
+    value: String,
+    isLoading: Boolean,
+    callback: () -> Unit = {}
+)
+{
+    Button(
+        onClick = { callback() },
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(50.dp)
+            .padding(horizontal = 10.dp),
+        contentPadding = PaddingValues(),
+        colors = ButtonDefaults.buttonColors(Color(0XFF2F4AE3)),
+        shape = RoundedCornerShape(50.dp)
+    ) {
+        val boldFont = FontFamily(
+            Font(R.font.raleway_bold, FontWeight.Bold),
+        )
+        if (isLoading)
+        {
+            CircularProgressIndicator(
+                color = Color.White,
+            )
+        }
+        else
+        {
+            Text(
+                text = value,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = boldFont,
+                color = Color.White
+            )
+        }
+    }
+}
+
+@Composable
 fun DividerTextComponent()
 {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
