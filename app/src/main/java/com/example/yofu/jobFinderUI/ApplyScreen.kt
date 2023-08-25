@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.yofu.R
 import com.example.yofu.accountUI.TextFieldComponent
@@ -53,18 +54,20 @@ import com.example.yofu.accountUI.normalFont
 
 @Composable
 fun ApplyScreen(
-    navController: NavController
+    navController: NavController,
+    applyViewModel: ApplyScreenViewModel = viewModel<ApplyScreenViewModel>(),
+    vid: String
 )
 {
+    applyViewModel.setVid(vid)
+
     var isUploaded by remember { mutableStateOf(false) }
 
     val pickPDFLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             Log.d("PDF", uri.toString())
 
-            //setPdfUri(uri)
-
-            //uploadPDFToFirebase()
+            applyViewModel.setPdfURI(uri)
 
             isUploaded = !isUploaded
         }
@@ -106,7 +109,9 @@ fun ApplyScreen(
             }
             Spacer(modifier = Modifier.height(30.dp))
             Column(
-                modifier = Modifier.padding(20.dp).fillMaxHeight(0.9f)
+                modifier = Modifier
+                    .padding(20.dp)
+                    .fillMaxHeight(0.9f)
             ) {
                 TextFieldComponent(labelValue = "Full Name", setValue = {})
                 Spacer(modifier = Modifier.height(30.dp))
@@ -180,7 +185,10 @@ fun ApplyScreen(
             }
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    applyViewModel.uploadPDFtoFirebase()
+                    navController.popBackStack()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(50.dp)

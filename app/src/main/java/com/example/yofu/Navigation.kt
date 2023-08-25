@@ -331,11 +331,16 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
             }
             DetailedJobScreen(vid = vid, navController = navController)
         }
-        composable(Screen.Apply.name) {
+        composable(
+            route = "${Screen.Apply.name}/{vidd}",
+            arguments = listOf(navArgument("vidd") { type = NavType.StringType })
+        ) {
+            val vid = it.arguments?.getString("vidd") ?: "vid"
+            Log.d("VID", vid)
             LaunchedEffect(Unit) {
                 bottomBar.value = false
             }
-            ApplyScreen(navController)
+            ApplyScreen(navController = navController, vid = vid)
         }
     }
 }

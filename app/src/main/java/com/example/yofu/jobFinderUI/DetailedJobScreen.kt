@@ -285,7 +285,7 @@ fun DetailedJobScreen(
 
             Button(
                 onClick = {
-                          navController.navigate(Screen.Apply.name)
+                          navController.navigate("${Screen.Apply.name}/${vid}")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
