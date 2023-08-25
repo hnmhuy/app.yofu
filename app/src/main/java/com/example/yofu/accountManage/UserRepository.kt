@@ -2,6 +2,7 @@ package com.example.yofu.accountManage
 
 import android.util.Log
 import com.example.yofu.User
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -9,6 +10,26 @@ import com.google.firebase.ktx.Firebase
 const val  DB_USER = "user"
 const val DBU = "user database"
 class UserRepository() {
+
+    fun fetch(uid: DocumentReference, onComplete: (User?, Exception?) -> Unit) {
+        uid.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val user = document.toObject<User>()
+                    Log.d(DBU, "DocumentSnapshot data: ${document.id}")
+                    Log.d(DBU, user.toString())
+                    onComplete(user, null)
+                } else {
+                    Log.d(DBU, "No such document")
+                    onComplete(null, Exception("No such document"))
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(DBU, "get failed with ", exception)
+                onComplete(null, exception)
+            }
+    }
+
     fun fetch(uid: String, onComplete: (User?, Exception?) -> Unit) {
         val db = Firebase.firestore
         if(uid == "")

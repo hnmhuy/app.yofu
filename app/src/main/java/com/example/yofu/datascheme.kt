@@ -78,7 +78,8 @@ data class  User(
     var avt: Bitmap? = null,
     var avtRef: DocumentReference = emptyUser,
     var gender: String = "",
-    var phone: String = ""
+    var phone: String = "",
+    var email: String = "",
 )
 
 data class Company(

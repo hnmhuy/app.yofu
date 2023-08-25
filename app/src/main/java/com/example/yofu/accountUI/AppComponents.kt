@@ -502,7 +502,7 @@ fun NotCenterBoldTextComponent(value: String)
 }
 
 @Composable
-fun alert(showDialog: Boolean, onClose: (Boolean)-> Unit)
+fun alert(showDialog: Boolean, title: String = "Oops, Failed!", message: String = "Sorry this feature is not supported yet! Please try again later", onClose: (Boolean)-> Unit)
 {
     AlertDialog(
         modifier = Modifier
@@ -511,7 +511,7 @@ fun alert(showDialog: Boolean, onClose: (Boolean)-> Unit)
             .padding(20.dp),
         onDismissRequest = { onClose(!showDialog) },
         title = {
-            Text(text = "Oops, Failed!",
+            Text(text = title,
                 fontFamily = BoldFont,
                 color = Color.Red,
                 textAlign = TextAlign.Center,
@@ -522,7 +522,7 @@ fun alert(showDialog: Boolean, onClose: (Boolean)-> Unit)
             )
         },
         text = {
-            Text(text = "Sorry this feature is not supported yet! Please try again later",
+            Text(text = message,
                 fontFamily = normalFont,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
@@ -917,16 +917,19 @@ fun jobCardEmployer(content: Vacancy = Vacancy())
     }
 }
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun jobcardEmployerApplications(content: Vacancy = Vacancy())
-{
+fun jobcardEmployerApplications(
+    content: Vacancy = Vacancy(),
+    navController: NavController
+) {
     Card(
         shape = RoundedCornerShape(10.dp),
         elevation = 0.dp,
         modifier = Modifier.padding(10.dp),
-        onClick = { Log.d("Click", "CardExample: Card Click")},
+        onClick = {
+                  navController.navigate("${Screen.ApplicantsList.name}/${content.vid}")
+        },
     ) {
         Column(
 

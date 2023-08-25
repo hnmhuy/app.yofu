@@ -144,4 +144,30 @@ class ApplyRepository {
                 }
         }
     }
+
+    fun getApplicationOfAVacancy(
+        vid: String,
+        onComplete: (List<JobApplication>, Exception?) -> Unit
+    )
+    {
+        application.whereEqualTo("vid", db.collection("vacancy").document(vid))
+            .get()
+            .addOnSuccessListener { documents ->
+                val applicationList = mutableListOf<JobApplication>()
+                for (document in documents) {
+                    val application = document.toObject<JobApplication>()
+                    application.aid = document.id
+                    applicationList.add(application)
+                    Log.d("getApplicationOfAVacancy", "${document.id} => ${document.data}")
+                }
+                Log.d("getApplicationOfAVacancy", "Successfully get application list")
+                onComplete(applicationList, null)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("getApplicationOfAVacancy", "Failed to get application list")
+                onComplete(mutableListOf(), exception)
+            }
+    }
+
+
 }

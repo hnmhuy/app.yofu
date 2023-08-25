@@ -76,6 +76,12 @@ class CreateAccountViewModel(): ViewModel() {
                 email = newEmail
             )
         )
+
+        _state.value = _state.value.copy(
+            userInfo = _state.value.userInfo.copy(
+                email = newEmail
+            )
+        )
     }
 
     fun setPassword(
@@ -126,7 +132,7 @@ class CreateAccountViewModel(): ViewModel() {
             onComplete("Please enter email")
             return false
         }
-        if(checkPassword())
+        if(!checkPassword())
         {
             onComplete("Please checking password")
             return false

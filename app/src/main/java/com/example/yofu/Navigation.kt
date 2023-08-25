@@ -55,6 +55,9 @@ import com.example.yofu.employer.CreateVacancy
 import com.example.yofu.employerUI.CompanyProfileScreen
 import com.example.yofu.employerUI.CompanyScreen
 import com.example.yofu.employerUI.CreatedJobs
+import com.example.yofu.employerUI.DetailedApplicationScreen
+import com.example.yofu.employerUI.view_applications
+import com.example.yofu.employerUI.view_jobs
 import com.example.yofu.jobFinderUI.ApplyScreen
 import com.example.yofu.jobFinderUI.Homepage
 import com.example.yofu.jobFinderUI.DetailedJobScreen
@@ -82,8 +85,10 @@ enum class Screen {
     CreateVacancy,
     CreatedVacanciesList,
     ApplicationList,
+    ApplicantsList,
     ProfileCompany,
-    DetailVacancy
+    DetailVacancy,
+    DetailApplication
 }
 
 
@@ -481,10 +486,26 @@ fun EmployerNavGraph(navController: NavHostController, it: PaddingValues, mainCo
             CreatedJobs(navigate = navController)
         }
         composable(Screen.ApplicationList.name) {
-            ApplicationListTemp(navController)
+            view_jobs(navController)
         }
         composable(Screen.ProfileCompany.name) {
             CompanyProfileScreen(navController, mainController)
+        }
+        composable(
+            route = "${Screen.ApplicantsList.name}/{vid}",
+            arguments = listOf(navArgument("vid") { type = NavType.StringType })
+        ) {
+            val vid = it.arguments?.getString("vid") ?: "vid"
+            Log.d("VID", vid)
+            view_applications(navController = navController, vid = vid)
+        }
+        composable(
+            route = "${Screen.DetailApplication.name}/{aid}",
+            arguments = listOf(navArgument("aid") { type = NavType.StringType })
+        ) {
+            val aid = it.arguments?.getString("aid") ?: "aid"
+            Log.d("AID", aid)
+            DetailedApplicationScreen(navController = navController, aid = aid)
         }
     }
 }
