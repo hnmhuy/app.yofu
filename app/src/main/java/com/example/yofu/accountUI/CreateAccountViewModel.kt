@@ -6,6 +6,7 @@ import com.example.yofu.Company
 import com.example.yofu.User
 import com.example.yofu.UserLogin
 import com.example.yofu.accountManage.AuthenticationProcess
+import com.example.yofu.jobFinderUI.convertDay
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +26,15 @@ class CreateAccountViewModel(): ViewModel() {
             companyInfomation = Company()
         )
     )
+
+    fun setPhone(newPhone: String)
+    {
+        _state.value = _state.value.copy(
+            userInfo = _state.value.userInfo.copy(
+                phone = newPhone
+            )
+        )
+    }
 
     fun setUserType(
         newUserType: String
@@ -103,6 +113,35 @@ class CreateAccountViewModel(): ViewModel() {
         return false
     }
 
+    fun verifyForIndividual(onComplete: (String) -> Unit): Boolean
+    {
+       // Check Full name, email, gender, birthdate, password, confirm password not empty
+        if (_state.value.userInfo.fullName == "")
+        {
+            onComplete("Please enter title")
+            return false
+        }
+        if (_state.value.account.email == "")
+        {
+            onComplete("Please enter email")
+            return false
+        }
+        if(checkPassword())
+        {
+            onComplete("Please checking password")
+            return false
+        }
+        if(_state.value.userInfo.gender == "")
+        {
+            onComplete("Please enter your gender")
+        }
+        if(convertDay(_state. value.userInfo.birthDate) == "")
+        {
+            onComplete("Please enter your birthdate")
+        }
+        return true
+    }
+
     fun signupForIndividual(
         onComplete: (String, Exception?) -> Unit
     ) {
@@ -167,6 +206,51 @@ class CreateAccountViewModel(): ViewModel() {
                 website = newWebsite
             )
         )
+    }
+
+    fun setDiscription(newDescription: String)
+    {
+        _state.value = _state.value.copy(
+            companyInfomation = _state.value.companyInfomation.copy(
+                description = newDescription
+            )
+        )
+    }
+
+    fun verifyForCompany(onComplete: (String) -> Unit): Boolean
+    {
+        //Company name, email, phone, website, description, location, manager name, manager email, manager phone
+        if (_state.value.companyInfomation.name == "")
+        {
+            onComplete("Please enter company name")
+            return false
+        }
+        if (_state.value.companyInfomation.email == "")
+        {
+            onComplete("Please enter company email")
+            return false
+        }
+        if (_state.value.companyInfomation.phone == "")
+        {
+            onComplete("Please enter company phone")
+            return false
+        }
+        if (_state.value.companyInfomation.website == "")
+        {
+            onComplete("Please enter company website")
+            return false
+        }
+        if (_state.value.companyInfomation.description == "")
+        {
+            onComplete("Please enter company description")
+            return false
+        }
+        if (_state.value.companyInfomation.location == "")
+        {
+            onComplete("Please enter company location")
+            return false
+        }
+        return true
     }
 
     fun signupForCompany(

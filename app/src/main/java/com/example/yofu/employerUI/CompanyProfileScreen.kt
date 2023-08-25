@@ -545,7 +545,13 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
             Button(
                 onClick = {
                     FirebaseAuth.getInstance().signOut()
-                    mainController.navigate("Authentication") },
+                    mainController.navigate("Authentication")
+                    {
+                        popUpTo("Employer") {
+                            inclusive = true
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(50.dp)

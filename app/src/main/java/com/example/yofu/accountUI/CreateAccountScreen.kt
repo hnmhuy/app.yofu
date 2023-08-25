@@ -100,11 +100,9 @@ fun CreateAccountScreen(
                 }
             )
             Spacer(modifier = Modifier.height(15.dp))
-//            TextFieldComponent(labelValue = "Gender",
-//                setValue = {
-//                    createAccountViewModel.setGender(it)
-//                }
-//            )
+            TextFieldComponent(labelValue = "Phone",
+                setValue = {createAccountViewModel.setPhone(it)})
+            Spacer(modifier = Modifier.height(15.dp))
             DropDown(
                 label = "Gender",
                 list = gender,
@@ -141,7 +139,6 @@ fun CreateAccountScreen(
                 selectedDate.value = convertDate(it)
                 createAccountViewModel.setBirthDate(it)
             }
-            Spacer(modifier = Modifier.height(15.dp))
             PasswordTextFieldComponent(labelValue = "Password",
                 setValue = {
                     createAccountViewModel.setPassword(it)
@@ -157,7 +154,11 @@ fun CreateAccountScreen(
             ButtonComponent(value = "Sign up",
                 callback = {
                     // Precondition checking
-                    if (createAccountViewModel.checkPassword())
+                    var message = ""
+                    var flag = createAccountViewModel.verifyForIndividual() {
+                        message = it
+                    }
+                    if(flag)
                     {
                         createAccountViewModel.signupForIndividual() { message, error ->
                             if(error == null)
@@ -166,13 +167,13 @@ fun CreateAccountScreen(
                                 navController.navigate(Screen.LoginScreen.name)
                             }
                             else {
-                                Toast.makeText(navController.context, message, Toast.LENGTH_SHORT)
-                                    .show()
+                                Toast.makeText(navController.context, message, Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
-                    else {
-                        Log.d("signup", "Password not match")
+                    else
+                    {
+                        Toast.makeText(navController.context, message, Toast.LENGTH_SHORT).show()
                     }
                 })
         }

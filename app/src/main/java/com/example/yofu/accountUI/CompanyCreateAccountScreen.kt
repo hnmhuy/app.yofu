@@ -1,5 +1,6 @@
 package com.example.yofu.accountUI
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +49,7 @@ fun CompanyCreateAccountScreen(
 {
     val gender = listOf<String>("Male", "Female", "Other")
     val isOpenDialog = remember { mutableStateOf(false) }
+    val context = LocalContext.current.applicationContext
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -90,8 +93,9 @@ fun CompanyCreateAccountScreen(
             TextFieldComponent(labelValue = "Email",
                 setValue = {viewModel.setEmail(it)})
             Spacer(modifier = Modifier.height(15.dp))
-//            TextFieldComponent(labelValue = "Manager's Gender",
-//                setValue = {viewModel.setGender(it)})
+            TextFieldComponent(labelValue = "Phone",
+                setValue = {viewModel.setPhone(it)})
+            Spacer(modifier = Modifier.height(15.dp))
             DropDown(
                 label = "Manager Gender",
                 list = gender,
@@ -129,7 +133,6 @@ fun CompanyCreateAccountScreen(
                 viewModel.setBirthDate(it)
             }
             Spacer(modifier = Modifier.height(15.dp))
-            Spacer(modifier = Modifier.height(15.dp))
             PasswordTextFieldComponent(labelValue = "Password",
                 setValue =  {viewModel.setPassword(it)}
             )
@@ -139,7 +142,16 @@ fun CompanyCreateAccountScreen(
             Spacer(modifier = Modifier.height(20.dp))
             ButtonComponent(value = "Next",
                 callback = {
-                    navController.navigate(Screen.AboutAccountCompanyScreen.name)
+                    var message = ""
+                    var check = viewModel.verifyForIndividual { message = it }
+                    if(check)
+                    {
+                        navController.navigate(Screen.AboutAccountCompanyScreen.name)
+                    }
+                    else
+                    {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             )
         }

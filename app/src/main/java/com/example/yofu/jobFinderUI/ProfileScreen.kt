@@ -326,7 +326,13 @@ fun ProfileScreen(navController: NavController,
             Button(
                 onClick = {
                     FirebaseAuth.getInstance().signOut()
-                    mainController.navigate("Authentication")
+                    // Clear all the backstack
+                    mainController.navigate("Authentication"){
+                        popUpTo("JobFinder") {
+                            inclusive = true
+                        }
+                    }
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()

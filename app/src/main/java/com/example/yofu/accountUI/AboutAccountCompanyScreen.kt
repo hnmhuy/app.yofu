@@ -106,19 +106,33 @@ fun AboutAccountCompanyScreen(
                     viewModel.setCompanyWebsite(it)
                 })
             Spacer(modifier = Modifier.height(20.dp))
-            DescriptionTextFieldComponent(labelValue = "Description", setValue = {}) // Description
+            DescriptionTextFieldComponent(labelValue = "Description", setValue = {
+                viewModel.setDiscription(it)
+            }) // Description
             Spacer(modifier = Modifier.height(20.dp))
             ButtonComponent(value = "Next") {
-                viewModel.signupForCompany() { message, e ->
-                    if(e == null)
-                    {
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                        navController.navigate(Screen.LoginScreen.name)
+                // Verify
+                var message = ""
+                var verify = viewModel.verifyForCompany {
+                    message = it
+                }
+                if(verify)
+                {
+                    viewModel.signupForCompany() { message, e ->
+                        if(e == null)
+                        {
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                            navController.navigate(Screen.LoginScreen.name)
+                        }
+                        else
+                        {
+                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    else
-                    {
-                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                    }
+                }
+                else
+                {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
             }
         }

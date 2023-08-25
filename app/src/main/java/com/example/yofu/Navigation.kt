@@ -1,6 +1,9 @@
 package com.example.yofu
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,9 +21,16 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Notes
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -90,7 +100,6 @@ fun Navigation() {
         {
 
             val sharedViewModel = CreateAccountViewModel()
-
             composable(Screen.LoginScreen.name) {
                 LoginScreen(navController = navController)
             }
@@ -166,111 +175,148 @@ private fun navigateInBottomBar(
 }
 
 @Composable
-fun BottomNavigationBarForJobFinder(navController: NavController)
+fun BottomNavigationBarForJobFinder(navController: NavController, isHiden: MutableState<Boolean>)
 {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    BottomNavigation(
-        elevation = 11.dp,
-        backgroundColor = Color(0XFF2F4AE3)
-    ) {
-        BottomNavigationItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = "Home icon",
-                )
-            },
-            selectedContentColor = Color.White,
-            unselectedContentColor = Color.Gray,
-            label = { Text(text = ("Home"))},
-            selected = currentRoute == Screen.Homepage.name,
-            onClick = {
-                navigateInBottomBar(navController, Screen.Homepage.name)
-            }
+    AnimatedVisibility(
+        visible = isHiden.value,
+        enter = slideInVertically(initialOffsetY = { it }),
+        exit = slideOutVertically(targetOffsetY = { it }),
         )
-
-        BottomNavigationItem(
-            selected = currentRoute == Screen.MyApplication.name,
-            onClick = {
-               navigateInBottomBar(navController, Screen.MyApplication.name)
-            },
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Badge,
-                    "Application",
-                )
-            },
-            selectedContentColor = Color.White,
-            unselectedContentColor = Color.Gray,
-            label = { Text(text = "Application")}
+    {
+        BottomNavigation(
+            elevation = 11.dp,
+            backgroundColor = Color(0XFF2F4AE3)
+        ) {
+            BottomNavigationItem(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Home,
+                        contentDescription = "Home icon",
+                    )
+                },
+                selectedContentColor = Color.White,
+                unselectedContentColor = Color.Gray,
+                label = { Text(text = ("Home"))},
+                selected = currentRoute == Screen.Homepage.name,
+                onClick = {
+                    navigateInBottomBar(navController, Screen.Homepage.name)
+                }
             )
 
-        BottomNavigationItem(
-            selected = currentRoute == Screen.Favorite.name,
-            onClick = {
-                navigateInBottomBar(navController, Screen.Favorite.name)
-            },
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    "Favorite",
-                )
-            },
-            selectedContentColor = Color.White,
-            unselectedContentColor = Color.Gray,
-            label = { Text(text = "Favorite")}
-        )
+            BottomNavigationItem(
+                selected = currentRoute == Screen.MyApplication.name,
+                onClick = {
+                    navigateInBottomBar(navController, Screen.MyApplication.name)
+                },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Badge,
+                        "Application",
+                    )
+                },
+                selectedContentColor = Color.White,
+                unselectedContentColor = Color.Gray,
+                label = { Text(text = "Application")}
+            )
 
-        BottomNavigationItem(
-            selected = currentRoute == Screen.ProfileIndividual.name,
-            onClick = {
-                navigateInBottomBar(navController, Screen.ProfileIndividual.name)
-            },
-            icon  = {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    "Profile",
-                )
-            },
-            selectedContentColor = Color.White,
-            unselectedContentColor = Color.Gray,
-            label = { Text(text = "Profile")}
-        )
+            BottomNavigationItem(
+                selected = currentRoute == Screen.Favorite.name,
+                onClick = {
+                    navigateInBottomBar(navController, Screen.Favorite.name)
+                },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        "Favorite",
+                    )
+                },
+                selectedContentColor = Color.White,
+                unselectedContentColor = Color.Gray,
+                label = { Text(text = "Favorite")}
+            )
+
+            BottomNavigationItem(
+                selected = currentRoute == Screen.ProfileIndividual.name,
+                onClick = {
+                    navigateInBottomBar(navController, Screen.ProfileIndividual.name)
+                },
+                icon  = {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        "Profile",
+                    )
+                },
+                selectedContentColor = Color.White,
+                unselectedContentColor = Color.Gray,
+                label = { Text(text = "Profile")}
+            )
+        }
     }
 }
 
 @Composable
 fun JobFinderApp(navController: NavHostController = rememberNavController(), mainNavController: NavHostController)
 {
+    val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    // Hide bottom navigation bar when navigating to detail vacancy screen and apply screen
+    when (navController.currentDestination?.route) {
+        Screen.DetailVacancy.name, Screen.Apply.name -> {
+            bottomBarState.value = false
+        }
+        else -> {
+            bottomBarState.value = true
+        }
+    }
+
     Scaffold(
-        bottomBar = { BottomNavigationBarForJobFinder(navController) }
+        bottomBar = {
+            BottomNavigationBarForJobFinder(navController, bottomBarState)
+        },
     ) {
-        JobFinderNavGraph(navController = navController, it, mainNavController)
+        JobFinderNavGraph(navController = navController, it, mainNavController, bottomBarState)
     }
 }
 
 @Composable
-fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues, mainNavController: NavHostController)
+fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues, mainNavController: NavHostController, bottomBar: MutableState<Boolean>)
 {
     NavHost(
+        route = "JobFinder",
         navController = navController,
         startDestination = Screen.Homepage.name,
         modifier = Modifier.padding(modifier)
     ){
         composable(Screen.Homepage.name) {
+            LaunchedEffect(Unit) {
+                bottomBar.value = true
+            }
             Homepage(navController = navController)
         }
         composable(Screen.Search.name) {
+            LaunchedEffect(Unit) {
+                bottomBar.value = true
+            }
             Search(navController)
         }
         composable(Screen.MyApplication.name) {
+            LaunchedEffect(Unit) {
+                bottomBar.value = true
+            }
             MyApplicationScreen(navController = navController)
         }
         composable(Screen.Favorite.name) {
+            LaunchedEffect(Unit) {
+                bottomBar.value = true
+            }
             FavoriteScreen(navController = navController)
         }
         composable(Screen.ProfileIndividual.name) {
+            LaunchedEffect(Unit) {
+                bottomBar.value = true
+            }
             ProfileScreen(navController, mainNavController)
         }
         composable(
@@ -280,9 +326,15 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
             var vid = it.arguments?.getString("vid")
             Log.d("NavigateDetailed", vid.toString())
             if (vid == null) vid = "VID"
+            LaunchedEffect(Unit) {
+                bottomBar.value = false
+            }
             DetailedJobScreen(vid = vid, navController = navController)
         }
         composable(Screen.Apply.name) {
+            LaunchedEffect(Unit) {
+                bottomBar.value = false
+            }
             ApplyScreen(navController)
         }
     }
@@ -393,7 +445,9 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
 fun EmployerApp(navController: NavHostController = rememberNavController(), mainNavController: NavHostController)
 {
     Scaffold(
-        bottomBar = { BottomNavigateBarForEmployer(navController) }
+        bottomBar = {
+            BottomNavigateBarForEmployer(navController)
+        }
     ) {
         EmployerNavGraph(navController = navController, it, mainNavController)
     }
@@ -402,6 +456,7 @@ fun EmployerApp(navController: NavHostController = rememberNavController(), main
 @Composable
 fun EmployerNavGraph(navController: NavHostController, it: PaddingValues, mainController: NavHostController){
     NavHost(
+        route = "Employer",
         navController = navController,
         startDestination = Screen.Company.name,
         modifier = Modifier.padding(it)
