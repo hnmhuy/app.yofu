@@ -18,6 +18,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,6 +67,10 @@ fun CreatedJobs(
         .pullRefresh(state)
         .background(Color(0xFFF6F7F9))
     ) {
+        LaunchedEffect(key1 = true)
+        {
+            refresh()
+        }
         LazyColumn(Modifier.fillMaxSize()) {
             if (!refreshing) {
                 item {

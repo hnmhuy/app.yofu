@@ -1734,7 +1734,7 @@ fun CreateVacancy(
                             if (it == null)
                             {
                                 Toast.makeText(toastContex, "Create vacancy Sucessfully", Toast.LENGTH_SHORT).show()
-                                navController.navigate(Screen.Company.name)
+                                navController.navigate(Screen.CreatedVacanciesList.name)
                             }
                             else
                             {

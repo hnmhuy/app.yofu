@@ -5,6 +5,7 @@ import com.example.yofu.Vacancy
 import com.example.yofu.accountManage.CompanyRepository
 import com.example.yofu.accountManage.UserRepository
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -89,6 +90,7 @@ class VacancyRepository {
         val auth = Firebase.auth
         val user = auth.currentUser
         if (user != null) {
+            newVacancy.isActive = true
             newVacancy.manager = db.collection("user").document(user.uid.toString())
             // Get company name
             UserRepository().fetch(user.uid.toString()) { user, e ->
@@ -176,6 +178,19 @@ class VacancyRepository {
             }
     }
 
+    fun fetch(vid: DocumentReference, onComplete: (Vacancy?, Exception?) -> Unit) {
+        vid.get()
+            .addOnSuccessListener { documentSnapshot ->
+                val vacancy = documentSnapshot.toObject(Vacancy::class.java)
+                Log.d(DBV, "Fetch vacancy successfully")
+                onComplete(vacancy, null)
+            }
+            .addOnFailureListener {
+                Log.d(DBV, it.toString())
+                onComplete(null, it)
+            }
+    }
+
     fun getVacancyList(onComplete: (List<Vacancy>, Exception?) -> Unit)
     {
         val auth = Firebase.auth
@@ -223,7 +238,7 @@ class VacancyRepository {
                 for (document in snapShots.documents) {
 //                    vacancies.add(Vacancy.fromFireStore(document))
                     val newVacancy = document.toObject(Vacancy::class.java)
-                    if (newVacancy != null) vacancies.add(newVacancy)
+                    if (newVacancy != null && newVacancy.isActive) vacancies.add(newVacancy)
                 }
                 Log.d("vacancies", "Get list of vacancies successfully")
 

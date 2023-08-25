@@ -34,6 +34,17 @@ class LoginScreenViewModel : ViewModel() {
         )
     }
 
+    fun verityInput(
+        onComplete: (String, Exception?, String?) -> Unit
+    ) {
+        if (_state.value.email.isEmpty() || _state.value.password.isEmpty()) {
+            onComplete("Please fill in all the fields", Exception("Please fill in all the fields"), null)
+        }
+        else {
+            login(onComplete)
+        }
+    }
+
     fun login(
         oncomplete: (String, Exception?, String?) -> Unit
     ) {

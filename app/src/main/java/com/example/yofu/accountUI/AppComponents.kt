@@ -72,6 +72,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -876,6 +877,7 @@ fun jobCardEmployer(content: Vacancy = Vacancy())
     }
 }
 
+@Preview
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun jobcardEmployerApplications(content: Vacancy = Vacancy())

@@ -58,6 +58,7 @@ import com.example.yofu.employerUI.CreatedJobs
 import com.example.yofu.jobFinderUI.ApplyScreen
 import com.example.yofu.jobFinderUI.Homepage
 import com.example.yofu.jobFinderUI.DetailedJobScreen
+import com.example.yofu.jobFinderUI.JFApplicationScreen
 import com.example.yofu.jobFinderUI.ProfileScreen
 import com.example.yofu.jobFinderUI.Search
 
@@ -305,7 +306,7 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
             LaunchedEffect(Unit) {
                 bottomBar.value = true
             }
-            MyApplicationScreen(navController = navController)
+            JFApplicationScreen(navController = navController)
         }
         composable(Screen.Favorite.name) {
             LaunchedEffect(Unit) {

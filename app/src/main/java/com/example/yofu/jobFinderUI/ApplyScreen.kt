@@ -84,7 +84,9 @@ fun ApplyScreen(
         {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Box(modifier = Modifier.padding(10.dp)) {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
                         Icon(
                             imageVector = Icons.Default.ArrowCircleLeft,
                             contentDescription = "",
@@ -113,9 +115,9 @@ fun ApplyScreen(
                     .padding(20.dp)
                     .fillMaxHeight(0.9f)
             ) {
-                TextFieldComponent(labelValue = "Full Name", setValue = {})
+                TextFieldComponent(labelValue = "Adjust your contact email", setValue = {})
                 Spacer(modifier = Modifier.height(30.dp))
-                TextFieldComponent(labelValue = "Email", setValue = {})
+                TextFieldComponent(labelValue = "Adjust your phone email", setValue = {})
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Button(
@@ -186,8 +188,16 @@ fun ApplyScreen(
 
             Button(
                 onClick = {
-                    applyViewModel.uploadPDFtoFirebase()
-                    navController.popBackStack()
+                    applyViewModel.applyJob() {success, message ->
+                        if (success)
+                        {
+                            navController.popBackStack()
+                        }
+                        else
+                        {
+                            Log.d("Apply", message)
+                        }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

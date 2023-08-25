@@ -7,6 +7,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
 
 
 @SuppressLint("StaticFieldLeak")
@@ -62,8 +63,10 @@ data class JobApplication(
     var aid: String = "",
     var vid: DocumentReference = emptyVacancy,
     var uid: DocumentReference = emptyUser,
-    var cvRef: DocumentReference = emptyUser,
-    var status: String = ""
+    var cvRef: String = "",
+    var newPhone: String = "",
+    var newEmail: String = "",
+    var status: Boolean? = null
 )
 
 data class  User(

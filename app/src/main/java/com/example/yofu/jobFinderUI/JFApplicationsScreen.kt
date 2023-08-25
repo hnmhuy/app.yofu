@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,7 +29,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,39 +55,55 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.yofu.JobApplication
 import com.example.yofu.R
+import com.example.yofu.Vacancy
+import com.example.yofu.accountUI.jobCardEmployer
 import com.example.yofu.accountUI.normalFont
+import com.example.yofu.jobVacancyManage.VacancyRepository
 import com.google.android.gms.common.internal.FallbackServiceBroker
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterialApi::class)
-@Preview
 @Composable
-fun ApplicationCard()
+fun ApplicationCard(data: JobApplication)
 {
-    var jobName = "UI/UX Design"
-    var companyName = "YOFU Team"
+    val jobData : MutableStateFlow<Vacancy> = MutableStateFlow(Vacancy())
 
-    var  accept = true
-    var reject = false
+    VacancyRepository().fetch(data.vid) { vacancy, e ->
+        if (e == null) {
+            if (vacancy != null)
+            {
+                jobData.value = vacancy
+            }
+            else
+            {
+                Log.d("DetailedJobScreen", "Vacancy is null")
+            }
+        }
+    }
 
     var tag = ""
     var tagBackgroundColor = Color(0xFFFFFFFF)
     var tagContentColor = Color(0xFFFFFFFF)
 
-    if(accept == false && reject == false)
+    if(data.status == null)
     {
         tag = "Application Sent"
         tagBackgroundColor = Color(0xFFE9F0FF)
         tagContentColor = Color(0xFF2F4AE3)
     }
-    else if(accept == true && reject == false)
+    else if(data.status == true)
     {
         tag = "Application Accepted"
         tagBackgroundColor = Color(0xFFE9FBEF)
         tagContentColor = Color(0xFF08BE75)
     }
-    else if (accept == false && reject == true)
+    else if (data.status == false)
     {
         tag = "Application Rejected"
         tagBackgroundColor = Color(0xFFFEEAEA)
@@ -113,7 +140,7 @@ fun ApplicationCard()
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
                     Text(
-                        text = jobName,
+                        text = jobData.collectAsState().value.title,
                         fontFamily = BoldFont,
                         color = Color.Black,
                         textAlign = TextAlign.Center,
@@ -124,7 +151,7 @@ fun ApplicationCard()
                         ),
                     )
                     Text(
-                        text = companyName,
+                        text = jobData.collectAsState().value.companyName,
                         fontFamily = NormalFont,
                         color = Color.Black,
                         textAlign = TextAlign.Center,
@@ -166,9 +193,12 @@ fun ApplicationCard()
 }
 
 
-@Preview
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun JFApplicationScreen()
+fun JFApplicationScreen(
+    navController: NavController,
+    jfApplicationViewModel: JFApplicationViewModel = JFApplicationViewModel()
+)
 {
     Surface(modifier = Modifier
         .fillMaxWidth()
@@ -176,39 +206,118 @@ fun JFApplicationScreen()
         .background(Color.White)
     )
     {
-        Column(modifier = Modifier
-            .fillMaxWidth().padding(5.dp),
-            verticalArrangement = Arrangement.Center
-        )
+        val refreshScope = rememberCoroutineScope()
+        var refreshing by remember { mutableStateOf(false) }
+
+        fun refresh() = refreshScope.launch {
+            refreshing = true
+            delay(1500)
+            jfApplicationViewModel.getApplicationList()
+            refreshing = false
+        }
+        val state = rememberPullRefreshState(refreshing, ::refresh)
+        LaunchedEffect(key1 = true)
         {
-            Image(
-                painter = painterResource(id = R.drawable.applications_screen),
-                contentDescription = "",
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(Color.White)
-                    .verticalScroll(rememberScrollState())
-                    .align(Alignment.CenterHorizontally),
-            )
-            {
-                Column(modifier = Modifier
-                    .fillMaxWidth().padding(5.dp)
-                    .align(Alignment.CenterHorizontally)
-                ) {
-                    (1..23).forEach()
+            refresh()
+        }
+
+        Box(modifier = Modifier
+            .pullRefresh(state)
+            .background(Color(0xFFF6F7F9))
+        ) {
+            LazyColumn(Modifier.fillMaxSize()) {
+                // Checking if data is loaded
+                if (!refreshing) {
+                    item {
+                        Image(
+                            painter = painterResource(id = R.drawable.applications_screen),
+                            contentDescription = "",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                    }
+                    if(jfApplicationViewModel.applicationList.value.isEmpty())
                     {
-                        ApplicationCard()
+                        // You have no application
+                        item {
+                            Column(modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp),
+                                verticalArrangement = Arrangement.Center
+                            )
+                            {
+                                Text(
+                                    text = "You have no application",
+                                    fontFamily = BoldFont,
+                                    color = Color.Black,
+                                    textAlign = TextAlign.Center,
+                                    style = TextStyle(
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        fontStyle = FontStyle.Normal
+                                    ),
+                                )
+                            }
+                        }
+                    }
+                    else
+                    {
+                        items(jfApplicationViewModel.applicationList.value.size) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp, 0.dp, 10.dp, 0.dp)
+                            ) {
+                                ApplicationCard(jfApplicationViewModel.applicationList.collectAsState().value[it])
+                            }
+                        }
                     }
                 }
             }
+            PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
         }
     }
+
+//    {
+//        Column(modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(5.dp),
+//            verticalArrangement = Arrangement.Center
+//        )
+//        {
+//            Image(
+//                painter = painterResource(id = R.drawable.applications_screen),
+//                contentDescription = "",
+//                contentScale = ContentScale.FillWidth,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//            )
+//            Surface(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .fillMaxHeight()
+//                    .background(Color.White)
+//                    .verticalScroll(rememberScrollState())
+//                    .align(Alignment.CenterHorizontally),
+//            )
+//            {
+//                Box(modifier = Modifier
+//                    .pullRefresh(state)
+//                    .background(Color(0xFFF6F7F9))
+//                ) {
+//                    LazyColumn(Modifier.fillMaxSize()) {
+//                        if (!refreshing) {
+//                            items(applicationList.size) {
+//                                ApplicationCard(applicationList[it])
+//                            }
+//                        }
+//                    }
+//                    PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
+//                }
+//            }
+//        }
+//    }
 }
 
 

@@ -81,28 +81,36 @@ fun LoginScreen(
             ButtonComponent(
                 value = "Sign in",
                 callback = {
-                    loginViewModel.login(){message, error, role ->
+                    loginViewModel.verityInput(){ message, error, _ ->
                         if(error != null) {
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                        } else {
-                            if (role == "Employer") {
-                               navController.navigate("Employer") {
-                                      popUpTo("Authentication") {
-                                        inclusive = true
-                                      }
-                               }
-                            } else {
-                                navController.navigate("JobFinder")
-                                {
-                                    popUpTo("Authentication") {
-                                        inclusive = true
+                        }
+                        else
+                        {
+                            loginViewModel.login(){message, error, role ->
+                                if(error != null) {
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                } else {
+                                    if (role == "Employer") {
+                                        navController.navigate("Employer") {
+                                            popUpTo("Authentication") {
+                                                inclusive = true
+                                            }
+                                        }
+                                    } else {
+                                        navController.navigate("JobFinder")
+                                        {
+                                            popUpTo("Authentication") {
+                                                inclusive = true
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-                )
+            )
             Spacer(modifier = Modifier.height(20.dp))
             var pop by remember{ mutableStateOf(false) }
             Text(
