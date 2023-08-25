@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +43,9 @@ fun LoginScreen(
     loginViewModel: LoginScreenViewModel = viewModel<LoginScreenViewModel>(),
 )
 {
+    var isLogin by remember {
+        mutableStateOf(false)
+    }
     val context = LocalContext.current.applicationContext
     Surface (
         modifier = Modifier
@@ -81,23 +85,28 @@ fun LoginScreen(
             ButtonComponent(
                 value = "Sign in",
                 callback = {
+                    isLogin = true
                     loginViewModel.verityInput(){ message, error, _ ->
                         if(error != null) {
+                            isLogin = false
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                         }
                         else
                         {
                             loginViewModel.login(){message, error, role ->
                                 if(error != null) {
+                                    isLogin = false
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                 } else {
                                     if (role == "Employer") {
+                                        isLogin = false
                                         navController.navigate("Employer") {
                                             popUpTo("Authentication") {
                                                 inclusive = true
                                             }
                                         }
                                     } else {
+                                        isLogin = false
                                         navController.navigate("JobFinder")
                                         {
                                             popUpTo("Authentication") {
@@ -109,12 +118,15 @@ fun LoginScreen(
                             }
                         }
                     }
+                    isLogin = false
                 }
             )
             Spacer(modifier = Modifier.height(20.dp))
             var pop by remember{ mutableStateOf(false) }
             Text(
-                modifier = Modifier.clickable {pop = !pop}.fillMaxWidth(),
+                modifier = Modifier
+                    .clickable { pop = !pop }
+                    .fillMaxWidth(),
                 text ="Forgot your password",
                 fontFamily = NormalFont,
                 color = Color(0xFF2F4AE3),

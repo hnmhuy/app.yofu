@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -32,6 +33,7 @@ import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,8 +58,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.yofu.R
 import com.example.yofu.Screen
+import com.example.yofu.accountUI.LoadingScreen
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.jobTag
+import com.example.yofu.jobVacancyManage.ApplyRepository
+import kotlinx.coroutines.delay
 
 
 import kotlin.math.roundToInt
@@ -79,8 +84,22 @@ fun DetailedJobScreen(
     detailedJobScreenViewModel: DetailedJobViewModel = viewModel<DetailedJobViewModel>()
 )
 {
-    detailedJobScreenViewModel.setVacancyId(vid)
-    detailedJobScreenViewModel.loadVacancy()
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
+    var isApplied by remember {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(isLoading){
+        detailedJobScreenViewModel.setVacancyId(vid)
+        detailedJobScreenViewModel.loadVacancy()
+        ApplyRepository().isApplied(vid) {
+            isApplied = it
+        }
+        delay(1000)
+        isLoading = false
+    }
+
     val jobContent by detailedJobScreenViewModel.state.collectAsState()
     val companyContent by detailedJobScreenViewModel.company.collectAsState()
     Surface(
@@ -91,220 +110,228 @@ fun DetailedJobScreen(
         elevation = 50.dp
     )
     {
-        Column(modifier = Modifier.fillMaxWidth())
+        if(isLoading)
         {
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween) {
-                Box(modifier = Modifier.padding(10.dp)) {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowCircleLeft,
-                            contentDescription = "",
-                            tint = Color(0xFF2F4AE3),
-                            modifier = Modifier.size(50.dp)
-                        )
+            LoadingScreen(isLoading = isLoading)
+        }
+        else
+        {
+            Column(modifier = Modifier.fillMaxWidth())
+            {
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Box(modifier = Modifier.padding(10.dp)) {
+                        IconButton(onClick = {
+                            navController.popBackStack()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowCircleLeft,
+                                contentDescription = "",
+                                tint = Color(0xFF2F4AE3),
+                                modifier = Modifier.size(50.dp)
+                            )
+                        }
                     }
-                }
-                var isTinted by remember { mutableStateOf(false) }
-                Box(modifier = Modifier
-                    .padding(10.dp)) {
-                    IconButton(onClick = { isTinted = !isTinted }) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = "",
-                            tint = if(isTinted) Color.Red else Color.LightGray,
-                            modifier = Modifier.size(35.dp)
-                        )
+                    var isTinted by remember { mutableStateOf(false) }
+                    Box(modifier = Modifier
+                        .padding(10.dp)) {
+                        IconButton(onClick = { isTinted = !isTinted }) {
+                            Icon(
+                                imageVector = Icons.Filled.Favorite,
+                                contentDescription = "",
+                                tint = if(isTinted) Color.Red else Color.LightGray,
+                                modifier = Modifier.size(35.dp)
+                            )
+                        }
                     }
-                }
-                if(isTinted)
-                {
-                    alert(isTinted)
+                    if(isTinted)
                     {
-                            updateShowDialog -> isTinted = updateShowDialog
+                        alert(isTinted)
+                        {
+                                updateShowDialog -> isTinted = updateShowDialog
+                        }
                     }
                 }
-            }
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth(0.95f)
-                    .fillMaxHeight(0.5f)
-                    .padding(10.dp)
-                    .align(Alignment.CenterHorizontally),
-                shape = RoundedCornerShape(10.dp),
-                elevation = 4.dp
-            ) {
-                Column(
+                Surface(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .padding(15.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                        .fillMaxWidth(0.95f)
+                        .fillMaxHeight(0.5f)
+                        .padding(10.dp)
+                        .align(Alignment.CenterHorizontally),
+                    shape = RoundedCornerShape(10.dp),
+                    elevation = 4.dp
                 ) {
-                    Image(painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "logo",
-                        contentScale = ContentScale.Fit,
+                    Column(
                         modifier = Modifier
-                            .size(120.dp)
                             .fillMaxWidth()
-                            .align(Alignment.CenterHorizontally)
-                            .clip(shape = RoundedCornerShape(10.dp))
-                            .shadow(elevation = 0.4.dp),
-                    )
-                    Text(
-                        text = jobContent.title,
-                        fontFamily = BoldFont,
-                        color = Color.Black,
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontStyle = FontStyle.Normal
-                        ),
-                    )
-                    Text(
-                        text = jobContent.companyName,
-                        fontFamily = BoldFont,
-                        color = Color(0xFF2F4AE3),
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontStyle = FontStyle.Normal
-                        ),
-                    )
-                    Row (
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                            .fillMaxHeight()
+                            .padding(15.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.LocationOn,
-                            contentDescription = "",
-                            tint = Color.LightGray,
-                            modifier = Modifier.size(15.dp)
+                        Image(painter = painterResource(id = R.drawable.logo),
+                            contentDescription = "logo",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier
+                                .size(120.dp)
+                                .fillMaxWidth()
+                                .align(Alignment.CenterHorizontally)
+                                .clip(shape = RoundedCornerShape(10.dp))
+                                .shadow(elevation = 0.4.dp),
                         )
                         Text(
-                            modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
-                            text = jobContent.location,
-                            fontFamily = NormalFont,
-                            color = Color.Gray,
+                            text = jobContent.title,
+                            fontFamily = BoldFont,
+                            color = Color.Black,
                             textAlign = TextAlign.Center,
                             style = TextStyle(
-                                fontSize = 15.sp,
+                                fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 fontStyle = FontStyle.Normal
                             ),
                         )
-                    }
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.AttachMoney,
-                            contentDescription = "",
-                            tint = Color.LightGray,
-                            modifier = Modifier.size(15.dp)
-                        )
                         Text(
-                            modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
-                            text = "${((jobContent.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((jobContent.maxSalary * 10).roundToInt() / 10.0f) * 1000} USD/month",
-                            fontFamily = NormalFont,
+                            text = jobContent.companyName,
+                            fontFamily = BoldFont,
                             color = Color(0xFF2F4AE3),
                             textAlign = TextAlign.Center,
                             style = TextStyle(
-                                fontSize = 15.sp,
+                                fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold,
                                 fontStyle = FontStyle.Normal
                             ),
                         )
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.horizontalScroll(rememberScrollState())
-                    )
-                    {
-                        val list = jobContent.programmingLanguage
-                        list.forEach{
-                            jobTag(value = it)
-                            Spacer(modifier = Modifier.width(10.dp))
+                        Row (
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.LocationOn,
+                                contentDescription = "",
+                                tint = Color.LightGray,
+                                modifier = Modifier.size(15.dp)
+                            )
+                            Text(
+                                modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
+                                text = jobContent.location,
+                                fontFamily = NormalFont,
+                                color = Color.Gray,
+                                textAlign = TextAlign.Center,
+                                style = TextStyle(
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontStyle = FontStyle.Normal
+                                ),
+                            )
                         }
-                    }
-                }
-            }
-            Surface(modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.85f)
-            ){
-                Column {
-                    val tabs = listOf("Job description", "Benefits", "Company Info")
-                    var selectedTabIndex by remember { mutableStateOf(0) }
-                    TabRow(
-                        modifier = Modifier.padding(13.dp),
-                        selectedTabIndex = selectedTabIndex,
-                        backgroundColor = Color.White,
-                        contentColor = Color(0xFF40A5FE),
-                    )
-                    {
-                        tabs.forEachIndexed { index, title ->
-                            Tab(
-                                selected = index == selectedTabIndex,
-                                onClick = { selectedTabIndex = index }
-                            ) {
-                                Text(
-                                    text = title,
-                                    modifier = Modifier
-                                        .padding(10.dp),
-                                    fontWeight = if (index == selectedTabIndex) FontWeight.Bold else FontWeight.Normal,
-                                    fontFamily = mediumFont,
-                                    color = Color.Black,
-                                    style = TextStyle(
-                                        fontSize = 12.sp,
-                                        fontWeight = FontWeight.Normal,
-                                        fontStyle = FontStyle.Normal
-                                    ),
-                                    textAlign = TextAlign.Center
-                                )
+                        Row (
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.AttachMoney,
+                                contentDescription = "",
+                                tint = Color.LightGray,
+                                modifier = Modifier.size(15.dp)
+                            )
+                            Text(
+                                modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
+                                text = "${((jobContent.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((jobContent.maxSalary * 10).roundToInt() / 10.0f) * 1000} USD/month",
+                                fontFamily = NormalFont,
+                                color = Color(0xFF2F4AE3),
+                                textAlign = TextAlign.Center,
+                                style = TextStyle(
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontStyle = FontStyle.Normal
+                                ),
+                            )
+                        }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.horizontalScroll(rememberScrollState())
+                        )
+                        {
+                            val list = jobContent.programmingLanguage
+                            list.forEach{
+                                jobTag(value = it)
+                                Spacer(modifier = Modifier.width(10.dp))
                             }
                         }
                     }
+                }
+                Surface(modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.85f)
+                ){
+                    Column {
+                        val tabs = listOf("Job description", "Benefits", "Company Info")
+                        var selectedTabIndex by remember { mutableStateOf(0) }
+                        TabRow(
+                            modifier = Modifier.padding(13.dp),
+                            selectedTabIndex = selectedTabIndex,
+                            backgroundColor = Color.White,
+                            contentColor = Color(0xFF40A5FE),
+                        )
+                        {
+                            tabs.forEachIndexed { index, title ->
+                                Tab(
+                                    selected = index == selectedTabIndex,
+                                    onClick = { selectedTabIndex = index }
+                                ) {
+                                    Text(
+                                        text = title,
+                                        modifier = Modifier
+                                            .padding(10.dp),
+                                        fontWeight = if (index == selectedTabIndex) FontWeight.Bold else FontWeight.Normal,
+                                        fontFamily = mediumFont,
+                                        color = Color.Black,
+                                        style = TextStyle(
+                                            fontSize = 12.sp,
+                                            fontWeight = FontWeight.Normal,
+                                            fontStyle = FontStyle.Normal
+                                        ),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        }
 
-                    when (selectedTabIndex) {
-                        0 -> TabContent("Job Description", jobContent.description)
-                        1 -> TabContent("Benefits", jobContent.benefit)
-                        2 -> TabContent("About",companyContent)
+                        when (selectedTabIndex) {
+                            0 -> TabContent("Job Description", jobContent.description)
+                            1 -> TabContent("Benefits", jobContent.benefit)
+                            2 -> TabContent("About",companyContent)
+                        }
                     }
+
                 }
 
-            }
-
-            Button(
-                onClick = {
-                          navController.navigate("${Screen.Apply.name}/${vid}")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(50.dp)
-                    .padding(horizontal = 10.dp),
-                contentPadding = PaddingValues(),
-                colors = ButtonDefaults.buttonColors(Color(0xFF2F4AE3)),
-                shape = RoundedCornerShape(50.dp)
-            ) {
-                val boldFont = FontFamily(
-                    Font(R.font.raleway_bold, FontWeight.Bold),
-                )
-                Text(
-                    text = "Apply",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = BoldFont,
-                    color = Color.White
-                )
+                Button(
+                    enabled = !isApplied,
+                    onClick = {
+                        navController.navigate("${Screen.Apply.name}/${vid}")
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(50.dp)
+                        .padding(horizontal = 10.dp),
+                    contentPadding = PaddingValues(),
+                    colors = ButtonDefaults.buttonColors(Color(0xFF2F4AE3)),
+                    shape = RoundedCornerShape(50.dp)
+                ) {
+                    val boldFont = FontFamily(
+                        Font(R.font.raleway_bold, FontWeight.Bold),
+                    )
+                    Text(
+                        text = "Apply",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = BoldFont,
+                        color = Color.White
+                    )
+                }
             }
         }
     }

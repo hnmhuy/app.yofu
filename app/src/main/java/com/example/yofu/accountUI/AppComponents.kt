@@ -31,6 +31,7 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
@@ -319,7 +320,7 @@ fun ButtonComponent(
             fontFamily = boldFont,
             color = Color.White
         )
-        }
+    }
 }
 
 @Composable
@@ -877,7 +878,7 @@ fun jobCardEmployer(content: Vacancy = Vacancy())
     }
 }
 
-@Preview
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun jobcardEmployerApplications(content: Vacancy = Vacancy())
@@ -985,5 +986,22 @@ fun jobcardEmployerApplications(content: Vacancy = Vacancy())
 
 
         }
+    }
+}
+
+@Composable
+fun LoadingScreen(isLoading:Boolean) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp), // Adjust padding as needed
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .size(50.dp)
+                .alpha(if (isLoading) 1f else 0f),
+            color = Color(0xFF2F4AE3)
+        )
     }
 }

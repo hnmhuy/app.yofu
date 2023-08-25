@@ -96,6 +96,29 @@ class ApplyRepository {
             }
     }
 
+    fun isApplied(vid: String, onComplete: (Boolean) -> Unit) {
+        if (currentUser == null) {
+            onComplete(false)
+        } else {
+            application.whereEqualTo("uid", db.collection("user").document(currentUser.uid)).whereEqualTo("vid", db.collection("vacancy").document(vid))
+                .whereEqualTo("vid", db.collection("vacancy").document(vid))
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (documents.isEmpty) {
+                        Log.d("isApplied", "No such document")
+                        onComplete(false)
+                    } else {
+                        Log.d("isApplied", "Successfully get document")
+                        onComplete(true)
+                    }
+                }
+                .addOnFailureListener {
+                    Log.d("isApplied", "Failed to get document")
+                    onComplete(false)
+                }
+        }
+    }
+
     fun getApplicationListOfJobFinder(
         onComplete: (List<JobApplication>?, Exception?) -> Unit
     ) {

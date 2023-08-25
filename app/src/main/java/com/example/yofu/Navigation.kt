@@ -61,6 +61,7 @@ import com.example.yofu.jobFinderUI.DetailedJobScreen
 import com.example.yofu.jobFinderUI.JFApplicationScreen
 import com.example.yofu.jobFinderUI.ProfileScreen
 import com.example.yofu.jobFinderUI.Search
+import kotlinx.coroutines.delay
 
 enum class Screen {
     // Authentication
@@ -329,6 +330,7 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
             if (vid == null) vid = "VID"
             LaunchedEffect(Unit) {
                 bottomBar.value = false
+                delay(1500)
             }
             DetailedJobScreen(vid = vid, navController = navController)
         }
