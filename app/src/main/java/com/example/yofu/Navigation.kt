@@ -25,6 +25,8 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.LargeFloatingActionButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -89,7 +91,8 @@ enum class Screen {
     ApplicantsList,
     ProfileCompany,
     DetailVacancy,
-    DetailApplication
+    DetailApplication,
+    ViewJobs
 }
 
 
@@ -193,15 +196,16 @@ fun BottomNavigationBarForJobFinder(navController: NavController, isHiden: Mutab
         exit = slideOutVertically(targetOffsetY = { it }),
         )
     {
-        BottomNavigation(
+        BottomNavigation (
+            modifier = Modifier.height(56.dp),
             elevation = 11.dp,
             backgroundColor = Color(0XFF2F4AE3)
         ) {
             BottomNavigationItem(
                 icon = {
                     Icon(
-                        imageVector = Icons.Default.Home,
-                        contentDescription = "Home icon",
+                        imageVector = Icons.Filled.Home,
+                        contentDescription = "Home icon"
                     )
                 },
                 selectedContentColor = Color.White,
@@ -220,8 +224,8 @@ fun BottomNavigationBarForJobFinder(navController: NavController, isHiden: Mutab
                 },
                 icon = {
                     Icon(
-                        imageVector = Icons.Default.Badge,
-                        "Application",
+                        imageVector = Icons.Filled.Badge,
+                        "Application"
                     )
                 },
                 selectedContentColor = Color.White,
@@ -236,8 +240,8 @@ fun BottomNavigationBarForJobFinder(navController: NavController, isHiden: Mutab
                 },
                 icon = {
                     Icon(
-                        imageVector = Icons.Default.Favorite,
-                        "Favorite",
+                        imageVector = Icons.Filled.Favorite,
+                        "Favorite"
                     )
                 },
                 selectedContentColor = Color.White,
@@ -252,8 +256,8 @@ fun BottomNavigationBarForJobFinder(navController: NavController, isHiden: Mutab
                 },
                 icon  = {
                     Icon(
-                        imageVector = Icons.Default.Person,
-                        "Profile",
+                        imageVector = Icons.Filled.Person,
+                        "Profile"
                     )
                 },
                 selectedContentColor = Color.White,
@@ -435,7 +439,7 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
             label = { Text(text = ("Applications"), fontSize = fontSize)},
             selected = currentRoute == Screen.ApplicationList.name,
             onClick = {
-                navigateInBottomBar(navController, Screen.ApplicationList.name)
+                navigateInBottomBar(navController, Screen.ViewJobs.name)
             }
         )
         BottomNavigationItem(
@@ -487,27 +491,32 @@ fun EmployerNavGraph(navController: NavHostController, it: PaddingValues, mainCo
         composable(Screen.CreatedVacanciesList.name) {
             CreatedJobs(navigate = navController)
         }
-        composable(Screen.ApplicationList.name) {
-            view_jobs(navController)
+        navigation(
+            route = Screen.ApplicationList.name,
+            startDestination = Screen.ViewJobs.name)
+        {
+            composable(Screen.ViewJobs.name) {
+                view_jobs(navController)
+            }
+            composable(
+                route = "${Screen.ApplicantsList.name}/{vid}",
+                arguments = listOf(navArgument("vid") { type = NavType.StringType })
+            ) {
+                val vid = it.arguments?.getString("vid") ?: "vid"
+                Log.d("VID", vid)
+                view_applications(navController = navController, vid = vid)
+            }
+            composable(
+                route = "${Screen.DetailApplication.name}/{aid}",
+                arguments = listOf(navArgument("aid") { type = NavType.StringType })
+            ) {
+                val aid = it.arguments?.getString("aid") ?: "aid"
+                Log.d("AID", aid)
+                DetailedApplicationScreen(navController = navController, aid = aid)
+            }
         }
         composable(Screen.ProfileCompany.name) {
             CompanyProfileScreen(navController, mainController)
-        }
-        composable(
-            route = "${Screen.ApplicantsList.name}/{vid}",
-            arguments = listOf(navArgument("vid") { type = NavType.StringType })
-        ) {
-            val vid = it.arguments?.getString("vid") ?: "vid"
-            Log.d("VID", vid)
-            view_applications(navController = navController, vid = vid)
-        }
-        composable(
-            route = "${Screen.DetailApplication.name}/{aid}",
-            arguments = listOf(navArgument("aid") { type = NavType.StringType })
-        ) {
-            val aid = it.arguments?.getString("aid") ?: "aid"
-            Log.d("AID", aid)
-            DetailedApplicationScreen(navController = navController, aid = aid)
         }
     }
 }

@@ -69,16 +69,19 @@ fun ChooseRoleScreen(
         elevation = 50.dp,
     )
     {
-        Box(modifier = Modifier.padding(10.dp)) {
-            IconButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowCircleLeft,
-                    contentDescription = "",
-                    tint = Color(0xFF2F4AE3),
-                    modifier = Modifier.size(60.dp)
-                )
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            Box(modifier = Modifier.padding(10.dp)) {
+                IconButton(onClick = {
+                    navController.popBackStack()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowCircleLeft,
+                        contentDescription = "",
+                        tint = Color(0xFF2F4AE3),
+                        modifier = Modifier.size(50.dp)
+                    )
+                }
             }
         }
         Column(modifier = Modifier

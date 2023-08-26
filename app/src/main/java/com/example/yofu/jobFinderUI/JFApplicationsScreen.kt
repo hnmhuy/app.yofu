@@ -221,6 +221,7 @@ fun JFApplicationScreen(
         val state = rememberPullRefreshState(refreshing, ::refresh)
         LaunchedEffect(key1 = true)
         {
+            jfApplicationViewModel.getApplicationList()
             refresh()
         }
 
@@ -285,46 +286,6 @@ fun JFApplicationScreen(
             PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
         }
     }
-
-//    {
-//        Column(modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(5.dp),
-//            verticalArrangement = Arrangement.Center
-//        )
-//        {
-//            Image(
-//                painter = painterResource(id = R.drawable.applications_screen),
-//                contentDescription = "",
-//                contentScale = ContentScale.FillWidth,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//            )
-//            Surface(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .fillMaxHeight()
-//                    .background(Color.White)
-//                    .verticalScroll(rememberScrollState())
-//                    .align(Alignment.CenterHorizontally),
-//            )
-//            {
-//                Box(modifier = Modifier
-//                    .pullRefresh(state)
-//                    .background(Color(0xFFF6F7F9))
-//                ) {
-//                    LazyColumn(Modifier.fillMaxSize()) {
-//                        if (!refreshing) {
-//                            items(applicationList.size) {
-//                                ApplicationCard(applicationList[it])
-//                            }
-//                        }
-//                    }
-//                    PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
-//                }
-//            }
-//        }
-//    }
 }
 
 

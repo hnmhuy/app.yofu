@@ -167,7 +167,7 @@ class CreateAccountViewModel(): ViewModel() {
                     onComplete(message, null)
                 }
                 else {
-                    val message = "Create account failed ${exception.toString()}"
+                    val message = "Create account failed ${exception.message.toString()}"
                     Log.d("signup", message)
                     onComplete(message, exception)
                 }

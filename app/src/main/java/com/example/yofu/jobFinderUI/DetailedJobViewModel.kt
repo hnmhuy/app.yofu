@@ -32,6 +32,7 @@ class DetailedJobViewModel(): ViewModel(){
                 if (vacancy != null)
                 {
                     _state.value = vacancy
+                    Log.d("DetailedJobScreen", vacancy.toString())
                     val managerRef = _state.value.manager
                     managerRef.get()
                         .addOnSuccessListener { doc ->

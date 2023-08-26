@@ -160,7 +160,9 @@ fun user_card(
                         )
                     }
                     IconButton(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            navController.navigate("${Screen.DetailApplication.name}/${content.aid}")
+                        },
                     ) {
                         Icon(
                             modifier = Modifier.size(15.dp),
@@ -193,7 +195,6 @@ fun view_jobs(
 
     fun refresh() = refreshScope.launch {
         refreshing = true
-        delay(2000)
         applicationsListViewModel.loadVacancies()
         refreshing = false
     }
@@ -232,41 +233,6 @@ fun view_jobs(
         }
         PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
     }
-//    Column(
-//        modifier = Modifier
-//            .background(Color(0xFFF6F7F9))
-//            .verticalScroll(rememberScrollState())
-//    )
-//    {
-//        Image(
-//            painter = painterResource(id = R.drawable.allyourapplication),
-//            contentDescription = "",
-//            contentScale = ContentScale.FillWidth,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//        )
-//
-//        Column(modifier = Modifier.padding(15.dp)) {
-//            jobcardEmployerApplications()
-//            Spacer(modifier = Modifier.height(10.dp))
-//            jobcardEmployerApplications()
-//            Spacer(modifier = Modifier.height(10.dp))
-//            jobcardEmployerApplications()
-//            Spacer(modifier = Modifier.height(10.dp))
-//            jobcardEmployerApplications()
-//            Spacer(modifier = Modifier.height(10.dp))
-//            jobcardEmployerApplications()
-//            Spacer(modifier = Modifier.height(10.dp))
-//            jobcardEmployerApplications()
-//            Spacer(modifier = Modifier.height(10.dp))
-//            jobcardEmployerApplications()
-//            Spacer(modifier = Modifier.height(10.dp))
-//            jobcardEmployerApplications()
-//            Spacer(modifier = Modifier.height(10.dp))
-//            jobcardEmployerApplications()
-//            Spacer(modifier = Modifier.height(10.dp))
-//        }
-//    }
 }
 
 
@@ -295,7 +261,7 @@ fun view_applications(
 
     fun refresh() = refreshScope.launch {
         refreshing = true
-        delay(1500)
+        delay(500)
         applicationsListViewModel.loadVacancies()
         refreshing = false
     }

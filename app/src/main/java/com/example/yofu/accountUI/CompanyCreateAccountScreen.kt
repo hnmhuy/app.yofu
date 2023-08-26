@@ -4,8 +4,10 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,18 +67,20 @@ fun CompanyCreateAccountScreen(
         shape = RoundedCornerShape(20.dp)
     )
     {
-        Box() {
-            IconButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowCircleLeft,
-                    contentDescription = "",
-                    tint = Color.Blue,
-                    modifier = Modifier
-                        .size(60.dp)
-                        .padding(10.dp)
-                )
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Box(modifier = Modifier.padding(10.dp)) {
+                IconButton(onClick = {
+                    navController.popBackStack()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowCircleLeft,
+                        contentDescription = "",
+                        tint = Color(0xFF2F4AE3),
+                        modifier = Modifier.size(50.dp)
+                    )
+                }
             }
         }
         Column(modifier = Modifier

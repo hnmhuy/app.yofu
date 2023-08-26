@@ -57,7 +57,7 @@ fun CreatedJobs(
 
     fun refresh() = refreshScope.launch {
         refreshing = true
-        delay(1500)
+        delay(500)
         createdVacanciesViewModel.loadVacancies()
         refreshing = false
     }
