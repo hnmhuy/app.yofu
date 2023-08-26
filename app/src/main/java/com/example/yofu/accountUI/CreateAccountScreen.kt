@@ -20,6 +20,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
@@ -33,7 +34,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.yofu.R
 import com.example.yofu.Screen
@@ -52,7 +56,6 @@ fun CreateAccountScreen(
             .fillMaxSize()
             .background(Color(0xFFF6F7F9)),
         elevation = 50.dp,
-        shape = RoundedCornerShape(20.dp)
     )
     {
         Box() {
@@ -111,18 +114,34 @@ fun CreateAccountScreen(
                 }
             )
             Spacer(modifier = Modifier.height(20.dp))
-            val selectedDate = remember { mutableStateOf("Date of birth") }
+            var dobheading = "Date of birth"
+            val selectedDate = remember { mutableStateOf("") }
             OutlinedTextField(
                 enabled = false,
                 readOnly = true,
                 textStyle = TextStyle(color = Color.Black),
                 value = selectedDate.value,
+                label = {
+                    Text(
+                        text = dobheading,
+                        fontFamily = normalFont,
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Normal,
+                            fontStyle = FontStyle.Normal,
+                        )
+                    )
+                },
                 onValueChange = {},
                 shape = RoundedCornerShape(30.dp),
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.LightGray
+                    focusedLabelColor = Color.Black,
+                    cursorColor = Color.Black,
+                    disabledTextColor = Color.Transparent,
+                    unfocusedBorderColor = Color.LightGray,
+                    trailingIconColor = Color.LightGray
                 ),
                 trailingIcon = {
                     Icon(

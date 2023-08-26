@@ -317,7 +317,6 @@ fun view_applications(
                         Card(
                             shape = RoundedCornerShape(10.dp),
                             elevation = 0.dp,
-                            onClick = { Log.d("Click", "CardExample: Card Click") },
                         ) {
                             Column(
                             ) {
@@ -339,17 +338,11 @@ fun view_applications(
                                 Text(
                                     text = applicationsListViewModel.vacancyInfo.collectAsState().value.title,
                                     modifier = Modifier
-                                        .heightIn(min = 55.dp)
-                                        .offset(
-                                            x = 0.dp,
-                                            y = 0.dp
-                                        )
-                                        .alpha(1.75f)
                                         .fillMaxWidth(),
-                                    fontFamily = extraBoldFont,
+                                    fontFamily = BoldFont,
                                     textAlign = TextAlign.Center,
                                     style = TextStyle(
-                                        fontSize = 42.sp,
+                                        fontSize = 27.sp,
                                         fontWeight = FontWeight.Normal,
                                         fontStyle = FontStyle.Normal,
                                     )

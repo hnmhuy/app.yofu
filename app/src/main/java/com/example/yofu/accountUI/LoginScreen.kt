@@ -67,19 +67,19 @@ fun LoginScreen(
                     .align(Alignment.CenterHorizontally)
             )
             BoldTextComponent(value = "Login to Your Account")
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             TextFieldComponent(labelValue = "Email address",
                 setValue =  { newEmail ->
                     loginViewModel.setEmail(newEmail)
                 }
                 )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(13.dp))
             PasswordTextFieldComponent(labelValue = "Password",
                     setValue = {
                         loginViewModel.setPassword(it)
                     }
                 )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             ButtonComponentWithLoading(
                 value = "Sign in",
                 isLoading = loginViewModel.isLogin.collectAsState().value,

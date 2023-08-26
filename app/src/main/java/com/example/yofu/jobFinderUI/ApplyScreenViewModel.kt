@@ -44,7 +44,7 @@ class ApplyScreenViewModel: ViewModel() {
         _newPhone.value = password
     }
 
-    fun uploadPDFtoFirebase(onComplete: (Boolean, String) -> Unit) {
+    fun uploadPDFtoFirebase(onComplete: (Boolean, String, String) -> Unit) {
         val uri = pdfURI.value
 
         val filename = "cv_${System.currentTimeMillis()}.pdf"
@@ -57,7 +57,7 @@ class ApplyScreenViewModel: ViewModel() {
             storageRef.downloadUrl.addOnSuccessListener {
                 Log.d("PDF uploading", "Successfully get download link")
                 val downloadUrl = it.toString()
-                onComplete(true, downloadUrl)
+                onComplete(true, downloadUrl, filename)
 //                val uid = Firebase.auth.currentUser?.uid
 //                val data = hashMapOf(
 //                    "candidate" to uid,
@@ -76,11 +76,11 @@ class ApplyScreenViewModel: ViewModel() {
 //                }
 
             }.addOnFailureListener {
-                onComplete(false, "")
+                onComplete(false, "", filename)
                 Log.d("PDF Uploading", "Failed to get download link")
             }
         }.addOnFailureListener {
-            onComplete(false, "")
+            onComplete(false, "", filename)
             Log.d("PDF Uploading", "can not add pdf to firebase storage")
         }
     }
@@ -94,9 +94,9 @@ class ApplyScreenViewModel: ViewModel() {
         val email = newEmail.value
         val password = newPhone.value
         if (verifyCVExsist()) {
-            uploadPDFtoFirebase() { success, ref ->
+            uploadPDFtoFirebase() { success, link, fileName ->
                 if (success) {
-                    ApplyRepository().apply(vid.value, email, password, ref) { _, exception ->
+                    ApplyRepository().apply(vid.value, email, password, link, fileName) { _, exception ->
                         if (exception == null) {
                             onComplete(true, "Apply successfully")
                         } else {

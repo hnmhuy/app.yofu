@@ -1,14 +1,19 @@
 package com.example.yofu.jobVacancyManage
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.webkit.MimeTypeMap
+import androidx.compose.ui.platform.LocalContext
 import com.example.yofu.JobApplication
-import com.example.yofu.Vacancy
+import com.example.yofu.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
+import java.io.File
 
 class ApplyRepository {
     private val db = Firebase.firestore
@@ -31,7 +36,7 @@ class ApplyRepository {
             }
     }
 
-    fun apply(vid: String, newEmail: String = "", newPhone: String = "", cvRef: String,onComplete: (JobApplication?, Exception?) -> Unit)
+    fun apply(vid: String, newEmail: String = "", newPhone: String = "", link: String, ref: String, onComplete: (JobApplication?, Exception?) -> Unit)
     {
         if (currentUser == null)
         {
@@ -44,7 +49,8 @@ class ApplyRepository {
                 uid = db.collection("user").document(currentUser.uid),
                 newEmail = newEmail,
                 newPhone = newPhone,
-                cvRef = cvRef
+                cvDownloadLink = link,
+                cvFileName = ref,
             )
             application.add(newApplication)
                 .addOnSuccessListener { documentReference ->
@@ -133,13 +139,13 @@ class ApplyRepository {
                         val application = document.toObject<JobApplication>()
                         application.aid = document.id
                         applicationList.add(application)
-                        Log.d("getApplicationListOfJobFinder", "${document.id} => ${document.data}")
+                        Log.d("ApplyRepository", "${document.id} => ${document.data}")
                     }
-                    Log.d("getApplicationListOfJobFinder", "Successfully get application list")
+                    Log.d("ApplyRepository", "Successfully get application list")
                     onComplete(applicationList, null)
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("getApplicationListOfJobFinder", "Failed to get application list")
+                    Log.d("ApplyRepository", "Failed to get application list")
                     onComplete(null, exception)
                 }
         }
@@ -158,16 +164,66 @@ class ApplyRepository {
                     val application = document.toObject<JobApplication>()
                     application.aid = document.id
                     applicationList.add(application)
-                    Log.d("getApplicationOfAVacancy", "${document.id} => ${document.data}")
+                    Log.d("ApplyRepository", "${document.id} => ${document.data}")
                 }
-                Log.d("getApplicationOfAVacancy", "Successfully get application list")
+                Log.d("ApplyRepository", "Successfully get application list")
                 onComplete(applicationList, null)
             }
             .addOnFailureListener { exception ->
-                Log.d("getApplicationOfAVacancy", "Failed to get application list")
+                Log.d("ApplyRepository", "Failed to get application list")
                 onComplete(mutableListOf(), exception)
             }
     }
+
+    fun downloadCV(applicationData: JobApplication, userInfo: User, context: Context, onComplete: (File, Boolean) -> Unit, onProgress: (Int) -> Unit)
+    {
+
+
+        // Get Vacancy info
+        VacancyRepository().fetch(applicationData.vid) { vacancy, e ->
+            if (e == null)
+            {
+                val localFile = File.createTempFile("${vacancy!!.title}-${userInfo.email}", "pdf")
+                val storageRef = Firebase.storage.reference.child("pdf/${applicationData.cvFileName}")
+                storageRef.getFile(localFile)
+                    .addOnProgressListener {
+                        val progress = (100.0 * it.bytesTransferred) / it.totalByteCount
+                        onProgress(progress.toInt())
+                    }
+                    .addOnSuccessListener {
+                        Log.d("DownloadCV", "Successfully download CV")
+                        // Save this file into local storage
+                        val file = File(context.getExternalFilesDir(null), "downloadCV/${vacancy.title}/${vacancy.title}-${userInfo.email}.pdf")
+                        if (file.exists()) {
+                            onComplete(file, true)
+                        }
+                        // Create folder if not exist
+                        file.parentFile.mkdirs()
+                        try {
+                            file.writeBytes(localFile.readBytes())
+                            Log.d("DownloadCV", "Successfully save CV")
+                            // Log the path to file
+                            Log.d("DownloadCV", file.absolutePath)
+                            onComplete(file, true)
+                        } catch (e: Exception) {
+                            Log.d("DownloadCV", "Failed to save CV", )
+                            onComplete(File(""), false)
+                        }
+                    }
+                    .addOnFailureListener {
+                        Log.d("DownloadCV", "Failed to download CV")
+                        onComplete(File(""), false)
+                    }
+            }
+        }
+    }
+
+    fun getMimeType(file: File): String?
+    {
+        val extension = file.extension
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+    }
+
 
 
 }

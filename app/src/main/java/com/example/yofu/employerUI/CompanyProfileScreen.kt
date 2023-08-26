@@ -2,6 +2,7 @@ package com.example.yofu.employerUI
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -102,7 +103,6 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
             .fillMaxWidth()
             .fillMaxHeight()
             .background(Color(0xFFF6F7F9))
-            .padding(start = 15.dp, end = 15.dp, top = 15.dp)
             .verticalScroll(rememberScrollState())
     ) {
 
@@ -129,7 +129,8 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                 Column(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ){
-                    Row(modifier = Modifier.fillMaxWidth())
+                    Row(modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween)
                     {
                         Text(
                             text = companyInfo.collectAsState().value.name,
@@ -147,7 +148,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                                 contentDescription = "",
                                 tint = Color.Blue,
                                 modifier = Modifier
-                                    .size(20.dp)
+                                    .size(15.dp)
                                     .align(Alignment.CenterVertically),
 
                                 )
