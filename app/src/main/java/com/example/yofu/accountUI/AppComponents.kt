@@ -312,7 +312,6 @@ fun PasswordTextFieldComponent(
                     .toSize()
             },
         shape = RoundedCornerShape(30.dp),
-        enabled = false,
         readOnly = true,
         textStyle = TextStyle(color = Color.Black),
         label = {Text(
@@ -847,7 +846,6 @@ fun dockedDatePicker(isOpenDialog: MutableState<Boolean>, title: String = "", di
 {
     val selectedDate = remember { mutableStateOf("Select date") }
     OutlinedTextField(
-        enabled = false,
         readOnly = true,
         textStyle = TextStyle(color = Color.Black),
         value = selectedDate.value,
