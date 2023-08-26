@@ -212,9 +212,10 @@ fun BottomNavigationBarForJobFinder(navController: NavController, isHiden: Mutab
                 selectedContentColor = Color.White,
                 unselectedContentColor = Color(0xFF83AEFF),
                 label = { Text(text = ("Home"))},
-                selected = currentRoute == Screen.Homepage.name,
+                selected = currentRoute == Screen.Homepage.name || currentRoute == Screen.Search.name,
                 onClick = {
                     navigateInBottomBar(navController, Screen.Homepage.name)
+                    navController.popBackStack(Screen.Search.name, inclusive = true)
                 }
             )
 
@@ -302,6 +303,7 @@ fun JobFinderNavGraph(navController: NavHostController, modifier: PaddingValues,
         startDestination = Screen.Homepage.name,
         modifier = Modifier.padding(modifier)
     ){
+
         composable(Screen.Homepage.name) {
             LaunchedEffect(Unit) {
                 bottomBar.value = true
