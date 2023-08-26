@@ -55,6 +55,10 @@ fun AboutAccountCompanyScreen(
         mutableStateOf(false)
     }
 
+    val isProcessing = remember {
+        mutableStateOf(false)
+    }
+
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -128,8 +132,9 @@ fun AboutAccountCompanyScreen(
                 viewModel.setDiscription(it)
             }) // Description
             Spacer(modifier = Modifier.height(20.dp))
-            ButtonComponent(value = "Create Account") {
-                // Verify
+            ButtonComponentWithLoading(value = "Create Account", isLoading = isProcessing.value)
+            {
+                isProcessing.value = true
                 var verify = viewModel.verifyForCompany {
                     message.value = it
                 }
@@ -138,18 +143,21 @@ fun AboutAccountCompanyScreen(
                     viewModel.signupForCompany() { it, e ->
                         if(e == null)
                         {
+                            isProcessing.value = false
                             isNotified.value = true
                             message.value = "Create account successfully. Please check your email to verify your account"
                             success.value = true
                         }
                         else
                         {
+                            isProcessing.value = false
                             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 else
                 {
+                    isProcessing.value = false
                     Toast.makeText(context, message.value, Toast.LENGTH_SHORT).show()
                 }
             }

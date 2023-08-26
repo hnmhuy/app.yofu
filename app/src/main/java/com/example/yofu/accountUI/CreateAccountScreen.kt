@@ -63,6 +63,11 @@ fun CreateAccountScreen(
     var message = remember {
         mutableStateOf("")
     }
+
+    var isProcessing = remember {
+        mutableStateOf(false)
+    }
+
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -182,9 +187,12 @@ fun CreateAccountScreen(
                 }
             )
             Spacer(modifier = Modifier.height(20.dp))
-            ButtonComponent(value = "Sign up",
-                callback = {
+            ButtonComponentWithLoading(
+                value = "Create Account",
+                isLoading = isProcessing.value,
+            ){
                     // Precondition checking
+                    isProcessing.value = true
                     var flag = createAccountViewModel.verifyForIndividual() {
                         message.value = it
                     }
@@ -193,20 +201,23 @@ fun CreateAccountScreen(
                         createAccountViewModel.signupForIndividual() { it, error ->
                             if(error == null)
                             {
+                                isProcessing.value = false
                                 isNotified.value = true
                                 message.value = "Create account successfully. Please check your email to verify your account"
                                 sucess.value = true
                             }
                             else {
+                                isProcessing.value = false
                                 Toast.makeText(navController.context, error.message.toString(), Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                     else
                     {
+                        isProcessing.value = false
                         Toast.makeText(navController.context, message.value, Toast.LENGTH_SHORT).show()
                     }
-                })
+                }
         }
         if (isNotified.value)
         {
