@@ -65,4 +65,7 @@ class DetailedJobViewModel(): ViewModel(){
             }
         }
     }
+
+    // Download the CV file of the applicant
+
 }

@@ -1,5 +1,7 @@
 package com.example.yofu.employerUI
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,10 +29,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material.icons.filled.FilePresent
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -42,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -53,6 +58,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.example.yofu.JobApplication
 import com.example.yofu.R
@@ -65,29 +72,55 @@ import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
 import com.example.yofu.jobFinderUI.NormalFont
 import com.example.yofu.jobVacancyManage.ApplyRepository
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
+import io.grpc.android.BuildConfig
 import kotlinx.coroutines.delay
+import java.io.File
+import java.util.Objects
 
 
 @Composable
 fun DetailedApplicationScreen(
     navController: NavController,
-    aid: String
+    aid: String,
+    applicationsListViewModel: ApplicationsListViewModel = ApplicationsListViewModel()
 )
 {
     var loading by remember { mutableStateOf(true) }
     var userInfo by remember { mutableStateOf(User()) }
     var applicationInfo by remember { mutableStateOf(JobApplication()) }
+    var fileSize by remember { mutableStateOf("") }
+    var fileName by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
     var reject by remember { mutableStateOf(false) }
     var accept by remember { mutableStateOf(false) }
 
     var message by remember { mutableStateOf("") }
 
+    var isDownloading by remember { mutableStateOf(false) }
+
+    var isDownloaded by remember { mutableStateOf(false) }
+
+    var processPercentage by remember { mutableStateOf(0) }
+
+    var fileData by remember { mutableStateOf(File(""))}
+
+    val context = LocalContext.current
+
+    val intent = Intent(Intent.ACTION_VIEW)
+
+
     LaunchedEffect(loading)
     {
+
         ApplyRepository().fetchAnApplication(aid) { application, exception ->
             if (exception == null) {
                 applicationInfo = application!!
+
+                applicationsListViewModel.loadVacancyInfo(applicationInfo.vid)
+
                 if (applicationInfo.status != null && applicationInfo.status == true)
                 {
                     accept = true
@@ -113,6 +146,18 @@ fun DetailedApplicationScreen(
                         {
                             userInfo.phone = applicationInfo.newPhone
                         }
+
+                        // Get the file size
+                        val storageRef = Firebase.storage.reference
+                        val pathReference: StorageReference = storageRef.child("pdf/${application.cvFileName}")
+                        pathReference.metadata.addOnSuccessListener { storageMetadata ->
+                            fileSize = "${storageMetadata.sizeBytes / 1024} KB"
+                        }.addOnFailureListener {
+                            Log.w("ApplicationList", it)
+                        }
+
+                        fileName = "CV"
+
                         loading = false
                     } else {
                         Log.w("ApplicationList", exception)
@@ -125,10 +170,6 @@ fun DetailedApplicationScreen(
         delay(1000)
         loading = false
     }
-
-
-    var fileName = "CV"
-    var fileSize = "0"
 
     Surface(
         modifier = Modifier
@@ -421,7 +462,7 @@ fun DetailedApplicationScreen(
                                         text = fileName,
                                         fontFamily = NormalFont,
                                         style = TextStyle(
-                                            fontSize = 18.sp,
+                                            fontSize = 12.sp,
                                             fontWeight = FontWeight.Bold,
                                             fontStyle = FontStyle.Normal
                                         ),
@@ -445,13 +486,70 @@ fun DetailedApplicationScreen(
 
 
                                 }
-                                IconButton(onClick = { showDialog = true }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.FileDownload,
-                                        contentDescription = "",
-                                        tint = Color(0xFFFF6E58),
+                                if (!isDownloading) {
+                                    Button(
+                                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                                        elevation = ButtonDefaults.elevation(0.dp),
+                                        onClick = {
+                                            if (!isDownloaded) {
+                                                isDownloading = true
+                                                ApplyRepository().downloadCV(
+                                                    applicationData = applicationInfo,
+                                                    userInfo = userInfo,
+                                                    context = context,
+                                                    onComplete = { file, isSuccess ->
+                                                        isDownloading = false
+                                                        if (isSuccess) {
+                                                            fileData = file
+                                                            isDownloaded = true
+                                                        }
+                                                    },
+                                                    onProgress = {
+                                                        isDownloading = true
+                                                        processPercentage = it
+                                                    }
+                                                )
+                                            } else {
+                                                val uri = FileProvider.getUriForFile(
+                                                    context,
+                                                    "com.example.yofu.fileprovider",
+                                                    fileData
+                                                )
+                                                intent.setDataAndType(uri, "application/pdf")
+                                                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                try {
+                                                    context.startActivity(intent)
+                                                } catch (e: ActivityNotFoundException) {
+                                                    // Handle case where no app can handle the intent
+                                                }
+                                            }
+                                        }
+                                    ) {
+                                        if (!isDownloaded) Icon(
+                                            imageVector = Icons.Filled.FileDownload,
+                                            contentDescription = "",
+                                            tint = Color(0xFFFF6E58),
+                                            modifier = Modifier
+                                                .size(30.dp)
+                                        )
+                                        else {
+                                            Icon(
+                                                imageVector = Icons.Filled.FileOpen,
+                                                contentDescription = "",
+                                                tint = Color(0xFF2F4AE3),
+                                                modifier = Modifier
+                                                    .size(30.dp)
+                                            )
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    CircularProgressIndicator(
                                         modifier = Modifier
-                                            .size(30.dp)
+                                            .size(30.dp),
+                                        progress = processPercentage.toFloat()
                                     )
                                 }
                             }

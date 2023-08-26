@@ -1,19 +1,17 @@
 package com.example.yofu.employerUI
 
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.yofu.JobApplication
 import com.example.yofu.User
 import com.example.yofu.Vacancy
 import com.example.yofu.accountManage.UserRepository
-import com.example.yofu.emptyCompanyRef
-import com.example.yofu.emptyUser
 import com.example.yofu.jobVacancyManage.ApplyRepository
 import com.example.yofu.jobVacancyManage.VacancyRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.io.File
 
 class ApplicationsListViewModel: ViewModel() {
     private val _vacancyList: MutableStateFlow<List<Vacancy>> = MutableStateFlow(listOf<Vacancy>())
@@ -25,6 +23,7 @@ class ApplicationsListViewModel: ViewModel() {
     private val _userInfo = MutableStateFlow(User())
 
     private val _applicationInfo = MutableStateFlow(JobApplication())
+
 
     val applicationInfo: MutableStateFlow<JobApplication>
         get() = _applicationInfo
@@ -61,6 +60,31 @@ class ApplicationsListViewModel: ViewModel() {
         }
     }
 
+    fun loadVacancyInfo(vid: DocumentReference)
+    {
+        VacancyRepository().fetch(vid) { vacancy, exception ->
+            if (exception == null) {
+                _vacancyInfo.value = _vacancyInfo.value.copy(
+                    vid = vacancy!!.vid,
+                    manager = vacancy.manager,
+                    title = vacancy.title,
+                    description = vacancy.description,
+                    minSalary = vacancy.minSalary,
+                    maxSalary = vacancy.maxSalary,
+                    location = vacancy.location,
+                    position = vacancy.position,
+                    benefit = vacancy.benefit,
+                    jobType = vacancy.jobType,
+                    programmingLanguage = vacancy.programmingLanguage,
+                    updatedDate = vacancy.updatedDate,
+                    expiredDate = vacancy.expiredDate
+                )
+            } else {
+                Log.w("ApplicationList", exception)
+            }
+        }
+    }
+
     fun loadApplications(vid: String) {
         ApplyRepository().getApplicationOfAVacancy(vid) { applications, exception ->
             if (exception == null) {
@@ -78,7 +102,7 @@ class ApplicationsListViewModel: ViewModel() {
                     aid = application!!.aid,
                     vid = application.vid,
                     uid = application.uid,
-                    cvRef = application.cvRef,
+                    cvDownloadLink = application.cvDownloadLink,
                     newEmail = application.newEmail,
                     newPhone = application.newPhone,
                     status = application.status
@@ -131,5 +155,6 @@ class ApplicationsListViewModel: ViewModel() {
             }
         }
     }
+
 
 }
