@@ -200,28 +200,33 @@ fun ApplyScreen(
                     }
                     else
                     {
-                        CircularProgressIndicator(
+                        Column(
                             modifier = Modifier
-                                .heightIn(min = 40.dp),
-                            color = Color(0xFF2F4AE3),
-                            strokeWidth = 5.dp,
-                            progress = currentProgress
-                        )
-                        // Display the currentProcess value
-                        Text(
-                            text = "${currentProgress.toInt()}%",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 40.dp),
-                            fontFamily = normalFont,
-                            style = TextStyle(
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.Normal,
-                                fontStyle = FontStyle.Normal,
-                                color = Color.Gray
-                            ),
-                            textAlign = TextAlign.Center
-                        )
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            // 50% width progress indicator
+                            LinearProgressIndicator(
+                                progress = currentProgress / 100,
+                                modifier = Modifier
+                                    .fillMaxWidth(0.5f)
+                                    .heightIn(min = 15.dp)
+                            )
+                            // Display the currentProcess value
+                            Text(
+                                text = "Uploading...${currentProgress.toInt()}%",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(min = 40.dp),
+                                fontFamily = normalFont,
+                                style = TextStyle(
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    fontStyle = FontStyle.Normal,
+                                    color = Color.Gray
+                                ),
+                                textAlign = TextAlign.Center)
+                        }
                     }
                 }
             }
