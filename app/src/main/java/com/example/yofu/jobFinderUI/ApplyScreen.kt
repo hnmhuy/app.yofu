@@ -79,10 +79,10 @@ fun ApplyScreen(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color(0xFFF6F7F9))
+            .background(Color(0xFFF6F7F9)),
     )
     {
-        Column(modifier = Modifier.fillMaxWidth())
+        Column(modifier = Modifier.fillMaxWidth().padding(10.dp))
         {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Box(modifier = Modifier.padding(10.dp)) {

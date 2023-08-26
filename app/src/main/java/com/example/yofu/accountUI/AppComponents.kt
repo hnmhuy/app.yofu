@@ -638,7 +638,7 @@ fun jobTag(value : String)
             text = value,
             fontFamily = normalFont,
             style = TextStyle(
-                fontSize = 13.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Normal,
                 fontStyle = FontStyle.Normal
             ),

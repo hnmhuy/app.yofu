@@ -107,7 +107,7 @@ fun DetailedJobScreen(
             .fillMaxWidth()
             .fillMaxHeight()
             .background(Color(0xFFF6F7F9)),
-        elevation = 50.dp
+        elevation = 30.dp
     )
     {
         if(isLoading)
@@ -116,7 +116,7 @@ fun DetailedJobScreen(
         }
         else
         {
-            Column(modifier = Modifier.fillMaxWidth())
+            Column(modifier = Modifier.fillMaxWidth().padding(10.dp))
             {
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
@@ -159,7 +159,7 @@ fun DetailedJobScreen(
                         .padding(10.dp)
                         .align(Alignment.CenterHorizontally),
                     shape = RoundedCornerShape(10.dp),
-                    elevation = 4.dp
+                    elevation = 10.dp
                 ) {
                     Column(
                         modifier = Modifier
@@ -177,7 +177,6 @@ fun DetailedJobScreen(
                                 .fillMaxWidth()
                                 .align(Alignment.CenterHorizontally)
                                 .clip(shape = RoundedCornerShape(10.dp))
-                                .shadow(elevation = 0.4.dp),
                         )
                         Text(
                             text = jobContent.title,
@@ -289,7 +288,7 @@ fun DetailedJobScreen(
                                         fontFamily = mediumFont,
                                         color = Color.Black,
                                         style = TextStyle(
-                                            fontSize = 12.sp,
+                                            fontSize = 10.sp,
                                             fontWeight = FontWeight.Normal,
                                             fontStyle = FontStyle.Normal
                                         ),

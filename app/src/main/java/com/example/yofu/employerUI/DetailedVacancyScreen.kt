@@ -107,7 +107,7 @@ fun DetailedVacancyScreen(
         }
         else
         {
-            Column(modifier = Modifier.fillMaxWidth())
+            Column(modifier = Modifier.fillMaxWidth().padding(10.dp))
             {
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {

@@ -106,7 +106,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
             .verticalScroll(rememberScrollState())
     ) {
 
-        Column {
+        Column(modifier =Modifier.padding(10.dp)) {
             Text(
                 text = "Profile",
                 modifier = Modifier
@@ -176,7 +176,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
+                    .padding(start = 10.dp, end = 10.dp)
                     .fillMaxHeight(0.4f),
                 shape = RoundedCornerShape(20.dp),
                 elevation = 3.dp,
@@ -346,7 +346,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
+                    .padding(start = 10.dp, end = 10.dp)
                     .fillMaxHeight(0.4f),
                 shape = RoundedCornerShape(20.dp),
                 elevation = 3.dp,
