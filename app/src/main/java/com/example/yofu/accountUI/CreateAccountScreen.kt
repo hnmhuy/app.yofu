@@ -58,7 +58,12 @@ fun CreateAccountScreen(
         elevation = 50.dp,
     )
     {
-        Box(modifier = Modifier.padding(10.dp)) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(15.dp)
+        )
+        {
             IconButton( onClick = {
                 navController.popBackStack()
             }) {
@@ -67,17 +72,10 @@ fun CreateAccountScreen(
                     contentDescription = "",
                     tint = Color(0xFF2F4AE3),
                     modifier = Modifier
-                        .size(60.dp)
-                        .padding(10.dp)
+                        .size(50.dp)
+                        .align(Alignment.Start)
                 )
             }
-        }
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(20.dp)
-        )
-        {
             Spacer(modifier = Modifier
                 .height(30.dp)
                 .padding(20.dp))
@@ -139,7 +137,7 @@ fun CreateAccountScreen(
                     focusedBorderColor = Color.Black,
                     focusedLabelColor = Color.Black,
                     cursorColor = Color.Black,
-                    disabledTextColor = Color.Transparent,
+                    disabledTextColor = Color.LightGray,
                     unfocusedBorderColor = Color.LightGray,
                     trailingIconColor = Color.LightGray
                 ),

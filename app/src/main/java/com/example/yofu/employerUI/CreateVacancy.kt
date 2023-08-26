@@ -179,7 +179,7 @@ fun DropDown(label: String, list: List<String>, previousContent: String = "", se
                 focusedBorderColor = Color.Black,
                 focusedLabelColor = Color.Black,
                 cursorColor = Color.Black,
-                disabledTextColor = Color.Transparent,
+                disabledTextColor = Color.LightGray,
                 unfocusedBorderColor = Color.LightGray,
                 trailingIconColor = Color.LightGray
             ),

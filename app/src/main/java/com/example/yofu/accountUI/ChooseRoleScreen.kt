@@ -69,27 +69,23 @@ fun ChooseRoleScreen(
         elevation = 50.dp,
     )
     {
-        Row(modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween) {
-            Box(modifier = Modifier.padding(10.dp)) {
-                IconButton(onClick = {
-                    navController.popBackStack()
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowCircleLeft,
-                        contentDescription = "",
-                        tint = Color(0xFF2F4AE3),
-                        modifier = Modifier.size(50.dp)
-                    )
-                }
-            }
-        }
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
             .verticalScroll(rememberScrollState()))
         {
-            Spacer(modifier = Modifier.height(30.dp))
+            IconButton(onClick = {
+                navController.popBackStack()
+            }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowCircleLeft,
+                    contentDescription = "",
+                    tint = Color(0xFF2F4AE3),
+                    modifier = Modifier.size(50.dp).align(Alignment.Start)
+                )
+            }
+            Spacer(modifier = Modifier.height(15.dp))
             Image(painter = painterResource(id = R.drawable.choose_role),
                 contentDescription = "role",
                 contentScale = ContentScale.Fit,
@@ -184,7 +180,7 @@ fun ChooseRoleScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             ButtonComponent(value = "Continue",
                 callback = {
                     viewModel.setRole(role.value)
