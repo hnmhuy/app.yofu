@@ -46,29 +46,26 @@ fun AboutAccountCompanyScreen(
         elevation = 50.dp
     )
     {
-        Box {
-            IconButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowCircleLeft,
-                    contentDescription = "",
-                    tint = Color(0xFF40A5FE),
-                    modifier = Modifier
-                        .size(60.dp)
-                        .padding(10.dp)
-                )
-            }
-        }
         Column(modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(10.dp)
         )
         {
+            IconButton( onClick = {
+                navController.popBackStack()
+            }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowCircleLeft,
+                    contentDescription = "",
+                    tint = Color(0xFF2F4AE3),
+                    modifier = Modifier
+                        .size(50.dp)
+                        .align(Alignment.Start)
+                )
+            }
             Spacer(modifier = Modifier
-                .height(30.dp)
-                .padding(20.dp))
+                .height(30.dp))
             Image(painter = painterResource(id = R.drawable.logo),
                 contentDescription = "logo",
                 contentScale = ContentScale.Fit,
