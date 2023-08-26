@@ -132,8 +132,14 @@ class CreateAccountViewModel(): ViewModel() {
             onComplete("Please enter email")
             return false
         }
+        if (_state.value.userInfo.phone == "")
+        {
+            onComplete("Please enter your phone number")
+            return false
+        }
         if(!checkPassword())
         {
+            Log.d("checkPassword", "Password: ${_state.value.account.password} Confirm password: ${_state.value.confirmPassword}")
             onComplete("Please checking password")
             return false
         }

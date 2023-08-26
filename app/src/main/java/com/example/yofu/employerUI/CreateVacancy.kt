@@ -143,12 +143,12 @@ private fun MyUI(setSalary: (Float, Float) -> Unit) {
 
 
 @Composable
-fun DropDown(label: String, list: List<String>, setValue: (String) -> Unit) {
+fun DropDown(label: String, list: List<String>, previousContent: String = "", setValue: (String) -> Unit) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
     var selectedItem by remember{
-        mutableStateOf("")
+        mutableStateOf(previousContent)
     }
     var textFieldSize by remember{
         mutableStateOf(Size.Zero)

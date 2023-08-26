@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,6 +40,8 @@ import androidx.navigation.NavController
 import com.example.yofu.R
 import com.example.yofu.Screen
 import com.example.yofu.employer.DropDown
+import com.example.yofu.jobFinderUI.convertDay
+import com.google.firebase.Timestamp
 
 
 @Composable
@@ -66,7 +69,9 @@ fun CompanyCreateAccountScreen(
                     imageVector = Icons.Default.ArrowCircleLeft,
                     contentDescription = "",
                     tint = Color.Blue,
-                    modifier = Modifier.size(60.dp).padding(10.dp)
+                    modifier = Modifier
+                        .size(60.dp)
+                        .padding(10.dp)
                 )
             }
         }
@@ -76,7 +81,9 @@ fun CompanyCreateAccountScreen(
             .padding(20.dp)
         )
         {
-            Spacer(modifier = Modifier.height(30.dp).padding(20.dp))
+            Spacer(modifier = Modifier
+                .height(30.dp)
+                .padding(20.dp))
             Image(painter = painterResource(id = R.drawable.logo),
                 contentDescription = "logo",
                 contentScale = ContentScale.Fit,
@@ -88,9 +95,13 @@ fun CompanyCreateAccountScreen(
             BoldTextComponent(value = "Create New Account")
             Spacer(modifier = Modifier.height(20.dp))
             TextFieldComponent(labelValue = "Manager's Full Name",
-                setValue = {viewModel.setFullName(it)})
+                previousContent = viewModel.state.collectAsState().value.userInfo.fullName,
+                setValue = {
+                    viewModel.setFullName(it)}
+            )
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Email",
+                previousContent = viewModel.state.collectAsState().value.account.email,
                 setValue = {viewModel.setEmail(it)})
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Phone",
@@ -99,12 +110,18 @@ fun CompanyCreateAccountScreen(
             DropDown(
                 label = "Manager Gender",
                 list = gender,
+                previousContent = viewModel.state.collectAsState().value.userInfo.gender,
                 setValue = {
                     viewModel.setGender(it)
                 }
             )
             Spacer(modifier = Modifier.height(15.dp))
-            val selectedDate = remember { mutableStateOf("Date of birth") }
+            val selectedDate = remember { mutableStateOf(
+                if(viewModel.state.value.userInfo.birthDate == Timestamp(0,0))
+                    "Date of birth"
+                else
+                    convertDay(viewModel.state.value.userInfo.birthDate)
+            ) }
             OutlinedTextField(
                 enabled = false,
                 readOnly = true,
@@ -134,11 +151,15 @@ fun CompanyCreateAccountScreen(
             }
             Spacer(modifier = Modifier.height(15.dp))
             PasswordTextFieldComponent(labelValue = "Password",
+                previousContent = viewModel.state.collectAsState().value.account.password,
                 setValue =  {viewModel.setPassword(it)}
             )
             Spacer(modifier = Modifier.height(15.dp))
             PasswordTextFieldComponent(labelValue = "Confirm Password",
-                setValue = {viewModel.setPassword(it)})
+                previousContent = viewModel.state.collectAsState().value.confirmPassword,
+                setValue = {
+                    viewModel.setConfirmPassword(it)
+                })
             Spacer(modifier = Modifier.height(20.dp))
             ButtonComponent(value = "Next",
                 callback = {

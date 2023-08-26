@@ -177,11 +177,12 @@ fun LessBoldTextComponent(value: String)
 @Composable
 fun TextFieldComponent(
     labelValue: String,
+    previousContent: String = "",
     setValue: (String) -> Unit
 )
 {
     val textValue = remember {
-        mutableStateOf("")
+        mutableStateOf(previousContent)
     }
 
     OutlinedTextField(
@@ -241,11 +242,12 @@ fun DescriptionTextFieldComponent(
 @Composable
 fun PasswordTextFieldComponent(
     labelValue: String,
+    previousContent: String = "",
     setValue: (String) -> Unit = {}
     )
 {
     val password = remember {
-        mutableStateOf("")
+        mutableStateOf(previousContent)
     }
     val passwordVisible = remember {
         mutableStateOf(false)
