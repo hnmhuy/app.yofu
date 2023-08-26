@@ -111,11 +111,11 @@ fun ProfileScreen(navController: NavController,
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color.White)
+            .background(Color(0xFFF6F7F9))
             .padding(15.dp)
     ) {
 
-        Column {
+        Column(modifier = Modifier.background(Color(0xFFF6F7F9))) {
             Text(
                 text = "Profile",
                 modifier = Modifier
@@ -145,7 +145,7 @@ fun ProfileScreen(navController: NavController,
                             fontFamily = extraBoldFont,
                             textAlign = TextAlign.Center,
                             style = TextStyle(
-                                fontSize = 35.sp,
+                                fontSize = 20.sp,
                                 fontWeight = FontWeight.Normal,
                                 fontStyle = FontStyle.Normal,
                             )
@@ -184,20 +184,19 @@ fun ProfileScreen(navController: NavController,
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
-                    .fillMaxHeight(0.4f),
+                    .padding(10.dp),
                 shape = RoundedCornerShape(20.dp),
                 elevation = 3.dp,
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
+                        .align(Alignment.CenterHorizontally).padding(10.dp)
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                            .padding(top = 10.dp, start = 5.dp, end = 5.dp)
                             .align(Alignment.CenterHorizontally),
                         verticalAlignment = Alignment.CenterVertically
                     ){
@@ -266,7 +265,7 @@ fun ProfileScreen(navController: NavController,
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
@@ -294,7 +293,7 @@ fun ProfileScreen(navController: NavController,
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(

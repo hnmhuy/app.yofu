@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -58,7 +59,12 @@ fun Search(
     val searchText by searchViewModel.searchText.collectAsState()
     val isSearching by searchViewModel.isSearching.collectAsState()
 
-    Column() {
+    Column(
+        modifier = Modifier.fillMaxSize()
+                            .background(
+                            color = Color(0xFFF6F7F9)
+        )
+    ) {
         SearchBar(
             modifier = Modifier.fillMaxWidth(),
             query = textValue,
