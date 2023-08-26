@@ -209,8 +209,6 @@ fun TextFieldComponent(
                 textFieldSize = layoutCoordinates.size
                     .toSize()
             },
-        enabled = false,
-        readOnly = true,
         textStyle = TextStyle(color = Color.Black),
         label = {
             Text(
@@ -269,8 +267,6 @@ fun DescriptionTextFieldComponent(
                 fontStyle = FontStyle.Normal,
             )
         )},
-        enabled = false,
-        readOnly = true,
         textStyle = TextStyle(color = Color.Black),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
@@ -312,7 +308,6 @@ fun PasswordTextFieldComponent(
                     .toSize()
             },
         shape = RoundedCornerShape(30.dp),
-        readOnly = true,
         textStyle = TextStyle(color = Color.Black),
         label = {Text(
             text = labelValue,
