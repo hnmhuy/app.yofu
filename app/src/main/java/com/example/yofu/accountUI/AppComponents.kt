@@ -928,15 +928,6 @@ fun jobCardEmployer(content: Vacancy = Vacancy())
                             ),
                         )
                     }
-                    IconButton(
-                        onClick = { /*TODO*/ },
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(25.dp),
-                            painter = painterResource(id = R.drawable.edit),
-                            contentDescription = "Icon"
-                        )
-                    }
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -962,7 +953,7 @@ fun jobCardEmployer(content: Vacancy = Vacancy())
                     Row{
                         Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
                         Text(
-                            text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000}",
+                            text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000} $/month",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .heightIn(min = 30.dp),
@@ -1053,15 +1044,6 @@ fun jobcardEmployerApplications(
                             ),
                         )
                     }
-                    IconButton(
-                        onClick = { /*TODO*/ },
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(25.dp),
-                            imageVector = Icons.Filled.KeyboardArrowRight,
-                            contentDescription = "Icon"
-                        )
-                    }
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -1087,7 +1069,7 @@ fun jobcardEmployerApplications(
                     Row{
                         Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
                         Text(
-                            text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000}",
+                            text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000} $/month",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .heightIn(min = 30.dp),

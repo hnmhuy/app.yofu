@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -128,7 +129,7 @@ fun DetailedJobScreen(
                                 imageVector = Icons.Default.ArrowCircleLeft,
                                 contentDescription = "",
                                 tint = Color(0xFF2F4AE3),
-                                modifier = Modifier.size(50.dp)
+                                modifier = Modifier.size(40.dp)
                             )
                         }
                     }
@@ -200,6 +201,7 @@ fun DetailedJobScreen(
                                 fontStyle = FontStyle.Normal
                             ),
                         )
+                        Spacer(modifier = Modifier.height(5.dp))
                         Row (
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,

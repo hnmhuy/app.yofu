@@ -102,7 +102,7 @@ fun ApplyScreen(
                             imageVector = Icons.Default.ArrowCircleLeft,
                             contentDescription = "",
                             tint = Color(0xFF2F4AE3),
-                            modifier = Modifier.size(50.dp)
+                            modifier = Modifier.size(40.dp)
                         )
                     }
                 }
