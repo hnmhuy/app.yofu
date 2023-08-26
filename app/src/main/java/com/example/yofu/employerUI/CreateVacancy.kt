@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -87,6 +88,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.example.yofu.Screen
+import com.example.yofu.accountUI.BoldFont
+import com.example.yofu.accountUI.ButtonComponentWithLoading
 import com.example.yofu.accountUI.NormalTextComponentWithSize
 import com.example.yofu.accountUI.NotCenterBoldTextComponentWithSize
 import com.example.yofu.accountUI.dockedDatePicker
@@ -215,7 +218,7 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 1
                             setJobType("Full Time")
@@ -223,12 +226,12 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                         }
                         .background(
                             color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -253,7 +256,7 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 2
                             setJobType("Contract")
@@ -261,12 +264,12 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                         }
                         .background(
                             color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -292,7 +295,7 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 3
                             setJobType("Internship")
@@ -300,12 +303,12 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                         }
                         .background(
                             color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -333,7 +336,7 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 4
                             setJobType("Part Time")
@@ -341,12 +344,12 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                         }
                         .background(
                             color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -372,7 +375,7 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 5
                             setJobType("Temporary")
@@ -380,12 +383,12 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                         }
                         .background(
                             color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -411,7 +414,7 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 6
                             setJobType("Other")
@@ -419,12 +422,12 @@ fun JobTypeCheckbox(setJobType: (String)-> Unit) {
                         }
                         .background(
                             color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -464,19 +467,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 1
                             setJobPosition("Software Engineer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 1) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -501,19 +504,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 2
                             setJobPosition("Fullstack Engineer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 2) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -539,19 +542,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 3
                             setJobPosition("Security Engineer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 3) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -577,19 +580,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 4
                             setJobPosition("Business Analysist")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 4) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -614,19 +617,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 5
                             setJobPosition("Web Designer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 5) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -652,19 +655,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 6
                             setJobPosition("Game Developer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 6) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -692,19 +695,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 7
                             setJobPosition("Developer")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 7) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 7) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -730,19 +733,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 8
                             setJobPosition("Data Scientist")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 8) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 8) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -768,19 +771,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 9
                             setJobPosition("Tester")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 9) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 9) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -806,19 +809,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 10
                             setJobPosition("Front-end")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 10) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 10) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -843,19 +846,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 11
                             setJobPosition("Back-end")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 11) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 11) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -881,19 +884,19 @@ fun PositionCheckbox(
                 Box(
                     modifier = Modifier
                         .size(size = 20.dp)
-                        .clip(shape = RoundedCornerShape(size = 6.dp))
+                        .clip(shape = CircleShape)
                         .clickable {
                             selectedCheckbox.value = 12
                             setJobPosition("Other")
                         }
                         .background(
                             color = if (selectedCheckbox.value == 12) Color(0xFF40A5FE) else Color.White,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         )
                         .border(
                             width = 2.dp,
                             color = if (selectedCheckbox.value == 12) Color(0xFF40A5FE) else Color.Gray,
-                            shape = RoundedCornerShape(size = 6.dp)
+                            shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -1435,6 +1438,9 @@ fun CreateVacancy(
         .background(Color(0xFFF6F7F9))
 )
 {
+    var isLoading by remember{
+        mutableStateOf(false)
+    }
     val list = listOf(
         "An Giang",
         "Ba Ria – Vung Tau",
@@ -1725,11 +1731,53 @@ fun CreateVacancy(
                 .fillMaxWidth()
                 .padding(28.dp)
         ){
-            Button(
-                onClick = {
-                    var message = ""
+//            Button(
+//                onClick = {
+//                    var message = ""
+//                    if(viewModel.verify { message = it })
+//                    {
+//                        viewModel.createVacancy {
+//                            if (it == null)
+//                            {
+//                                Toast.makeText(toastContex, "Create vacancy Sucessfully", Toast.LENGTH_SHORT).show()
+//                                navController.navigate(Screen.CreatedVacanciesList.name)
+//                            }
+//                            else
+//                            {
+//                                Toast.makeText(toastContex, "Create vacancy Failed", Toast.LENGTH_SHORT).show()
+//                            }
+//                        }
+//                    }
+//                    else
+//                        Toast.makeText(toastContex, message, Toast.LENGTH_SHORT).show()
+//                },
+//                modifier = Modifier
+//                    .clip(RoundedCornerShape(50))
+//                    .fillMaxWidth()
+//                    .height(60.dp),
+//                colors = ButtonDefaults.buttonColors(
+//                    backgroundColor = Color(0xFF2F4AE3)
+//                ),
+//            ){
+//                Text(text = "Create",
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .heightIn(min = 50.dp),
+//                    fontFamily = BoldFont,
+//                    color = Color.White,
+//                    style = TextStyle(
+//                        fontSize = 20.sp,
+//                        fontWeight = FontWeight.Normal,
+//                        fontStyle = FontStyle.Normal
+//                    ),
+//                    textAlign = TextAlign.Center)
+//            }
+            ButtonComponentWithLoading(value = "Create", isLoading = isLoading) {
+
+                var message = ""
                     if(viewModel.verify { message = it })
                     {
+                        isLoading = true
                         viewModel.createVacancy {
                             if (it == null)
                             {
@@ -1738,34 +1786,17 @@ fun CreateVacancy(
                             }
                             else
                             {
+                                isLoading = false
                                 Toast.makeText(toastContex, "Create vacancy Failed", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                     else
+                    {
                         Toast.makeText(toastContex, message, Toast.LENGTH_SHORT).show()
-                },
-                modifier = Modifier
-                    .clip(RoundedCornerShape(40))
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .size(height = 100.dp, width = 200.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF40A5FE)
-                ),
-            ){
-                Text(text = "Create",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 50.dp),
-                    fontFamily = extraBoldFont,
-                    color = Color.White,
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),
-                    textAlign = TextAlign.Center)
+                        isLoading = false
+                    }
+
             }
         }
     }

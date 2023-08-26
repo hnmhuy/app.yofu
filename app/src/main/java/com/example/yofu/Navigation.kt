@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
@@ -368,8 +369,9 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val fontSize = 10.sp
+    val fontSize = 8.sp
     BottomNavigation (
+        modifier = Modifier.height(56.dp),
         elevation = 11.dp,
         backgroundColor = Color(0XFF2F4AE3)
     ) {
@@ -383,7 +385,7 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
             selectedContentColor = Color.White,
             unselectedContentColor = Color(0xFF83AEFF),
             label = { Text(text = ("Page"), fontSize = fontSize)},
-            selected = true,
+            selected = currentRoute == Screen.Company.name,
             onClick = {
                 navigateInBottomBar(navController, Screen.Company.name)
             }
@@ -398,7 +400,7 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
             selectedContentColor = Color.White,
             unselectedContentColor = Color(0xFF83AEFF),
             label = { Text(text = ("Created jobs"), fontSize = fontSize)},
-            selected = true,
+            selected = currentRoute == Screen.CreatedVacanciesList.name,
             onClick = {
                 navigateInBottomBar(navController, Screen.CreatedVacanciesList.name)
             }
@@ -431,7 +433,7 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
             selectedContentColor = Color.White,
             unselectedContentColor = Color(0xFF83AEFF),
             label = { Text(text = ("Applications"), fontSize = fontSize)},
-            selected = true,
+            selected = currentRoute == Screen.ApplicationList.name,
             onClick = {
                 navigateInBottomBar(navController, Screen.ApplicationList.name)
             }
@@ -446,7 +448,7 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
             selectedContentColor = Color.White,
             unselectedContentColor = Color(0xFF83AEFF),
             label = { Text(text = ("Profile"), fontSize = fontSize)},
-            selected = true,
+            selected = currentRoute == Screen.ProfileCompany.name,
             onClick = {
                 navigateInBottomBar(navController, Screen.ProfileCompany.name)
             }

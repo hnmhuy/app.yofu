@@ -246,16 +246,20 @@ fun JFApplicationScreen(
                         // You have no application
                         item {
                             Column(modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxHeight()
                                 .padding(5.dp),
                                 verticalArrangement = Arrangement.Center
                             )
                             {
+                                Spacer(modifier = Modifier.height(250.dp))
                                 Text(
-                                    text = "You have no application",
+                                    text = "You have not applied any jobs.",
                                     fontFamily = BoldFont,
                                     color = Color.Black,
                                     textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight(),
                                     style = TextStyle(
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold,
