@@ -204,7 +204,7 @@ fun BottomNavigationBarForJobFinder(navController: NavController, isHiden: Mutab
                     )
                 },
                 selectedContentColor = Color.White,
-                unselectedContentColor = Color.Gray,
+                unselectedContentColor = Color(0xFF83AEFF),
                 label = { Text(text = ("Home"))},
                 selected = currentRoute == Screen.Homepage.name,
                 onClick = {
@@ -224,7 +224,7 @@ fun BottomNavigationBarForJobFinder(navController: NavController, isHiden: Mutab
                     )
                 },
                 selectedContentColor = Color.White,
-                unselectedContentColor = Color.Gray,
+                unselectedContentColor = Color(0xFF83AEFF),
                 label = { Text(text = "Application")}
             )
 
@@ -240,7 +240,7 @@ fun BottomNavigationBarForJobFinder(navController: NavController, isHiden: Mutab
                     )
                 },
                 selectedContentColor = Color.White,
-                unselectedContentColor = Color.Gray,
+                unselectedContentColor = Color(0xFF83AEFF),
                 label = { Text(text = "Favorite")}
             )
 
@@ -256,7 +256,7 @@ fun BottomNavigationBarForJobFinder(navController: NavController, isHiden: Mutab
                     )
                 },
                 selectedContentColor = Color.White,
-                unselectedContentColor = Color.Gray,
+                unselectedContentColor = Color(0xFF83AEFF),
                 label = { Text(text = "Profile")}
             )
         }
@@ -381,7 +381,7 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
                 )
             },
             selectedContentColor = Color.White,
-            unselectedContentColor = Color.Gray,
+            unselectedContentColor = Color(0xFF83AEFF),
             label = { Text(text = ("Page"), fontSize = fontSize)},
             selected = true,
             onClick = {
@@ -396,7 +396,7 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
                 )
             },
             selectedContentColor = Color.White,
-            unselectedContentColor = Color.Gray,
+            unselectedContentColor = Color(0xFF83AEFF),
             label = { Text(text = ("Created jobs"), fontSize = fontSize)},
             selected = true,
             onClick = {
@@ -429,7 +429,7 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
                 )
             },
             selectedContentColor = Color.White,
-            unselectedContentColor = Color.Gray,
+            unselectedContentColor = Color(0xFF83AEFF),
             label = { Text(text = ("Applications"), fontSize = fontSize)},
             selected = true,
             onClick = {
@@ -444,7 +444,7 @@ fun BottomNavigateBarForEmployer(navController: NavController) {
                 )
             },
             selectedContentColor = Color.White,
-            unselectedContentColor = Color.Gray,
+            unselectedContentColor = Color(0xFF83AEFF),
             label = { Text(text = ("Profile"), fontSize = fontSize)},
             selected = true,
             onClick = {

@@ -616,7 +616,7 @@ fun JobCard(content: Vacancy, navController: NavController)
                 .padding(10.dp)
         ) {
             Row(
-                modifier = Modifier.height(70.dp)
+//                modifier = Modifier.height(70.dp)
             ){
 //                Box(
 //                    modifier = Modifier
@@ -649,6 +649,7 @@ fun JobCard(content: Vacancy, navController: NavController)
                                 fontWeight = FontWeight.Normal,
                                 fontStyle = FontStyle.Normal,
                             ),
+                            modifier = Modifier.fillMaxWidth(0.8f)
                         )
                         Spacer(modifier = Modifier.height(7.dp))
                         Text(
@@ -696,7 +697,7 @@ fun JobCard(content: Vacancy, navController: NavController)
                     Row{
                         Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
                         Text(
-                            text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000}",
+                            text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000} $/month",
                             modifier = Modifier
                                 .fillMaxWidth(),
                             fontFamily = normalFont,
