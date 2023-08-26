@@ -103,7 +103,6 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
             .fillMaxWidth()
             .fillMaxHeight()
             .background(Color(0xFFF6F7F9))
-            .padding(start = 15.dp, end = 15.dp, top = 15.dp)
             .verticalScroll(rememberScrollState())
     ) {
 

@@ -191,7 +191,7 @@ fun ProfileScreen(navController: NavController,
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally).padding(10.dp)
+                        .align(Alignment.CenterHorizontally).padding(bottom = 10.dp)
                 ) {
                     Row(
                         modifier = Modifier

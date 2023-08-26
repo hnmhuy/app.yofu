@@ -88,7 +88,6 @@ fun CompanyScreen(
             .fillMaxWidth()
             .fillMaxHeight()
             .background(Color(0xFFF6F7F9))
-            .padding(20.dp)
             .verticalScroll(rememberScrollState())
     )
     {

@@ -65,7 +65,6 @@ fun ChooseRoleScreen(
     Surface (
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
             .background(Color(0xFFF6F7F9)),
         elevation = 50.dp,
     )

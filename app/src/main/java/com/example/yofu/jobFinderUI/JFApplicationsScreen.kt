@@ -115,7 +115,6 @@ fun ApplicationCard(data: JobApplication, navController: NavController)
         shape = RoundedCornerShape(10.dp),
         elevation = 4.dp,
         modifier = Modifier
-            .padding(start = 15.dp, end = 15.dp, top = 10.dp, bottom = 10.dp)
             .height(90.dp)
             .background(Color(0xFFF6F7F9))
             .fillMaxWidth(),

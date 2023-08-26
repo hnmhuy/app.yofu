@@ -60,15 +60,19 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -86,6 +90,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.yofu.R
 import com.example.yofu.Screen
@@ -194,12 +199,30 @@ fun TextFieldComponent(
     val textValue = remember {
         mutableStateOf(previousContent)
     }
-
+    var textFieldSize by remember{
+        mutableStateOf(Size.Zero)
+    }
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(30.dp)),
-        label = {Text(text = labelValue)},
+            .onGloballyPositioned { layoutCoordinates ->
+                textFieldSize = layoutCoordinates.size
+                    .toSize()
+            },
+        enabled = false,
+        readOnly = true,
+        textStyle = TextStyle(color = Color.Black),
+        label = {
+            Text(
+                text = labelValue,
+                fontFamily = normalFont,
+                style = TextStyle(
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Normal,
+                    fontStyle = FontStyle.Normal,
+                ),
+            )
+        },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
             focusedLabelColor = Color.Black,
@@ -227,12 +250,28 @@ fun DescriptionTextFieldComponent(
     val textValue = remember {
         mutableStateOf("")
     }
-
+    var textFieldSize by remember{
+        mutableStateOf(Size.Zero)
+    }
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(30.dp)),
-        label = {Text(text = labelValue)},
+            .onGloballyPositioned { layoutCoordinates ->
+                textFieldSize = layoutCoordinates.size
+                    .toSize()
+            },
+        label = {Text(
+            text = labelValue,
+            fontFamily = normalFont,
+            style = TextStyle(
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Normal,
+                fontStyle = FontStyle.Normal,
+            )
+        )},
+        enabled = false,
+        readOnly = true,
+        textStyle = TextStyle(color = Color.Black),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
             focusedLabelColor = Color.Black,
@@ -262,12 +301,29 @@ fun PasswordTextFieldComponent(
     val passwordVisible = remember {
         mutableStateOf(false)
     }
+    var textFieldSize by remember{
+        mutableStateOf(Size.Zero)
+    }
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(30.dp)),
+            .onGloballyPositioned { layoutCoordinates ->
+                textFieldSize = layoutCoordinates.size
+                    .toSize()
+            },
         shape = RoundedCornerShape(30.dp),
-        label = {Text(text = labelValue)},
+        enabled = false,
+        readOnly = true,
+        textStyle = TextStyle(color = Color.Black),
+        label = {Text(
+            text = labelValue,
+            fontFamily = normalFont,
+            style = TextStyle(
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Normal,
+                fontStyle = FontStyle.Normal,
+            )
+        )},
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
             focusedLabelColor = Color.Black,
@@ -316,8 +372,7 @@ fun ButtonComponent(
         onClick = { callback() },
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(50.dp)
-            .padding(horizontal = 10.dp),
+            .heightIn(50.dp),
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color(0XFF2F4AE3)),
         shape = RoundedCornerShape(50.dp)
@@ -327,10 +382,11 @@ fun ButtonComponent(
         )
         Text(
             text = value,
-            fontSize = 16.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = boldFont,
-            color = Color.White
+            color = Color.White,
+            modifier = Modifier.padding(10.dp)
         )
     }
 }
@@ -346,8 +402,7 @@ fun ButtonComponentWithLoading(
         onClick = { callback() },
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(50.dp)
-            .padding(horizontal = 10.dp),
+            .heightIn(50.dp),
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color(0XFF2F4AE3)),
         shape = RoundedCornerShape(50.dp)
@@ -365,10 +420,11 @@ fun ButtonComponentWithLoading(
         {
             Text(
                 text = value,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = boldFont,
-                color = Color.White
+                color = Color.White,
+                modifier = Modifier.padding(10.dp)
             )
         }
     }

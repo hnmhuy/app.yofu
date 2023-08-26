@@ -172,7 +172,22 @@ fun DropDown(label: String, list: List<String>, previousContent: String = "", se
                         .toSize()
                 },
             shape = RoundedCornerShape(50.dp),
-            label = { Text(text = label) },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.Black,
+                focusedLabelColor = Color.Black,
+                cursorColor = Color.Black,
+                disabledTextColor = Color.Transparent,
+                unfocusedBorderColor = Color.LightGray,
+                trailingIconColor = Color.LightGray
+            ),
+            label = {
+                Text(text = label,
+                fontFamily = normalFont,
+                style = TextStyle(
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Normal,
+                    fontStyle = FontStyle.Normal,
+                )) },
             trailingIcon = {
                 Icon(
                     imageVector = icon,
@@ -193,7 +208,14 @@ fun DropDown(label: String, list: List<String>, previousContent: String = "", se
                         setValue(label)}
             )
             {
-                Text(text = label)
+                Text(text = label,
+                    fontFamily = normalFont,
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal,
+                    )
+                )
             }
             }
         }
