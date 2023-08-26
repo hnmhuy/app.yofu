@@ -65,9 +65,9 @@ fun ChooseRoleScreen(
     Surface (
         modifier = Modifier
             .fillMaxSize()
+            .padding(10.dp)
             .background(Color(0xFFF6F7F9)),
         elevation = 50.dp,
-        shape = RoundedCornerShape(20.dp)
     )
     {
         Box(modifier = Modifier.padding(10.dp)) {
@@ -117,7 +117,7 @@ fun ChooseRoleScreen(
                         }
                     },
                     modifier = Modifier
-                        .height(250.dp)
+                        .height(200.dp)
                         .width(150.dp)
                         .padding(10.dp),
                     elevation = 4.dp,
@@ -154,7 +154,7 @@ fun ChooseRoleScreen(
                         }
                     },
                     modifier = Modifier
-                        .height(250.dp)
+                        .height(200.dp)
                         .width(150.dp)
                         .padding(10.dp),
                     elevation = 4.dp,

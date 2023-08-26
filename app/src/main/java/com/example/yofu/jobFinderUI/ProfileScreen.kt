@@ -115,7 +115,7 @@ fun ProfileScreen(navController: NavController,
             .padding(15.dp)
     ) {
 
-        Column {
+        Column(modifier = Modifier.background(Color(0xFFF6F7F9))) {
             Text(
                 text = "Profile",
                 modifier = Modifier
@@ -184,15 +184,14 @@ fun ProfileScreen(navController: NavController,
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
-                    .fillMaxHeight(0.4f),
+                    .padding(10.dp),
                 shape = RoundedCornerShape(20.dp),
                 elevation = 3.dp,
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
+                        .align(Alignment.CenterHorizontally).padding(10.dp)
                 ) {
                     Row(
                         modifier = Modifier

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -46,6 +47,7 @@ import com.example.yofu.Company
 import com.example.yofu.R
 import com.example.yofu.accountManage.CompanyRepository
 import com.example.yofu.accountManage.UserRepository
+import com.example.yofu.accountUI.BoldFont
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
@@ -86,11 +88,11 @@ fun CompanyScreen(
             .fillMaxWidth()
             .fillMaxHeight()
             .background(Color(0xFFF6F7F9))
-            .padding(start = 20.dp, end = 20.dp, top = 30.dp)
+            .padding(20.dp)
             .verticalScroll(rememberScrollState())
     )
     {
-        Column()
+        Column(modifier = Modifier.background((Color(0xFFF6F7F9))))
         {
             Row(
                 modifier = Modifier
@@ -144,24 +146,25 @@ fun CompanyScreen(
                 Column(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ){
-                    Row(modifier = Modifier.fillMaxWidth())
+                    Row(modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween)
                     {
                         Text(
                             text = company.collectAsState().value.name,
-                            fontFamily = extraBoldFont,
+                            fontFamily = BoldFont,
                             textAlign = TextAlign.Center,
                             style = TextStyle(
-                                fontSize = 30.sp,
-                                fontWeight = FontWeight.Normal,
+                                fontSize = 25.sp,
+                                fontWeight = FontWeight.Bold,
                                 fontStyle = FontStyle.Normal,
                             ),
-                            color = Color.Blue
+                            color = Color(0xFF2F4AE3)
                         )
                         IconButton(onClick = { showDialog = true}) {
                             Icon(
                                 imageVector = Icons.Filled.Edit,
                                 contentDescription = "",
-                                tint = Color.Blue,
+                                tint = Color(0xFF2F4AE3),
                                 modifier = Modifier
                                     .size(20.dp)
                                     .align(Alignment.CenterVertically),
@@ -179,14 +182,14 @@ fun CompanyScreen(
             section(heading = "Location", content = company.collectAsState().value.location)
             Text(
                 text = "Contact us",
-                fontFamily = extraBoldFont,
+                fontFamily = BoldFont,
                 style = TextStyle(
-                    fontSize = 18.sp,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Normal,
                     fontStyle = FontStyle.Normal,
                 ),
-                color = Color.Black,
-                modifier = Modifier.padding(top = 1.dp, start = 20.dp, end = 20.dp)
+                color = Color(0xFF2F4AE3),
+                modifier = Modifier.padding(top = 1.dp, start = 15.dp, end = 20.dp)
             )
             Surface(
                 modifier = Modifier
@@ -277,14 +280,14 @@ fun section(heading:String, content:String)
 {
     Text(
         text = heading,
-        fontFamily = extraBoldFont,
+        fontFamily = BoldFont,
         style = TextStyle(
-            fontSize = 18.sp,
+            fontSize = 15.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal,
         ),
-        color = Color.Black,
-        modifier = Modifier.padding(top = 1.dp, start = 20.dp, end = 20.dp)
+        color = Color(0xFF2F4AE3),
+        modifier = Modifier.padding(top = 1.dp, start = 15.dp, end = 20.dp)
     )
 
     Text(
@@ -296,7 +299,7 @@ fun section(heading:String, content:String)
             fontStyle = FontStyle.Normal,
         ),
         color = Color.Black,
-        modifier = Modifier.padding(start = 15.dp, end = 20.dp, bottom = 20.dp),
+        modifier = Modifier.padding(top = 1.dp, start = 20.dp, end = 20.dp)
     )
-
+    Spacer(modifier = Modifier.height(10.dp))
 }
