@@ -44,7 +44,7 @@ class ApplyScreenViewModel: ViewModel() {
         _newPhone.value = password
     }
 
-    fun uploadPDFtoFirebase(onComplete: (Boolean, String, String) -> Unit) {
+    fun uploadPDFtoFirebase(onProcess: (percent: Float) -> Unit, onComplete: (Boolean, String, String) -> Unit) {
         val uri = pdfURI.value
 
         val filename = "cv_${System.currentTimeMillis()}.pdf"
@@ -58,22 +58,6 @@ class ApplyScreenViewModel: ViewModel() {
                 Log.d("PDF uploading", "Successfully get download link")
                 val downloadUrl = it.toString()
                 onComplete(true, downloadUrl, filename)
-//                val uid = Firebase.auth.currentUser?.uid
-//                val data = hashMapOf(
-//                    "candidate" to uid,
-//                    "cvRef" to downloadUrl,
-//                    "status" to "Waiting",
-//                    "vid" to vid.value,
-//                )
-//
-//                val db = Firebase.firestore
-//                db.collection("application").document().set(data).addOnSuccessListener {
-//                    onComplete(true, storageRef)
-//                    Log.d("PDF Uploading", "Successfully add new CV")
-//                }.addOnFailureListener {
-//                    onComplete(false, null)
-//                    Log.d("PDF Uploading", "Failed to add new CV")
-//                }
 
             }.addOnFailureListener {
                 onComplete(false, "", filename)
@@ -83,6 +67,10 @@ class ApplyScreenViewModel: ViewModel() {
             onComplete(false, "", filename)
             Log.d("PDF Uploading", "can not add pdf to firebase storage")
         }
+        .addOnProgressListener { taskSnapshot ->
+            val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
+            onProcess(progress.toFloat())
+        }
     }
 
     private fun verifyCVExsist(): Boolean
@@ -90,11 +78,15 @@ class ApplyScreenViewModel: ViewModel() {
         return pdfURI.value != Uri.EMPTY
     }
 
-    fun applyJob(onComplete: (Boolean, String) -> Unit) {
+    fun applyJob(onProcess: (percent: Float) -> Unit, onComplete: (Boolean, String) -> Unit) {
         val email = newEmail.value
         val password = newPhone.value
         if (verifyCVExsist()) {
-            uploadPDFtoFirebase() { success, link, fileName ->
+            uploadPDFtoFirebase(
+                onProcess = {
+                    onProcess(it)
+                }
+            ) { success, link, fileName ->
                 if (success) {
                     ApplyRepository().apply(vid.value, email, password, link, fileName) { _, exception ->
                         if (exception == null) {

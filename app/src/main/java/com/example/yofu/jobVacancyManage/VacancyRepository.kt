@@ -7,6 +7,7 @@ import com.example.yofu.accountManage.UserRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 
 const val DB_VACANCY = "vacancy"
@@ -168,7 +169,7 @@ class VacancyRepository {
         db.collection("vacancy").document(vid)
             .get()
             .addOnSuccessListener { documentSnapshot ->
-                val vacancy = documentSnapshot.toObject(Vacancy::class.java)
+                val vacancy = documentSnapshot.toObject<Vacancy>()
                 Log.d(DBV, "Fetch vacancy successfully")
                 onComplete(vacancy, null)
             }
@@ -181,7 +182,7 @@ class VacancyRepository {
     fun fetch(vid: DocumentReference, onComplete: (Vacancy?, Exception?) -> Unit) {
         vid.get()
             .addOnSuccessListener { documentSnapshot ->
-                val vacancy = documentSnapshot.toObject(Vacancy::class.java)
+                val vacancy = documentSnapshot.toObject<Vacancy>()
                 Log.d(DBV, "Fetch vacancy successfully")
                 onComplete(vacancy, null)
             }

@@ -1740,7 +1740,7 @@ fun CreateVacancy(
                         value = textValue.value,
                         onValueChange = {
                             textValue.value = it
-                            viewModel.setDescription(it)
+                            viewModel.setBenefit(it)
                         },)
                     Spacer(modifier = Modifier.height(20.dp))
 
@@ -1794,30 +1794,34 @@ fun CreateVacancy(
 //                    ),
 //                    textAlign = TextAlign.Center)
 //            }
+            var message = ""
             ButtonComponentWithLoading(value = "Create", isLoading = isLoading) {
-
-                var message = ""
-                    if(viewModel.verify { message = it })
-                    {
-                        isLoading = true
-                        viewModel.createVacancy {
-                            if (it == null)
-                            {
-                                Toast.makeText(toastContex, "Create vacancy Sucessfully", Toast.LENGTH_SHORT).show()
-                                navController.navigate(Screen.CreatedVacanciesList.name)
-                            }
-                            else
-                            {
-                                isLoading = false
-                                Toast.makeText(toastContex, "Create vacancy Failed", Toast.LENGTH_SHORT).show()
+                if(viewModel.verify { message = it })
+                {
+                    isLoading = true
+                    viewModel.createVacancy {
+                        if (it == null)
+                        {
+                            isLoading = false
+                            Toast.makeText(toastContex, "Create vacancy Sucessfully", Toast.LENGTH_SHORT).show()
+                            navController.navigate(Screen.CreatedVacanciesList.name) {
+                                popUpTo(Screen.CreateVacancy.name) {
+                                    inclusive = true
+                                }
                             }
                         }
+                        else
+                        {
+                            isLoading = false
+                            Toast.makeText(toastContex, "Create vacancy Failed", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    else
-                    {
-                        Toast.makeText(toastContex, message, Toast.LENGTH_SHORT).show()
-                        isLoading = false
-                    }
+                }
+                else
+                {
+                    Toast.makeText(toastContex, message, Toast.LENGTH_SHORT).show()
+                    isLoading = false
+                }
 
             }
         }

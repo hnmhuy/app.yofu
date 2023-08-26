@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,6 +63,11 @@ fun ApplyScreen(
 )
 {
     var isApplying by remember { mutableStateOf(false) }
+
+    var isUploading by remember { mutableStateOf(false) }
+
+    var currentProgress by remember { mutableStateOf(0.0f) }
+
     applyViewModel.setVid(vid)
 
     var isUploaded by remember { mutableStateOf(false) }
@@ -82,7 +89,9 @@ fun ApplyScreen(
             .background(Color(0xFFF6F7F9)),
     )
     {
-        Column(modifier = Modifier.fillMaxWidth().padding(10.dp))
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp))
         {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Box(modifier = Modifier.padding(10.dp)) {
@@ -117,9 +126,13 @@ fun ApplyScreen(
                     .padding(20.dp)
                     .fillMaxHeight(0.9f)
             ) {
-                TextFieldComponent(labelValue = "Adjust your contact email", setValue = {})
+                TextFieldComponent(labelValue = "Adjust your contact email", setValue = {
+                    applyViewModel.setNewEmail(it)
+                })
                 Spacer(modifier = Modifier.height(30.dp))
-                TextFieldComponent(labelValue = "Adjust your phone email", setValue = {})
+                TextFieldComponent(labelValue = "Adjust your phone email", setValue = {
+                    applyViewModel.setNewPassword(it)
+                })
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Button(
@@ -134,54 +147,81 @@ fun ApplyScreen(
                     shape = RoundedCornerShape(20.dp),
                 )
                 {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        if (!isUploaded) {
-                            Icon(
-                                imageVector = Icons.Default.Upload,
-                                contentDescription = "",
-                                tint = Color(0xFF2F4AE3),
-                                modifier = Modifier.size(50.dp)
-                            )
-                            Text(
-                                text = "Upload CV/Resume",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .heightIn(min = 40.dp),
-                                fontFamily = normalFont,
-                                style = TextStyle(
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    fontStyle = FontStyle.Normal,
-                                    color = Color.Gray
-                                ),
-                                textAlign = TextAlign.Center
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Default.AttachFile,
-                                contentDescription = "",
-                                tint = Color.Red,
-                                modifier = Modifier.size(50.dp)
-                            )
-                            Text(
-                                text = "Uploaded Successfully",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .heightIn(min = 40.dp),
-                                fontFamily = normalFont,
-                                style = TextStyle(
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    fontStyle = FontStyle.Normal,
-                                    color = Color.Gray
-                                ),
-                                textAlign = TextAlign.Center
-                            )
+                    if(!isUploading) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            if (!isUploaded) {
+                                Icon(
+                                    imageVector = Icons.Default.Upload,
+                                    contentDescription = "",
+                                    tint = Color(0xFF2F4AE3),
+                                    modifier = Modifier.size(50.dp)
+                                )
+                                Text(
+                                    text = "Upload CV/Resume",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .heightIn(min = 40.dp),
+                                    fontFamily = normalFont,
+                                    style = TextStyle(
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        fontStyle = FontStyle.Normal,
+                                        color = Color.Gray
+                                    ),
+                                    textAlign = TextAlign.Center
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Default.AttachFile,
+                                    contentDescription = "",
+                                    tint = Color.Red,
+                                    modifier = Modifier.size(50.dp)
+                                )
+                                Text(
+                                    text = "Uploaded Successfully",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .heightIn(min = 40.dp),
+                                    fontFamily = normalFont,
+                                    style = TextStyle(
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        fontStyle = FontStyle.Normal,
+                                        color = Color.Gray
+                                    ),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
+                    }
+                    else
+                    {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .heightIn(min = 40.dp),
+                            color = Color(0xFF2F4AE3),
+                            strokeWidth = 5.dp,
+                            progress = currentProgress
+                        )
+                        // Display the currentProcess value
+                        Text(
+                            text = "${currentProgress.toInt()}%",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp),
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal,
+                                color = Color.Gray
+                            ),
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
             }
@@ -189,7 +229,13 @@ fun ApplyScreen(
             ButtonComponentWithLoading(value = "Apply", isLoading = isApplying)
             {
                 isApplying = true
-                applyViewModel.applyJob() { success, message ->
+                applyViewModel.applyJob(
+                    onProcess = {
+                        isUploading = true
+                        currentProgress = it
+                        Log.d("Apply", it.toString())
+                    }
+                ) { success, message ->
                     if (success) {
                         isApplying = false
                         navController.popBackStack()
