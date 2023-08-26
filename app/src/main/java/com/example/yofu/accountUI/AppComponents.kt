@@ -575,7 +575,7 @@ fun alert(showDialog: Boolean, title: String = "Oops, Failed!", message: String 
         title = {
             Text(text = title,
                 fontFamily = BoldFont,
-                color = Color.Red,
+                color = if(title == "Oops, Failed!") Color.Red else Color(0xFF2F4AE3),
                 textAlign = TextAlign.Center,
                 style = TextStyle(
                     fontSize = 20.sp,
