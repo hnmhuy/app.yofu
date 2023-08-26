@@ -101,7 +101,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color.White)
+            .background(Color(0xFFF6F7F9))
             .padding(start = 15.dp, end = 15.dp, top = 15.dp)
             .verticalScroll(rememberScrollState())
     ) {
@@ -133,10 +133,10 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     {
                         Text(
                             text = companyInfo.collectAsState().value.name,
-                            fontFamily = extraBoldFont,
+                            fontFamily = BoldFont,
                             textAlign = TextAlign.Center,
                             style = TextStyle(
-                                fontSize = 35.sp,
+                                fontSize = 20.sp,
                                 fontWeight = FontWeight.Normal,
                                 fontStyle = FontStyle.Normal,
                             )
@@ -188,7 +188,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                            .padding(top = 5.dp, start = 10.dp, end = 5.dp)
                             .align(Alignment.CenterHorizontally),
                         verticalAlignment = Alignment.CenterVertically
                     ){
@@ -229,7 +229,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
@@ -257,7 +257,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
@@ -285,7 +285,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
@@ -313,7 +313,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
@@ -370,7 +370,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                                 .size(35.dp)
                                 .align(Alignment.CenterVertically)
                         )
-                        Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(15.dp))
                         Text(
                             text = "Company's Information",
                             fontFamily = BoldFont,
@@ -399,7 +399,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
@@ -427,7 +427,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
@@ -484,7 +484,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
@@ -513,7 +513,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
@@ -541,7 +541,7 @@ fun CompanyProfileScreen(navController: NavController, mainController: NavContro
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             Button(
                 onClick = {
                     FirebaseAuth.getInstance().signOut()

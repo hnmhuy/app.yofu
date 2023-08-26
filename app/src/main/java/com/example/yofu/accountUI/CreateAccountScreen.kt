@@ -50,7 +50,7 @@ fun CreateAccountScreen(
     Surface (
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color(0xFFF6F7F9)),
         elevation = 50.dp,
         shape = RoundedCornerShape(20.dp)
     )

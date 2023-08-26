@@ -77,7 +77,7 @@ fun ApplyScreen(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color.White)
+            .background(Color(0xFFF6F7F9))
     )
     {
         Column(modifier = Modifier.fillMaxWidth())

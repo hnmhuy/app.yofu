@@ -73,6 +73,7 @@ import com.example.yofu.R
 import com.example.yofu.Screen
 import com.example.yofu.User
 import com.example.yofu.accountManage.UserRepository
+import com.example.yofu.accountUI.BoldFont
 import com.example.yofu.accountUI.LessBoldTextComponent
 import com.example.yofu.accountUI.LoadingScreen
 import com.example.yofu.accountUI.NormalTextComponent
@@ -141,7 +142,7 @@ fun user_card(
                         )
                         Text(
                             text = userInfo.fullName,
-                            fontFamily = extraBoldFont,
+                            fontFamily = BoldFont,
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Normal,

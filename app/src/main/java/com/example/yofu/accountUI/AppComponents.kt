@@ -36,6 +36,12 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
@@ -56,6 +62,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -83,6 +90,7 @@ import androidx.navigation.NavController
 import com.example.yofu.R
 import com.example.yofu.Screen
 import com.example.yofu.Vacancy
+import kotlinx.coroutines.launch
 import java.util.Date
 import kotlin.math.roundToInt
 
@@ -523,6 +531,7 @@ fun alert(showDialog: Boolean, title: String = "Oops, Failed!", message: String 
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Normal),
+                modifier = Modifier.fillMaxWidth()
             )
         },
         text = {
@@ -1052,63 +1061,3 @@ fun LoadingScreen(isLoading:Boolean) {
     }
 }
 
-
-@Composable
-fun AlertDialog(
-    onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
-    dialogTitle: String,
-    dialogText: String,
-    icon: ImageVector,
-) {
-    AlertDialog(
-        title = {
-            Text(text = dialogTitle)
-        },
-        text = {
-            Text(text = dialogText)
-        },
-        onDismissRequest = {
-            onDismissRequest()
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirmation()
-                }
-            ) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onDismissRequest()
-                }
-            ) {
-                Text("Cancel")
-            }
-        }
-    )
-}
-
-@Composable
-fun DialogExamples() {
-
-    val openAlertDialog = remember { mutableStateOf(false) }
-    val title = "Notification"
-    val text = "Please try again later"
-    when {
-        openAlertDialog.value -> {
-            AlertDialog(
-                onDismissRequest = { openAlertDialog.value = false },
-                onConfirmation = {
-                    openAlertDialog.value = false
-                },
-                dialogTitle = title,
-                dialogText = text,
-                icon = Icons.Default.Info
-            )
-        }
-    }
-}

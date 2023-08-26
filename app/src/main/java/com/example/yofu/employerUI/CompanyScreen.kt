@@ -85,7 +85,7 @@ fun CompanyScreen(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color.White)
+            .background(Color(0xFFF6F7F9))
             .padding(start = 20.dp, end = 20.dp, top = 30.dp)
             .verticalScroll(rememberScrollState())
     )

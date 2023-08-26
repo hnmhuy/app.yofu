@@ -1,4 +1,4 @@
-package com.example.yofu.jobFinderUI
+package com.example.yofu.employerUI
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -61,24 +60,16 @@ import com.example.yofu.Screen
 import com.example.yofu.accountUI.LoadingScreen
 import com.example.yofu.accountUI.alert
 import com.example.yofu.accountUI.jobTag
+import com.example.yofu.jobFinderUI.BoldFont
+import com.example.yofu.jobFinderUI.DetailedJobViewModel
+import com.example.yofu.jobFinderUI.NormalFont
+import com.example.yofu.jobFinderUI.mediumFont
 import com.example.yofu.jobVacancyManage.ApplyRepository
 import kotlinx.coroutines.delay
-
-
 import kotlin.math.roundToInt
 
-val BoldFont = FontFamily(
-    Font(R.font.raleway_bold, FontWeight.Bold),
-)
-val NormalFont = FontFamily(
-    Font(R.font.raleway_regular, FontWeight.Thin),
-)
-val mediumFont = FontFamily(
-    Font(R.font.raleway_medium, FontWeight.Medium),
-)
-
 @Composable
-fun DetailedJobScreen(
+fun DetailedVacancyScreen(
     vid: String,
     navController: NavController,
     detailedJobScreenViewModel: DetailedJobViewModel = viewModel<DetailedJobViewModel>()
@@ -308,30 +299,6 @@ fun DetailedJobScreen(
 
                 }
 
-                Button(
-                    enabled = !isApplied,
-                    onClick = {
-                        navController.navigate("${Screen.Apply.name}/${vid}")
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(50.dp)
-                        .padding(horizontal = 10.dp),
-                    contentPadding = PaddingValues(),
-                    colors = ButtonDefaults.buttonColors(Color(0xFF2F4AE3)),
-                    shape = RoundedCornerShape(50.dp)
-                ) {
-                    val boldFont = FontFamily(
-                        Font(R.font.raleway_bold, FontWeight.Bold),
-                    )
-                    Text(
-                        text = "Apply",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = BoldFont,
-                        color = Color.White
-                    )
-                }
             }
         }
     }
