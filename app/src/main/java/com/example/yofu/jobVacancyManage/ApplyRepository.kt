@@ -7,6 +7,7 @@ import android.webkit.MimeTypeMap
 import androidx.compose.ui.platform.LocalContext
 import com.example.yofu.JobApplication
 import com.example.yofu.User
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -51,6 +52,9 @@ class ApplyRepository {
                 newPhone = newPhone,
                 cvDownloadLink = link,
                 cvFileName = ref,
+                status = null,
+                // Set time is now
+                applyDate = Timestamp.now()
             )
             application.add(newApplication)
                 .addOnSuccessListener { documentReference ->

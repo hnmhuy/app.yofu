@@ -66,7 +66,8 @@ data class JobApplication(
     var cvFileName: String = "",
     var newPhone: String = "",
     var newEmail: String = "",
-    var status: Boolean? = null
+    var status: Boolean? = null,
+    var applyDate: Timestamp = Timestamp(0,0)
 )
 
 data class  User(

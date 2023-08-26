@@ -393,6 +393,7 @@ fun ButtonComponentWithLoading(
 )
 {
     Button(
+        enabled = !isLoading,
         onClick = { callback() },
         modifier = Modifier
             .fillMaxWidth()

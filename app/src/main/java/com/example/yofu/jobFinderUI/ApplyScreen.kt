@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.yofu.R
+import com.example.yofu.accountUI.ButtonComponentWithLoading
 import com.example.yofu.accountUI.TextFieldComponent
 import com.example.yofu.accountUI.extraBoldFont
 import com.example.yofu.accountUI.normalFont
@@ -59,6 +60,7 @@ fun ApplyScreen(
     vid: String
 )
 {
+    var isApplying by remember { mutableStateOf(false) }
     applyViewModel.setVid(vid)
 
     var isUploaded by remember { mutableStateOf(false) }
@@ -123,7 +125,7 @@ fun ApplyScreen(
                 Button(
                     onClick = {
                         pickPDFLauncher.launch("application/pdf")
-                              },
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(150.dp),
@@ -137,8 +139,7 @@ fun ApplyScreen(
                             .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        if(!isUploaded)
-                        {
+                        if (!isUploaded) {
                             Icon(
                                 imageVector = Icons.Default.Upload,
                                 contentDescription = "",
@@ -159,8 +160,7 @@ fun ApplyScreen(
                                 ),
                                 textAlign = TextAlign.Center
                             )
-                        }
-                        else {
+                        } else {
                             Icon(
                                 imageVector = Icons.Default.AttachFile,
                                 contentDescription = "",
@@ -186,38 +186,18 @@ fun ApplyScreen(
                 }
             }
 
-            Button(
-                onClick = {
-                    applyViewModel.applyJob() {success, message ->
-                        if (success)
-                        {
-                            navController.popBackStack()
-                        }
-                        else
-                        {
-                            Log.d("Apply", message)
-                        }
+            ButtonComponentWithLoading(value = "Apply", isLoading = isApplying)
+            {
+                isApplying = true
+                applyViewModel.applyJob() { success, message ->
+                    if (success) {
+                        isApplying = false
+                        navController.popBackStack()
+                    } else {
+                        isApplying = false
+                        Log.d("Apply", message)
                     }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(50.dp)
-                    .padding(horizontal = 10.dp),
-                contentPadding = PaddingValues(),
-                colors = ButtonDefaults.buttonColors(Color(0xFF2F4AE3)),
-                shape = RoundedCornerShape(50.dp),
-                enabled = isUploaded
-            ) {
-                val boldFont = FontFamily(
-                    Font(R.font.raleway_bold, FontWeight.Bold),
-                )
-                Text(
-                    text = "Apply",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = boldFont,
-                    color = Color.White
-                )
+                }
             }
         }
     }

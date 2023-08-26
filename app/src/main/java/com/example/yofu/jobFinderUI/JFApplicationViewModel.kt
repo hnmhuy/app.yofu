@@ -28,6 +28,8 @@ class JFApplicationViewModel: ViewModel() {
             if (exception == null) {
                 if (jobApplications != null) {
                     _applicationList.value = jobApplications
+                    // Sort by date
+                    _applicationList.value = _applicationList.value.sortedByDescending { it.applyDate }
                 }
             } else {
                 println(exception)
