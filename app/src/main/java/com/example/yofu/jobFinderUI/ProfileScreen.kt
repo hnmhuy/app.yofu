@@ -184,7 +184,7 @@ fun ProfileScreen(navController: NavController,
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp),
+                    .padding(start = 10.dp, end = 10.dp),
                 shape = RoundedCornerShape(20.dp),
                 elevation = 3.dp,
             ) {

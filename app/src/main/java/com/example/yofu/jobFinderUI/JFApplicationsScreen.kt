@@ -113,11 +113,11 @@ fun ApplicationCard(data: JobApplication, navController: NavController)
 
     Surface(
         shape = RoundedCornerShape(10.dp),
-        elevation = 4.dp,
         modifier = Modifier
-            .height(90.dp)
+            .height(100.dp)
             .background(Color(0xFFF6F7F9))
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(10.dp),
     )
     {
         Row(modifier = Modifier.fillMaxWidth(),
@@ -228,6 +228,7 @@ fun JFApplicationScreen(
             .pullRefresh(state)
             .background(Color(0xFFF6F7F9))
         ) {
+            Spacer(modifier = Modifier.height(10.dp))
             LazyColumn(Modifier.fillMaxSize()) {
                 // Checking if data is loaded
                 if (!refreshing) {
@@ -239,6 +240,7 @@ fun JFApplicationScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                         )
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                     if(jfApplicationViewModel.applicationList.value.isEmpty())
                     {
@@ -274,7 +276,7 @@ fun JFApplicationScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(10.dp, 0.dp, 10.dp, 0.dp)
+                                    .padding(15.dp, 0.dp, 15.dp, 0.dp)
                             ) {
                                 ApplicationCard(jfApplicationViewModel.applicationList.collectAsState().value[it], navController)
                             }

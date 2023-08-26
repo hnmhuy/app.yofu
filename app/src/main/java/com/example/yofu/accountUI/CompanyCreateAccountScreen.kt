@@ -122,7 +122,7 @@ fun CompanyCreateAccountScreen(
             Spacer(modifier = Modifier.height(15.dp))
             val selectedDate = remember { mutableStateOf(
                 if(viewModel.state.value.userInfo.birthDate == Timestamp(0,0))
-                    "w"
+                    ""
                 else
                     convertDay(viewModel.state.value.userInfo.birthDate)
             ) }

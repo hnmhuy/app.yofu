@@ -91,7 +91,7 @@ fun CompanyScreen(
             .verticalScroll(rememberScrollState())
     )
     {
-        Column(modifier = Modifier.background((Color(0xFFF6F7F9))))
+        Column(modifier = Modifier.background((Color(0xFFF6F7F9))).padding(20.dp))
         {
             Row(
                 modifier = Modifier

@@ -58,7 +58,7 @@ fun CreateAccountScreen(
         elevation = 50.dp,
     )
     {
-        Box() {
+        Box(modifier = Modifier.padding(10.dp)) {
             IconButton( onClick = {
                 navController.popBackStack()
             }) {
