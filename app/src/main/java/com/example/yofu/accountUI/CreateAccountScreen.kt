@@ -51,6 +51,18 @@ fun CreateAccountScreen(
 {
     val gender = listOf("Male", "Female", "Other")
     val isOpenDialog = remember { mutableStateOf(false) }
+
+    val isNotified =  remember {
+        mutableStateOf(false)
+    }
+
+    val sucess = remember {
+        mutableStateOf(false)
+    }
+
+    var message = remember {
+        mutableStateOf("")
+    }
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -173,28 +185,39 @@ fun CreateAccountScreen(
             ButtonComponent(value = "Sign up",
                 callback = {
                     // Precondition checking
-                    var message = ""
                     var flag = createAccountViewModel.verifyForIndividual() {
-                        message = it
+                        message.value = it
                     }
                     if(flag)
                     {
-                        createAccountViewModel.signupForIndividual() { message, error ->
+                        createAccountViewModel.signupForIndividual() { it, error ->
                             if(error == null)
                             {
-                                Toast.makeText(navController.context, message, Toast.LENGTH_SHORT).show()
-                                navController.navigate(Screen.LoginScreen.name)
+                                isNotified.value = true
+                                message.value = "Create account successfully. Please check your email to verify your account"
+                                sucess.value = true
                             }
                             else {
-                                Toast.makeText(navController.context, message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(navController.context, error.message.toString(), Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                     else
                     {
-                        Toast.makeText(navController.context, message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(navController.context, message.value, Toast.LENGTH_SHORT).show()
                     }
                 })
         }
+        if (isNotified.value)
+        {
+            alert(showDialog = isNotified.value, title = "Notification",  message = message.value) {
+                    updateShowDialog -> isNotified.value = updateShowDialog
+            }
+        }
+        if(sucess.value && !isNotified.value)
+        {
+            navController.navigate(Screen.LoginScreen.name)
+        }
+
     }
 }

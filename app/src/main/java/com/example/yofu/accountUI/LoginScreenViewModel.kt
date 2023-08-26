@@ -63,8 +63,8 @@ class LoginScreenViewModel : ViewModel() {
                 }
                 else {
                     isLogin.value = false
-                    Log.d("login", exception.toString())
-                    oncomplete("Login failed ${exception.toString()}", exception, null)
+                    Log.d("login", exception.message.toString())
+                    oncomplete("Login failed ${exception.message.toString()}", exception, null)
                 }
             }
         )

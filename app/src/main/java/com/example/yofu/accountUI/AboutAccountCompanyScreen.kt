@@ -20,6 +20,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,6 +49,10 @@ fun AboutAccountCompanyScreen(
 
     var message = remember {
         mutableStateOf("")
+    }
+
+    val success = remember {
+        mutableStateOf(false)
     }
 
     Surface (
@@ -88,35 +93,42 @@ fun AboutAccountCompanyScreen(
             BoldTextComponent(value = "About Your Company")
             Spacer(modifier = Modifier.height(20.dp))
             TextFieldComponent(labelValue = "Company Name",
+                previousContent = viewModel.state.collectAsState().value.companyInfomation.name,
                 setValue = {
                     viewModel.setCompanyName(it)
             })
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Company's address",
+                previousContent = viewModel.state.collectAsState().value.companyInfomation.location,
                 setValue = {
                     viewModel.setCompanyAddress(it)
                 })
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Email",
+                previousContent = viewModel.state.collectAsState().value.companyInfomation.email,
                 setValue = {
                     viewModel.setCompanyEmail(it)
                 })
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Phone Number",
+                previousContent = viewModel.state.collectAsState().value.companyInfomation.phone,
                 setValue = {
                     viewModel.setCompanyPhone(it)
                 })
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Website",
+                previousContent = viewModel.state.collectAsState().value.companyInfomation.website,
                 setValue = {
                     viewModel.setCompanyWebsite(it)
                 })
             Spacer(modifier = Modifier.height(20.dp))
-            DescriptionTextFieldComponent(labelValue = "Description", setValue = {
+            DescriptionTextFieldComponent(labelValue = "Description",
+                previousContent = viewModel.state.collectAsState().value.companyInfomation.description,
+                setValue = {
                 viewModel.setDiscription(it)
             }) // Description
             Spacer(modifier = Modifier.height(20.dp))
-            ButtonComponent(value = "Next") {
+            ButtonComponent(value = "Create Account") {
                 // Verify
                 var verify = viewModel.verifyForCompany {
                     message.value = it
@@ -128,7 +140,7 @@ fun AboutAccountCompanyScreen(
                         {
                             isNotified.value = true
                             message.value = "Create account successfully. Please check your email to verify your account"
-                            navController.navigate(Screen.LoginScreen.name)
+                            success.value = true
                         }
                         else
                         {
@@ -146,8 +158,13 @@ fun AboutAccountCompanyScreen(
         if (isNotified.value)
         {
             alert(showDialog = isNotified.value, title = "Notification",  message = message.value) {
-                isNotified.value = false
+                    updateShowDialog -> isNotified.value = updateShowDialog
             }
+        }
+
+        if(success.value && !isNotified.value)
+        {
+            navController.navigate(Screen.LoginScreen.name)
         }
     }
 }

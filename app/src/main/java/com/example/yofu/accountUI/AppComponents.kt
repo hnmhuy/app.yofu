@@ -242,11 +242,12 @@ fun TextFieldComponent(
 @Composable
 fun DescriptionTextFieldComponent(
     labelValue: String,
+    previousContent: String = "",
     setValue: (String) -> Unit
 )
 {
     val textValue = remember {
-        mutableStateOf("")
+        mutableStateOf(previousContent)
     }
     var textFieldSize by remember{
         mutableStateOf(Size.Zero)

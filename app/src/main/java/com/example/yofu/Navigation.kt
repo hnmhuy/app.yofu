@@ -100,7 +100,7 @@ enum class Screen {
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-
+    var sharedViewModel = remember { CreateAccountViewModel() }
     NavHost(
         navController,
         startDestination = "Authentication"
@@ -111,8 +111,9 @@ fun Navigation() {
         )
         {
 
-            val sharedViewModel = CreateAccountViewModel()
             composable(Screen.LoginScreen.name) {
+                // Create new shared view model
+                sharedViewModel = CreateAccountViewModel()
                 LoginScreen(navController = navController)
             }
 
