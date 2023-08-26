@@ -103,7 +103,7 @@ fun CompanyCreateAccountScreen(
                     viewModel.setGender(it)
                 }
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             val selectedDate = remember { mutableStateOf("Date of birth") }
             OutlinedTextField(
                 enabled = false,
@@ -115,7 +115,7 @@ fun CompanyCreateAccountScreen(
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Black
+                    unfocusedBorderColor = Color.LightGray
                 ),
                 trailingIcon = {
                     Icon(
