@@ -117,7 +117,8 @@ fun ApplicationCard(data: JobApplication, navController: NavController)
             .height(100.dp)
             .background(Color(0xFFF6F7F9))
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(top = 10.dp, start = 10.dp, end = 10.dp),
+        onClick = {}
     )
     {
         Row(modifier = Modifier.fillMaxWidth(),
@@ -162,7 +163,7 @@ fun ApplicationCard(data: JobApplication, navController: NavController)
                             fontStyle = FontStyle.Normal
                         ),
                     )
-
+                    Spacer(modifier = Modifier.height(5.dp))
                     Text(
                         text = tag,
                         fontFamily = NormalFont,

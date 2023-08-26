@@ -185,6 +185,7 @@ fun DetailedApplicationScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(10.dp)
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween
             )
@@ -212,7 +213,7 @@ fun DetailedApplicationScreen(
                                 .fillMaxWidth(),
                             fontFamily = extraBoldFont,
                             style = TextStyle(
-                                fontSize = 27.sp,
+                                fontSize = 20.sp,
                                 fontWeight = FontWeight.Normal,
                                 fontStyle = FontStyle.Normal,
                             ),
@@ -220,41 +221,49 @@ fun DetailedApplicationScreen(
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Icon(
-                            imageVector = Icons.Default.AccountCircle,
-                            contentDescription = "",
-                            tint = Color.LightGray,
-                            modifier = Modifier.size(90.dp)
-                        )
-                        Column(
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        ) {
-                            Text(
-                                text = userInfo.fullName,
-                                fontFamily = extraBoldFont,
-                                textAlign = TextAlign.Center,
-                                style = TextStyle(
-                                    fontSize = 35.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    fontStyle = FontStyle.Normal,
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        shape = RoundedCornerShape(20.dp),
+                        elevation = 1.dp,
+                    )
+                    {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Icon(
+                                imageVector = Icons.Default.AccountCircle,
+                                contentDescription = "",
+                                tint = Color.LightGray,
+                                modifier = Modifier.size(90.dp)
+                            )
+                            Column(
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            ) {
+                                Text(
+                                    text = userInfo.fullName,
+                                    fontFamily = BoldFont,
+                                    textAlign = TextAlign.Center,
+                                    style = TextStyle(
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        fontStyle = FontStyle.Normal,
+                                    )
                                 )
-                            )
 
-                            Text(
-                                text = userInfo.email,
-                                fontFamily = normalFont,
-                                style = TextStyle(
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    fontStyle = FontStyle.Italic
-                                ),
-                                textDecoration = TextDecoration.Underline
-                            )
+                                Text(
+                                    text = userInfo.email,
+                                    fontFamily = normalFont,
+                                    style = TextStyle(
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        fontStyle = FontStyle.Italic
+                                    ),
+                                    textDecoration = TextDecoration.Underline
+                                )
+                            }
+                            // Spacer(modifier = Modifier.width(20.dp))
+
                         }
-                        Spacer(modifier = Modifier.width(20.dp))
-
-
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     Divider(modifier = Modifier.padding(start = 5.dp, end = 5.dp))
@@ -264,7 +273,7 @@ fun DetailedApplicationScreen(
                             .fillMaxWidth()
                             .padding(10.dp),
                         shape = RoundedCornerShape(20.dp),
-                        elevation = 3.dp,
+                        elevation = 1.dp,
                     ) {
                         Column(
                             modifier = Modifier
@@ -290,7 +299,7 @@ fun DetailedApplicationScreen(
                                     text = "Contact Information",
                                     fontFamily = BoldFont,
                                     style = TextStyle(
-                                        fontSize = 19.sp,
+                                        fontSize = 16.sp,
                                         fontWeight = FontWeight.Normal,
                                         fontStyle = FontStyle.Normal
                                     ),
@@ -392,7 +401,7 @@ fun DetailedApplicationScreen(
                             .fillMaxWidth()
                             .padding(10.dp),
                         shape = RoundedCornerShape(20.dp),
-                        elevation = 3.dp,
+                        elevation = 1.dp,
                     ) {
                         Column(
                             modifier = Modifier
@@ -418,7 +427,7 @@ fun DetailedApplicationScreen(
                                     text = "Candidate's CV/Resume",
                                     fontFamily = BoldFont,
                                     style = TextStyle(
-                                        fontSize = 19.sp,
+                                        fontSize = 16.sp,
                                         fontWeight = FontWeight.Normal,
                                         fontStyle = FontStyle.Normal
                                     ),

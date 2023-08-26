@@ -576,7 +576,7 @@ fun alert(showDialog: Boolean, title: String = "Oops, Failed!", message: String 
         title = {
             Text(text = title,
                 fontFamily = BoldFont,
-                color = Color.Red,
+                color = if(title == "Oops, Failed!") Color.Red else Color(0xFF2F4AE3),
                 textAlign = TextAlign.Center,
                 style = TextStyle(
                     fontSize = 20.sp,
@@ -735,7 +735,8 @@ fun JobCard(content: Vacancy, navController: NavController)
                         Text(
                             text = content.location,
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .heightIn(min = 30.dp),
                             fontFamily = normalFont,
                             style = TextStyle(
                                 fontSize = 14.sp,
@@ -744,13 +745,13 @@ fun JobCard(content: Vacancy, navController: NavController)
                             ),
                         )
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
                     Row{
                         Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
                         Text(
                             text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000} $/month",
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .heightIn(min = 30.dp),
                             fontFamily = normalFont,
                             style = TextStyle(
                                 fontSize = 14.sp,
@@ -945,7 +946,18 @@ fun jobCardEmployer(content: Vacancy = Vacancy())
                 Column {
                     Row{
                         Icon(Icons.Filled.Place, contentDescription = "Icon")
-                        NotCenterNormalTextComponent(value = content.location, size = 14.sp)
+                        Text(
+                            text = content.location,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 30.dp),
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                        )
                     }
                     Row{
                         Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
@@ -953,7 +965,7 @@ fun jobCardEmployer(content: Vacancy = Vacancy())
                             text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000}",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .heightIn(min = 40.dp),
+                                .heightIn(min = 30.dp),
                             fontFamily = normalFont,
                             style = TextStyle(
                                 fontSize = 14.sp,
@@ -975,8 +987,6 @@ fun jobCardEmployer(content: Vacancy = Vacancy())
                     }
                 }
             }
-
-
         }
     }
 }
@@ -1001,14 +1011,16 @@ fun jobcardEmployerApplications(
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
-            Row {
+            Row(
+                modifier = Modifier.height(70.dp)
+            ) {
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(2.dp))
                         .size(70.dp)
                 )
                 {
-                    Image(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = "")
+                    Image( painter = painterResource(id = R.drawable.logo), contentDescription = "", modifier = Modifier.size(70.dp))
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Row(
@@ -1030,6 +1042,7 @@ fun jobcardEmployerApplications(
                                 fontStyle = FontStyle.Normal,
                             ),
                         )
+                        Spacer(modifier = Modifier.height(7.dp))
                         Text(
                             text = content.companyName,
                             fontFamily = normalFont,
@@ -1045,7 +1058,7 @@ fun jobcardEmployerApplications(
                     ) {
                         Icon(
                             modifier = Modifier.size(25.dp),
-                            painter = painterResource(id = R.drawable.heart_empty),
+                            imageVector = Icons.Filled.KeyboardArrowRight,
                             contentDescription = "Icon"
                         )
                     }
@@ -1055,11 +1068,21 @@ fun jobcardEmployerApplications(
             Divider(startIndent = 1.dp, thickness = 0.2.dp, color = Color.LightGray)
             Spacer(modifier = Modifier.height(15.dp))
             Row {
-                Spacer(modifier = Modifier.size(90.dp))
                 Column {
                     Row{
                         Icon(Icons.Filled.Place, contentDescription = "Icon")
-                        NotCenterNormalTextComponent(value = content.location, size = 14.sp)
+                        Text(
+                            text = content.location,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 30.dp),
+                            fontFamily = normalFont,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontStyle = FontStyle.Normal
+                            ),
+                        )
                     }
                     Row{
                         Icon(Icons.Filled.AttachMoney, contentDescription = "Icon")
@@ -1067,7 +1090,7 @@ fun jobcardEmployerApplications(
                             text = "${((content.minSalary * 10).roundToInt() / 10.0f) * 1000} - ${((content.maxSalary * 10).roundToInt() / 10.0f) * 1000}",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .heightIn(min = 40.dp),
+                                .heightIn(min = 30.dp),
                             fontFamily = normalFont,
                             style = TextStyle(
                                 fontSize = 14.sp,
@@ -1077,6 +1100,7 @@ fun jobcardEmployerApplications(
                             color = Color(0xFF2F4AE3)
                         )
                     }
+                    Spacer(modifier = Modifier.height(5.dp))
                     Row(
                         modifier = Modifier.horizontalScroll(rememberScrollState())
                     )
@@ -1089,8 +1113,6 @@ fun jobcardEmployerApplications(
                     }
                 }
             }
-
-
         }
     }
 }

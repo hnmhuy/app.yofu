@@ -290,6 +290,7 @@ fun view_applications(
                                 Box(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(2.dp))
+                                        .height(200.dp)
                                         .fillMaxWidth(),
                                     contentAlignment = Alignment.Center
                                 )
@@ -298,6 +299,7 @@ fun view_applications(
                                     Image(
                                         painter = painterResource(id = R.drawable.logo),
                                         contentDescription = "",
+                                        contentScale = ContentScale.Fit
                                     )
                                 }
                                 Spacer(modifier = Modifier.height(5.dp))
@@ -314,8 +316,9 @@ fun view_applications(
                                     )
 
                                 )
-                                LessBoldTextComponent(value = applicationsListViewModel.vacancyInfo.collectAsState().value.companyName)
                                 Spacer(modifier = Modifier.height(5.dp))
+                                LessBoldTextComponent(value = applicationsListViewModel.vacancyInfo.collectAsState().value.companyName)
+                                Spacer(modifier = Modifier.height(25.dp))
                                 Divider(
                                     startIndent = 1.dp,
                                     thickness = 0.2.dp,
