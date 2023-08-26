@@ -49,10 +49,7 @@ fun Search(
         )
     }
     var items = remember{
-        mutableStateListOf(
-            "banana",
-            "ananas"
-        )
+        mutableStateListOf(  ""  )
     }
 
     val vacancies = searchViewModel.vacancies.collectAsState().value
@@ -69,13 +66,11 @@ fun Search(
             modifier = Modifier.fillMaxWidth(),
             query = textValue,
             onQueryChange = {
-
                 textValue = it
             },
             onSearch = {
                 if (textValue.isNotEmpty()) {
                     items.add(0, textValue)
-
                     searchViewModel.onSearchTextChange(textValue)
                 }
                 active = false

@@ -113,6 +113,7 @@ fun CompanyCreateAccountScreen(
                 setValue = {viewModel.setEmail(it)})
             Spacer(modifier = Modifier.height(15.dp))
             TextFieldComponent(labelValue = "Phone",
+                previousContent = viewModel.state.collectAsState().value.userInfo.phone,
                 setValue = {viewModel.setPhone(it)})
             Spacer(modifier = Modifier.height(15.dp))
             DropDown(

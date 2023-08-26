@@ -20,6 +20,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +41,15 @@ fun AboutAccountCompanyScreen(
     )
 {
     val context = LocalContext.current.applicationContext
+
+    var isNotified =  remember {
+        mutableStateOf(false)
+    }
+
+    var message = remember {
+        mutableStateOf("")
+    }
+
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -110,16 +121,16 @@ fun AboutAccountCompanyScreen(
             Spacer(modifier = Modifier.height(20.dp))
             ButtonComponent(value = "Next") {
                 // Verify
-                var message = ""
                 var verify = viewModel.verifyForCompany {
-                    message = it
+                    message.value = it
                 }
                 if(verify)
                 {
-                    viewModel.signupForCompany() { message, e ->
+                    viewModel.signupForCompany() { it, e ->
                         if(e == null)
                         {
-                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                            isNotified.value = true
+                            message.value = "Create account successfully. Please check your email to verify your account"
                             navController.navigate(Screen.LoginScreen.name)
                         }
                         else
@@ -130,8 +141,15 @@ fun AboutAccountCompanyScreen(
                 }
                 else
                 {
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, message.value, Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+
+        if (isNotified.value)
+        {
+            alert(showDialog = isNotified.value, title = "Notification",  message = message.value) {
+                isNotified.value = false
             }
         }
     }

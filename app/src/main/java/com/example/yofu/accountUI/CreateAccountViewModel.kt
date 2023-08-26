@@ -113,6 +113,12 @@ class CreateAccountViewModel(): ViewModel() {
     }
 
     fun checkPassword(): Boolean {
+
+        // Check if password is longer than 6 characters
+        if (_state.value.account.password.length < 6) {
+            return false
+        }
+
         if (_state.value.account.password == _state.value.confirmPassword) {
             return true
         }
@@ -278,8 +284,8 @@ class CreateAccountViewModel(): ViewModel() {
                 onComplete("Create account successfully", null)
             }
             else {
-                Log.d("signup", e.toString())
-                onComplete(e.toString(), e)
+                Log.d("signup", e.message.toString())
+                onComplete(e.message.toString(), e)
             }
         }
     }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 
 class SearchViewModel: ViewModel() {
-    private val vacancyRepo = VacancyRepository()
+    val vacancyRepo = VacancyRepository()
 
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
@@ -21,6 +21,7 @@ class SearchViewModel: ViewModel() {
     val isSearching = _isSearching.asStateFlow()
 
     private val _vacancies = MutableStateFlow(listOf<Vacancy>())
+
     val vacancies = searchText
         .debounce(500L)  // if use does not type anything after 0.5s -> do the code below
         .combine(_vacancies) { text, vacancies ->
@@ -36,6 +37,12 @@ class SearchViewModel: ViewModel() {
             SharingStarted.WhileSubscribed(5000),
             _vacancies.value
         )
+
+    fun getVacancies() {
+        vacancyRepo.getAllVacancies { vacancies ->
+            _vacancies.value = vacancies
+        }
+    }
 
     init {
         vacancyRepo.getAllVacancies { vacancies ->
