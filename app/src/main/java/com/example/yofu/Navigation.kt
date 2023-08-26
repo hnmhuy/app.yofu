@@ -373,111 +373,119 @@ fun FavoriteScreen(navController: NavHostController) {
 }
 
 @Composable
-fun BottomNavigateBarForEmployer(navController: NavController) {
+fun BottomNavigateBarForEmployer(navController: NavController, isHiden: MutableState<Boolean>) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     val fontSize = 8.sp
-    BottomNavigation (
-        modifier = Modifier.height(56.dp),
-        elevation = 11.dp,
-        backgroundColor = Color(0XFF2F4AE3)
-    ) {
-        BottomNavigationItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Notes,
-                    contentDescription = "Home icon",
-                )
-            },
-            selectedContentColor = Color.White,
-            unselectedContentColor = Color(0xFF83AEFF),
-            label = { Text(text = ("Page"), fontSize = fontSize)},
-            selected = currentRoute == Screen.Company.name,
-            onClick = {
-                navigateInBottomBar(navController, Screen.Company.name)
-            }
-        )
-        BottomNavigationItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Checklist,
-                    contentDescription = "Home icon",
-                )
-            },
-            selectedContentColor = Color.White,
-            unselectedContentColor = Color(0xFF83AEFF),
-            label = { Text(text = ("Created jobs"), fontSize = fontSize)},
-            selected = currentRoute == Screen.CreatedVacanciesList.name,
-            onClick = {
-                navigateInBottomBar(navController, Screen.CreatedVacanciesList.name)
-            }
-        )
-        LargeFloatingActionButton(
-            onClick = {
-                navigateInBottomBar(navController, Screen.CreateVacancy.name)
-            },
-            modifier = Modifier
-                .graphicsLayer {
-                    shape = androidx.compose.foundation.shape.CircleShape
-                }
-                .size(56.dp),
-            containerColor = Color.White
-
+    AnimatedVisibility(
+        visible = isHiden.value,
+        enter = slideInVertically(initialOffsetY = { it }),
+        exit = slideOutVertically(targetOffsetY = { it }),
+    )
+    {
+        BottomNavigation(
+            modifier = Modifier.height(56.dp),
+            elevation = 11.dp,
+            backgroundColor = Color(0XFF2F4AE3)
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add new vacancy",
-                tint = Color(0XFF2F4AE3),
+            BottomNavigationItem(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Notes,
+                        contentDescription = "Home icon",
+                    )
+                },
+                selectedContentColor = Color.White,
+                unselectedContentColor = Color(0xFF83AEFF),
+                label = { Text(text = ("Page"), fontSize = fontSize) },
+                selected = currentRoute == Screen.Company.name,
+                onClick = {
+                    navigateInBottomBar(navController, Screen.Company.name)
+                }
+            )
+            BottomNavigationItem(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Checklist,
+                        contentDescription = "Home icon",
+                    )
+                },
+                selectedContentColor = Color.White,
+                unselectedContentColor = Color(0xFF83AEFF),
+                label = { Text(text = ("Created jobs"), fontSize = fontSize) },
+                selected = currentRoute == Screen.CreatedVacanciesList.name,
+                onClick = {
+                    navigateInBottomBar(navController, Screen.CreatedVacanciesList.name)
+                }
+            )
+            LargeFloatingActionButton(
+                onClick = {
+                    navigateInBottomBar(navController, Screen.CreateVacancy.name)
+                },
+                modifier = Modifier
+                    .graphicsLayer {
+                        shape = androidx.compose.foundation.shape.CircleShape
+                    }
+                    .size(56.dp),
+                containerColor = Color.White
+
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add new vacancy",
+                    tint = Color(0XFF2F4AE3),
+                )
+            }
+            BottomNavigationItem(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Mail,
+                        contentDescription = "Home icon",
+                    )
+                },
+                selectedContentColor = Color.White,
+                unselectedContentColor = Color(0xFF83AEFF),
+                label = { Text(text = ("Applications"), fontSize = fontSize) },
+                selected = currentRoute == Screen.ApplicationList.name,
+                onClick = {
+                    navigateInBottomBar(navController, Screen.ViewJobs.name)
+                }
+            )
+            BottomNavigationItem(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Home icon",
+                    )
+                },
+                selectedContentColor = Color.White,
+                unselectedContentColor = Color(0xFF83AEFF),
+                label = { Text(text = ("Profile"), fontSize = fontSize) },
+                selected = currentRoute == Screen.ProfileCompany.name,
+                onClick = {
+                    navigateInBottomBar(navController, Screen.ProfileCompany.name)
+                }
             )
         }
-        BottomNavigationItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Mail,
-                    contentDescription = "Home icon",
-                )
-            },
-            selectedContentColor = Color.White,
-            unselectedContentColor = Color(0xFF83AEFF),
-            label = { Text(text = ("Applications"), fontSize = fontSize)},
-            selected = currentRoute == Screen.ApplicationList.name,
-            onClick = {
-                navigateInBottomBar(navController, Screen.ViewJobs.name)
-            }
-        )
-        BottomNavigationItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "Home icon",
-                )
-            },
-            selectedContentColor = Color.White,
-            unselectedContentColor = Color(0xFF83AEFF),
-            label = { Text(text = ("Profile"), fontSize = fontSize)},
-            selected = currentRoute == Screen.ProfileCompany.name,
-            onClick = {
-                navigateInBottomBar(navController, Screen.ProfileCompany.name)
-            }
-        )
     }
 }
 
 @Composable
 fun EmployerApp(navController: NavHostController = rememberNavController(), mainNavController: NavHostController)
 {
+    val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     Scaffold(
         bottomBar = {
-            BottomNavigateBarForEmployer(navController)
+            BottomNavigateBarForEmployer(navController, bottomBarState)
         }
     ) {
-        EmployerNavGraph(navController = navController, it, mainNavController)
+        EmployerNavGraph(navController = navController, it, mainNavController, bottomBarState)
     }
 }
 
 @Composable
-fun EmployerNavGraph(navController: NavHostController, it: PaddingValues, mainController: NavHostController){
+fun EmployerNavGraph(navController: NavHostController, it: PaddingValues, mainController: NavHostController, bottomBar: MutableState<Boolean>){
     NavHost(
         route = "Employer",
         navController = navController,
@@ -485,14 +493,23 @@ fun EmployerNavGraph(navController: NavHostController, it: PaddingValues, mainCo
         modifier = Modifier.padding(it)
     ) {
         composable(Screen.Company.name) {
+            LaunchedEffect(Unit) {
+                bottomBar.value = true
+            }
             CompanyScreen(
                 navController = navController
             )
         }
         composable(Screen.CreateVacancy.name) {
+            LaunchedEffect(Unit) {
+                bottomBar.value = true
+            }
             CreateVacancy(navController = navController)
         }
         composable(Screen.CreatedVacanciesList.name) {
+            LaunchedEffect(Unit) {
+                bottomBar.value = true
+            }
             CreatedJobs(navigate = navController)
         }
         navigation(
@@ -500,12 +517,18 @@ fun EmployerNavGraph(navController: NavHostController, it: PaddingValues, mainCo
             startDestination = Screen.ViewJobs.name)
         {
             composable(Screen.ViewJobs.name) {
+                LaunchedEffect(Unit) {
+                    bottomBar.value = true
+                }
                 view_jobs(navController)
             }
             composable(
                 route = "${Screen.ApplicantsList.name}/{vid}",
                 arguments = listOf(navArgument("vid") { type = NavType.StringType })
             ) {
+                LaunchedEffect(Unit) {
+                    bottomBar.value = true
+                }
                 val vid = it.arguments?.getString("vid") ?: "vid"
                 Log.d("VID", vid)
                 view_applications(navController = navController, vid = vid)
@@ -514,12 +537,18 @@ fun EmployerNavGraph(navController: NavHostController, it: PaddingValues, mainCo
                 route = "${Screen.DetailApplication.name}/{aid}",
                 arguments = listOf(navArgument("aid") { type = NavType.StringType })
             ) {
+                LaunchedEffect(Unit) {
+                    bottomBar.value = false
+                }
                 val aid = it.arguments?.getString("aid") ?: "aid"
                 Log.d("AID", aid)
                 DetailedApplicationScreen(navController = navController, aid = aid)
             }
         }
         composable(Screen.ProfileCompany.name) {
+            LaunchedEffect(Unit) {
+                bottomBar.value = true
+            }
             CompanyProfileScreen(navController, mainController)
         }
     }
