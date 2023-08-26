@@ -237,7 +237,7 @@ fun DetailedApplicationScreen(
                                 modifier = Modifier.size(90.dp)
                             )
                             Column(
-                                modifier = Modifier.align(Alignment.CenterVertically)
+                                modifier = Modifier.align(Alignment.CenterVertically).fillMaxWidth()
                             ) {
                                 Text(
                                     text = userInfo.fullName,
@@ -277,7 +277,7 @@ fun DetailedApplicationScreen(
                     ) {
                         Column(
                             modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
+                                .align(Alignment.CenterHorizontally).fillMaxWidth()
                         ) {
                             Row(
                                 modifier = Modifier
