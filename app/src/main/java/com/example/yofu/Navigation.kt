@@ -447,7 +447,7 @@ fun BottomNavigateBarForEmployer(navController: NavController, isHiden: MutableS
                 selectedContentColor = Color.White,
                 unselectedContentColor = Color(0xFF83AEFF),
                 label = { Text(text = ("Applications"), fontSize = fontSize) },
-                selected = currentRoute == Screen.ApplicationList.name,
+                selected = currentRoute == Screen.ApplicationList.name || currentRoute == Screen.ViewJobs.name || currentRoute == Screen.DetailApplication.name,
                 onClick = {
                     navigateInBottomBar(navController, Screen.ViewJobs.name)
                 }

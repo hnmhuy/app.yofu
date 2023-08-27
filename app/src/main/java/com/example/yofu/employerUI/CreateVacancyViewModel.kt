@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 class CreateVacancyViewModel : ViewModel() {
     private val _state = MutableStateFlow<Vacancy>(Vacancy(updatedDate = Timestamp.now(), expiredDate = Timestamp.now()))
     private val _program = MutableStateFlow<MutableList<Boolean>>(MutableList(12) { false })
-    private val programmingLanguage = listOf<String>("Java Script", "Java", "Kotlin", "PHP", "C#", "C/C++", "HTML", "CSS", "Matlab", "TypeScript", "SQL", "Order");
+    private val programmingLanguage = listOf<String>("Java Script", "Java", "Kotlin", "PHP", "C#", "C/C++", "HTML", "CSS", "Matlab", "TypeScript", "SQL", "Other");
     val process = VacancyRepository()
 
     val state: StateFlow<Vacancy>
